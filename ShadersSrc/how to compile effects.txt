@@ -1,0 +1,2 @@
+Release Run ->fxc /Tfx_2_0 /FoMyEffect.fxo MyEffect.fx
+Debug Run   ->fxc /Od /Zi /Tfx_2_0 /FoMyEffect.fxo MyEffect.fx

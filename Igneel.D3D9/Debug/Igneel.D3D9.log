@@ -1,0 +1,13 @@
+﻿Build started 04/08/2014 11:47:00 a. m..
+     1>Project "G:\Ansel\Develop\Visual Studio 2010\Igneel\Igneel.D3D9\Igneel.D3D9.vcxproj" on node 2 (Build target(s)).
+     1>C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V110\Microsoft.MetaGen.targets(91,5): warning : Required file "F:\PROJECTS\IGNEEL\IGNEEL\BIN\X86\DEBUG\IGNEEL.DLL" is missing.
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 11.0\VC\bin\CL.exe /c /AI"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5\\" /AI"C:\Program Files (x86)\Windows Kits\8.0\References\CommonConfiguration\Neutral" /AI"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5\Facades\\" /Zi /clr /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _WINDLL /D _UNICODE /D UNICODE /EHa /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Yc"stdafx.h" /Fp"Debug\Igneel.D3D9.pch" /Fo"Debug\\" /Fd"Debug\vc110.pdb" /TP /FU"G:\Ansel\Develop\Visual Studio 2010\Igneel\Igneel\bin\x86\Debug\Igneel.dll" /FU"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5\mscorlib.dll" /FU"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5\System.Core.dll" /FU"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5\System.Data.dll" /FU"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5\System.dll" /FU"C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5\System.Xml.dll" /analyze- /errorReport:prompt /clr:nostdlib Stdafx.cpp
+         Stdafx.cpp
+     1>Stdafx.cpp : fatal error C1192: #using failed on 'G:\Ansel\Develop\Visual Studio 2010\Igneel\Igneel\bin\x86\Debug\Igneel.dll'
+                 'El sistema no puede encontrar el archivo especificado.'
+     1>Done Building Project "G:\Ansel\Develop\Visual Studio 2010\Igneel\Igneel.D3D9\Igneel.D3D9.vcxproj" (Build target(s)) -- FAILED.
+
+Build FAILED.
+
+Time Elapsed 00:00:01.70

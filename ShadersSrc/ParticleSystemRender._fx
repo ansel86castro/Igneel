@@ -1,0 +1,71 @@
+int DESCRIPTION
+<
+	string ShaderModel = "3.0";
+	string Version = "1.0.0";
+	int NumberOfLights = 0;						
+	int DiffuseSamplersNumbers = 1;	
+	int DiffuseSamplerStartRegister = 0;	
+>;
+
+float4x4 View			: VIEW;
+float4x4 ViewProj		: VIEWPROJ;
+float3 eyePos			: EYEPOSITION;
+
+//float Rot;
+sampler s0 : register(s0); // Diffuse Map
+
+struct PointSpriteIn
+{
+	float4 Position : POSITION;
+	float2 TexCoord : TEXCOORD0;	
+	float4 Color 	: COLOR0;
+	float Size		: PSIZE;
+	float Rot		: TEXCOORD1;
+};
+
+struct PointSpriteOut
+{
+	float4 Position : POSITION;
+	float2 TexCoord : TEXCOORD0;	
+	float4 Color 	: COLOR0;
+	float Size		: PSIZE;
+	nointerpolation float2 Rot		: COLOR1; // x=cos(rot),y=sin(rot)
+};
+
+PointSpriteOut PointSpriteVS(PointSpriteIn input)
+{
+	PointSpriteOut output = (PointSpriteOut)0;	
+	//float3 viewPos = mul(input.Position, View);
+	float4 pos = mul(input.Position ,ViewProj);
+	output.Position = pos;
+	output.TexCoord = input.TexCoord;		
+	output.Color = input.Color;	
+	//output.Size = 1 / (pow(viewPos.z, 2) + 1 ) * input.Size;
+	output.Size = (1 - pow(pos.z/pos.w,2)) * input.Size;
+	output.Rot = input.Rot == 0 ? float2(1,0) : float2(cos(input.Rot), sin(input.Rot));
+	
+	return output;
+}
+
+float4 PointSpritePS(PointSpriteOut input):COLOR0
+{	
+	//input.Rot = float2(cos(Rot), sin(Rot));
+	float2 texDisp = input.TexCoord - float2(0.5, 0.5);	
+	float2 texC = float2(texDisp.x * input.Rot.x - texDisp.y * input.Rot.y ,
+						 texDisp.x * input.Rot.y + texDisp.y * input.Rot.x );
+	texC += float2(0.5,0.5);
+	
+	float4 color = tex2D(s0 ,texC) * input.Color;		
+	return color;
+}
+
+technique PointSprite
+{
+    pass Pass1
+    {
+        // TODO: set renderstates here.					
+        VertexShader = compile vs_1_1 PointSpriteVS();
+        PixelShader = compile ps_3_0 PointSpritePS();
+    }
+}
+

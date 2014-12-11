@@ -1,0 +1,167 @@
+﻿ private ModelMesh CreateBasicModelMesh(FBXObject modelDataObject, FBXDeclarationNode objectDataObject, List<int>[] materialPolygons ,out bool computeNormal,out bool computeTexCoords)
+        {
+            var vd = GTools.GetVertexDescriptor<ModelVertex>(GEngine.Graphics);
+            ModelMesh mesh = new ModelMesh(modelDataObject.Name, vd);
+
+            #region Materials
+
+            string matMappingInfoType = null;
+            string matReferenceInfoType = null;
+            bool allSame = false;
+            var materialObject = modelDataObject.GetDeclaration<FBXObject>("LayerElementMaterial");
+            if (materialObject != null)
+            {
+                for (int i = 0; i < materialPolygons.Length; i++)
+                    if (materialPolygons[i] != null) materialPolygons[i].Clear();
+
+                List<float> materialsList = materialObject.GetDeclaration<FBXFloatListProperty>("Materials").FloatValues;
+                matMappingInfoType = materialObject.GetDeclaration<FBXListProperty>("MappingInformationType").Values[0];
+                matReferenceInfoType = materialObject.GetDeclaration<FBXListProperty>("ReferenceInformationType").Values[0];
+
+                if (matMappingInfoType == "ByPolygon")
+                {
+                    for (int i = 0; i < materialsList.Count; i++)
+                    {
+                        int matIndex = (int)materialsList[i];
+                        if (materialPolygons[matIndex] == null)
+                            materialPolygons[matIndex] = new List<int> { i };
+                    }
+                }
+                else if(matMappingInfoType == "AllSame")
+                    allSame = true;
+            }
+
+            #endregion
+
+            #region Pick up Data
+            computeNormal = true;
+            computeTexCoords = true;
+            string normalMappingInfoType = null;
+            string normalReferenceInfoType = null;
+            string texMappingInfoType = null;
+            string texReferenceInfoType = null;
+            int[] texCoordIndex = null;
+            Vector3[] positions = null;
+            Vector3[] normals = null;
+            Vector2[] texCoords = null;
+
+            var positionList = modelDataObject.GetDeclaration<FBXFloatListProperty>(FBXDocument.Vertices).FloatValues;
+            positions = GetVectors3(positionList);
+            int[] polygonVertexIndex = GetIndices(modelDataObject.GetDeclaration<FBXFloatListProperty>(FBXDocument.PolygonVertexIndex).FloatValues, positions.Length);            
+
+            var normalData = modelDataObject.GetDeclaration<FBXObject>("LayerElementNormal");
+            if (normalData != null)
+            {
+                computeNormal = false;
+                normalMappingInfoType = normalData.GetDeclaration<FBXListProperty>("MappingInformationType").Values[0];
+                normalReferenceInfoType = normalData.GetDeclaration<FBXListProperty>("ReferenceInformationType").Values[0];
+                normals = GetVectors3(normalData.GetDeclaration<FBXFloatListProperty>("Normals").FloatValues);
+            }
+
+            var texCoordData = modelDataObject.GetDeclaration<FBXObject>("LayerElementUV");
+            if (texCoordData != null)
+            {
+                computeTexCoords = false;
+                texMappingInfoType = texCoordData.GetDeclaration<FBXListProperty>("MappingInformationType").Values[0];
+                texReferenceInfoType = texCoordData.GetDeclaration<FBXListProperty>("ReferenceInformationType").Values[0];
+                texCoords = GetVectors2(texCoordData.GetDeclaration<FBXFloatListProperty>("UV").FloatValues);
+                if (texReferenceInfoType == "IndexToDirect")
+                    texCoordIndex = GetIndices(texCoordData.GetDeclaration<FBXFloatListProperty>("UVIndex").FloatValues, texCoords.Length);                
+            }
+
+            #endregion
+
+            int iIndex = 0;                                
+            Dictionary<int, List<int>> lookup = new Dictionary<int, List<int>>();
+            bool[] taked = null;
+            List<MeshLayer> layers = new List<MeshLayer>();
+            bool byPolygonVertex = normalMappingInfoType == "ByPolygonVertex" && normalReferenceInfoType == "Direct";
+            bool byVertice = normalMappingInfoType == "ByVertice" && normalReferenceInfoType == "Direct";
+
+            uint[] indices = new uint[polygonVertexIndex.Length];
+            List<ModelVertex> vertexes = new List<ModelVertex>();
+
+            if (byPolygonVertex)            
+                taked = new bool[positions.Length];
+            
+
+            for (int matIndex = 0; matIndex < materialPolygons.Length; matIndex++)
+            {
+                var polygons = materialPolygons[matIndex];
+                int polyCount = allSame ? polygonVertexIndex.Length / 3 : polygons.Count;
+
+                if (polygons == null && !allSame)
+                    continue;
+
+                int startVertex = int.MaxValue;
+                int startIndex = iIndex;
+                int vertexCount = 0;
+                int primitiveCount = polyCount;
+
+                #region LayerPolygons                
+                for (int poly = 0; poly < polyCount; poly++)
+                {
+                    int startPolyIndex = allSame ? 3 * poly : 3 * polygons[poly]; ;
+
+                    #region polygonsVertex
+
+                    for (int k = 0; k < 3; k++)
+                    {
+                        //PolygonVertex
+                        int vIndex = startPolyIndex + k;
+
+                        int posIndex = polygonVertexIndex[vIndex];
+                        Vector3 pos = positions[posIndex];
+                        Vector3 normal = normals != null ? normals[byPolygonVertex ? vIndex : posIndex] : new Vector3();
+                        Vector2 texCoord = texCoords != null ? (texCoords[texCoordIndex != null ? texCoordIndex[vIndex] : posIndex])
+                                                               : new Vector2();
+
+                        if (!taked[posIndex])
+                        {
+                            vertexes.Add(new ModelVertex(pos, normal, Vector3.Zero, texCoord, 0));
+                            vertexCount++;
+                            indices[iIndex] = (uint)vertexes.Count - 1;
+                            taked[posIndex] = true;
+                            lookup.Add(posIndex, new List<int> { vertexes.Count - 1 });
+                        }
+                        else
+                        {
+                            List<int> vertexList = lookup[posIndex];
+                            int index = FindIndex(vertexes, ref normal, ref texCoord, vertexList);
+                            if (index < 0)
+                            {
+                                vertexes.Add(new ModelVertex(pos, normal, Vector3.Zero, texCoord, 0));
+                                vertexCount++;
+                                indices[iIndex] = (uint)vertexes.Count - 1;
+                                vertexList.Add(vertexes.Count - 1);
+                            }
+                            else
+                            {
+                                indices[iIndex] = (uint)index;
+                            }
+                        }
+                        startVertex = Math.Min(startVertex, (int)indices[iIndex]);
+                        iIndex++;
+                    }
+
+                    #endregion
+                }
+
+                #endregion
+
+                MeshLayer layer = new MeshLayer(startIndex, primitiveCount, startVertex, vertexCount);
+                layer.MaterialIndex = matIndex;
+                layers.Add(layer);
+            }
+
+            mesh.CreateVertexBuffer(vertexes.ToArray());            
+            if (vertexes.Count < ushort.MaxValue)            
+                mesh.CreateIndexBuffer(indices.Cast<ushort>().ToArray());
+            else
+                mesh.CreateIndexBuffer(indices);
+
+            mesh.SetLayers(layers.ToArray());
+
+            return mesh;
+
+        }

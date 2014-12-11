@@ -1,0 +1,136 @@
+﻿  private unsafe void RenderStar(RenderManager renderMgr,Vector2 * ptSampleOffsets, Vector4 *ptSampleWeights)
+        {
+
+            Device device = renderMgr.Device;
+            renderMgr.Fill(rtStarFinal, 0);
+
+            // Avoid rendering the star if it's not being used in the current glare
+            if (glare == null || glare.glareLuminance <= 0.0f || glare.starLuminance <= 0.0f)
+                return;
+
+            float fTanFoV = (float)Math.Atan(Numerics.PI / 8.0f);
+            const int maxPasses = 3;
+            const int samples = 8;
+            int i, d, p, s; // Loop variables
+            StarDefinition starDef = glare.starDef;
+            
+            device.SetRenderState(RenderStates.AlphaBlendEnable, false);
+            device.SetRenderState(RenderStates.SourceBlend, (int)Blend.One);
+            device.SetRenderState(RenderStates.DestinationBlend, (int)Blend.One);
+            device.SetRenderState(RenderStates.BlendOperation, (int)BlendOperation.Add);
+                        
+            device.SetSamplerState(0, SamplerStageStates.MagFilter, (int)TextureFilter.Linear);
+            device.SetSamplerState(0, SamplerStageStates.MinFilter, (int)TextureFilter.Linear);
+          
+
+            float srcW = rtStartSource.Width;
+            float srcH = rtStartSource.Height;
+
+            for (p = 0; p < maxPasses; p++)
+            {
+                float ratio = (float)(p + 1) / (float)maxPasses;
+                for (s = 0; s < samples; s++)
+                {
+                    Vector4 chromaticAberrColor = Numerics.Lerp(StarDefinition.chromaticAberrationColor[s], s_colorWhite, ratio);
+                    s_aaColor[p, s] = Numerics.Lerp(s_colorWhite, chromaticAberrColor, glare.chromaticAberration);
+                }
+            }
+
+            float radOffset = glare.starInclination + starDef.inclination;
+            RenderTarget2D source = rtStartSource;
+            RenderTarget2D dest;
+            Vector2 stepUV;
+            int lines = starDef.starLines.Length;
+
+            for (d = 0; d < lines; d++)
+            {
+                STARLINE starLine = starDef.starLines[d];
+                float rad = radOffset + starLine.Inclination;                
+                float sn = (float)Math.Sin(rad);
+                float cs = (float)Math.Cos(rad);               
+                stepUV.X = sn / srcW * starLine.SampleLength;
+                stepUV.Y = cs / srcH * starLine.SampleLength;
+                float attnPowScale = ( fTanFoV + 0.1f ) * 1.0f * ( 160.0f + 120.0f ) / ( srcW + srcH ) * 1.2f;
+                
+                // 1 direction expansion loop
+                int iWorkTexture = 1;
+                for (p = 0; p < starLine.Passes; p++)
+                {
+                    if (p == starLine.Passes - 1)
+                    {
+                        // Last pass move to other work buffer
+                        dest = rtStar[d + 4];
+                    }
+                    else
+                    {
+                        dest = rtStar[iWorkTexture];
+                    }
+
+                    // Sampling configration for each stage
+                    for (i = 0; i < samples; i++)
+                    {
+                        float lum = (float)Math.Pow(starLine.Attenuation, attnPowScale * i);
+
+                        ptSampleWeights[i] = s_aaColor[starLine.Passes - 1 - p, i] * lum * (p + 1.0f) * 0.5f;
+
+                        // Offset of sampling coordinate
+                        ptSampleOffsets[i].X = stepUV.X * i;
+                        ptSampleOffsets[i].Y = stepUV.Y * i;
+                        if (Math.Abs(ptSampleOffsets[i].X) >= 0.9f || Math.Abs(ptSampleOffsets[i].Y) >= 0.9f)
+                        {
+                            ptSampleOffsets[i].X = 0.0f;
+                            ptSampleOffsets[i].Y = 0.0f;
+
+                            ptSampleWeights[i].X = 0.0f;
+                            ptSampleWeights[i].Y = 0.0f;
+                            ptSampleWeights[i].Z = 0.0f;
+                            ptSampleWeights[i].W = 0.0f;
+                        }
+                    }
+
+                    effect.Technique= tcStar;
+                    effect.SetValue(hSamplerOffsets, sampleOffsets);
+                    effect.SetValue(hSamplerWeights, sampleWeights);
+
+                    renderMgr.SetTextureRT(0, source);
+                    renderMgr.SetRenderTarget(0, dest);
+
+                    device.Clear(ClearFlags.Target, 0, 1, 0);
+                    quadRender.DrawToTexture(dest.Width, dest.Height);
+                    
+                    // Setup next expansion
+                    stepUV *= samples;
+                    attnPowScale *= samples;
+
+                    // Set the work drawn just before to next texture source.
+                    source = rtStar[iWorkTexture];
+                    iWorkTexture++;
+                    if (iWorkTexture > 2)
+                    {
+                        iWorkTexture = 1;
+                    }
+
+                }
+            }
+
+            dest = rtStar[0];
+
+            for (i = 0; i < lines; i++)
+            {
+                renderMgr.SetTextureRT(i, rtStar[i + 4]);
+                device.SetSamplerState(i, SamplerStageStates.MagFilter, (int)TextureFilter.Linear);
+                device.SetSamplerState(i, SamplerStageStates.MinFilter, (int)TextureFilter.Linear);
+                ptSampleWeights[i] = white * (1.0f / (float)lines);
+            }
+
+            effect.Technique = tcMergeTextures[lines - 1];
+            effect.SetValue(hSamplerWeights, sampleWeights);
+            renderMgr.SetRenderTarget(0, dest);
+            device.Clear(ClearFlags.Target, 0, 1, 0);
+            quadRender.DrawToTexture(dest.Width, dest.Height);
+
+            for (i = 0; i < lines; i++)
+            {
+                renderMgr.SetTexture(i, null);
+            }
+        }

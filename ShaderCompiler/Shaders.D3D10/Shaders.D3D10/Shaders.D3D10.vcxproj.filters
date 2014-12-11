@@ -1,0 +1,230 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Dump Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="System">
+      <UniqueIdentifier>{88910b56-b322-45ef-8dc0-10279eaf787f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="System\HDR">
+      <UniqueIdentifier>{67f29d5f-f865-4aa1-b24b-bfb9fb2653c8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="System\Headers">
+      <UniqueIdentifier>{24ba0c1f-7c9c-40f3-af36-890dcbf59c98}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="System\Mesh">
+      <UniqueIdentifier>{f1f5964e-132f-4d18-b14a-490a506e53a3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="System\Mesh\Deffered">
+      <UniqueIdentifier>{c093bb77-2dd6-4a82-a037-f8bc73cafc4b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="System\Misc">
+      <UniqueIdentifier>{67783a5f-7b1a-41e4-a8da-5b42d28ef326}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="System\Skinned">
+      <UniqueIdentifier>{600eb345-19c7-484d-90ab-d9772fbf62c4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="System\Mesh\PreFilterShadow">
+      <UniqueIdentifier>{a46e7830-5cb4-4369-8dee-c36a3a193e9a}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="Mesh_RenderDepthVS.hlsl">
+      <Filter>System\Mesh</Filter>
+    </FxCompile>
+    <FxCompile Include="Mesh_BumpVS.hlsl">
+      <Filter>System\Mesh</Filter>
+    </FxCompile>
+    <FxCompile Include="Mesh_PhongVS.hlsl">
+      <Filter>System\Mesh</Filter>
+    </FxCompile>
+    <FxCompile Include="Mesh_BumpPS.hlsl">
+      <Filter>System\Mesh</Filter>
+    </FxCompile>
+    <FxCompile Include="Mesh_RenderDepthPS.hlsl">
+      <Filter>System\Mesh</Filter>
+    </FxCompile>
+    <FxCompile Include="Mesh_ShadowPhongVS.hlsl">
+      <Filter>System\Mesh</Filter>
+    </FxCompile>
+    <FxCompile Include="Mesh_IdRenderVS.hlsl">
+      <Filter>System\Mesh</Filter>
+    </FxCompile>
+    <FxCompile Include="Mesh_IdRenderPS.hlsl">
+      <Filter>System\Mesh</Filter>
+    </FxCompile>
+    <FxCompile Include="Mesh_ColoredVS.hlsl">
+      <Filter>System\Mesh</Filter>
+    </FxCompile>
+    <FxCompile Include="Mesh_ColoredPS.hlsl">
+      <Filter>System\Mesh</Filter>
+    </FxCompile>
+    <FxCompile Include="Skin_RenderDepthVS.hlsl">
+      <Filter>System\Skinned</Filter>
+    </FxCompile>
+    <FxCompile Include="Skin_BumpVS.hlsl">
+      <Filter>System\Skinned</Filter>
+    </FxCompile>
+    <FxCompile Include="Skin_PhongVS.hlsl">
+      <Filter>System\Skinned</Filter>
+    </FxCompile>
+    <FxCompile Include="Skin_ShadowPhongVS.hlsl">
+      <Filter>System\Skinned</Filter>
+    </FxCompile>
+    <FxCompile Include="Skin_IdRenderVS.hlsl">
+      <Filter>System\Skinned</Filter>
+    </FxCompile>
+    <FxCompile Include="Skin_ColoredVS.hlsl">
+      <Filter>System\Skinned</Filter>
+    </FxCompile>
+    <FxCompile Include="Mesh_ShadowBumpVS.hlsl">
+      <Filter>System\Mesh</Filter>
+    </FxCompile>
+    <FxCompile Include="Skin_ShadowBumpVS.hlsl">
+      <Filter>System\Skinned</Filter>
+    </FxCompile>
+    <FxCompile Include="Mesh_PhongPS.hlsl">
+      <Filter>System\Mesh</Filter>
+    </FxCompile>
+    <FxCompile Include="CheckTransparencePS.hlsl">
+      <Filter>System\Misc</Filter>
+    </FxCompile>
+    <FxCompile Include="RenderQuadPS.hlsl">
+      <Filter>System\Misc</Filter>
+    </FxCompile>
+    <FxCompile Include="RenderQuadVS.hlsl">
+      <Filter>System\Misc</Filter>
+    </FxCompile>
+    <FxCompile Include="Mesh_ShadowBump3KPS.hlsl">
+      <Filter>System\Mesh</Filter>
+    </FxCompile>
+    <FxCompile Include="Mesh_ShadowBump5KPS.hlsl">
+      <Filter>System\Mesh</Filter>
+    </FxCompile>
+    <FxCompile Include="Mesh_ShadowBump7KPS.hlsl">
+      <Filter>System\Mesh</Filter>
+    </FxCompile>
+    <FxCompile Include="Mesh_ShadowPhong3KPS.hlsl">
+      <Filter>System\Mesh</Filter>
+    </FxCompile>
+    <FxCompile Include="Mesh_ShadowPhong5KPS.hlsl">
+      <Filter>System\Mesh</Filter>
+    </FxCompile>
+    <FxCompile Include="Mesh_ShadowPhong7KPS.hlsl">
+      <Filter>System\Mesh</Filter>
+    </FxCompile>
+    <FxCompile Include="SampleLumIterativePS.hlsl">
+      <Filter>System\HDR</Filter>
+    </FxCompile>
+    <FxCompile Include="SampleLumInitialPS.hlsl">
+      <Filter>System\HDR</Filter>
+    </FxCompile>
+    <FxCompile Include="SampleLumFinalPS.hlsl">
+      <Filter>System\HDR</Filter>
+    </FxCompile>
+    <FxCompile Include="DownScale2x2PS.hlsl">
+      <Filter>System\HDR</Filter>
+    </FxCompile>
+    <FxCompile Include="GaussianBlur5x5PS.hlsl">
+      <Filter>System\HDR</Filter>
+    </FxCompile>
+    <FxCompile Include="GaussianBlur15PS.hlsl">
+      <Filter>System\HDR</Filter>
+    </FxCompile>
+    <FxCompile Include="GaussianBlur8PS.hlsl">
+      <Filter>System\HDR</Filter>
+    </FxCompile>
+    <FxCompile Include="CalculateAdaptedLumPS.hlsl">
+      <Filter>System\HDR</Filter>
+    </FxCompile>
+    <FxCompile Include="BrightPassFilterPS.hlsl">
+      <Filter>System\HDR</Filter>
+    </FxCompile>
+    <FxCompile Include="FinalScenePassPS.hlsl">
+      <Filter>System\HDR</Filter>
+    </FxCompile>
+    <FxCompile Include="MergeTexturePS.hlsl">
+      <Filter>System\HDR</Filter>
+    </FxCompile>
+    <FxCompile Include="DownScale4x4PS.hlsl">
+      <Filter>System\HDR</Filter>
+    </FxCompile>
+    <FxCompile Include="Mesh_DefferedPS.hlsl">
+      <Filter>System\Mesh\Deffered</Filter>
+    </FxCompile>
+    <FxCompile Include="Mesh_DefferedVS.hlsl">
+      <Filter>System\Mesh\Deffered</Filter>
+    </FxCompile>
+    <FxCompile Include="DefferedLightingPS.hlsl">
+      <Filter>System\Mesh\Deffered</Filter>
+    </FxCompile>
+    <FxCompile Include="Mesh_ShadowPhong1KPS.hlsl">
+      <Filter>System\Mesh</Filter>
+    </FxCompile>
+    <FxCompile Include="Mesh_ShadowBump1KPS.hlsl">
+      <Filter>System\Mesh</Filter>
+    </FxCompile>
+    <FxCompile Include="DefferedLightingShadowedPS.hlsl">
+      <Filter>System\Mesh\Deffered</Filter>
+    </FxCompile>
+    <FxCompile Include="PreFilterVS.hlsl">
+      <Filter>System\Mesh\PreFilterShadow</Filter>
+    </FxCompile>
+    <FxCompile Include="PreFilterPS.hlsl">
+      <Filter>System\Mesh\PreFilterShadow</Filter>
+    </FxCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="SkinnedShadowed.hlsli">
+      <Filter>System\Headers</Filter>
+    </None>
+    <None Include="Globals.hlsli">
+      <Filter>System\Headers</Filter>
+    </None>
+    <None Include="Transform.hlsli">
+      <Filter>System\Headers</Filter>
+    </None>
+    <None Include="Luminance.hlsli">
+      <Filter>System\Headers</Filter>
+    </None>
+    <None Include="ShadowMapTransform.hlsli">
+      <Filter>System\Headers</Filter>
+    </None>
+    <None Include="Common.hlsli">
+      <Filter>System\Headers</Filter>
+    </None>
+    <None Include="Lighting.hlsli">
+      <Filter>System\Headers</Filter>
+    </None>
+    <None Include="LigthingShadowed.hlsli">
+      <Filter>System\Headers</Filter>
+    </None>
+    <None Include="Skinned.hlsli">
+      <Filter>System\Headers</Filter>
+    </None>
+    <None Include="HDRCommon.hlsli">
+      <Filter>System\HDR</Filter>
+    </None>
+    <None Include="LightingBase.hlsli">
+      <Filter>System\Headers</Filter>
+    </None>
+    <None Include="Deffered.hlsli">
+      <Filter>System\Headers</Filter>
+    </None>
+    <None Include="Shadowing.hlsli">
+      <Filter>System\Headers</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="ReadMe.txt">
+      <Filter>Dump Files</Filter>
+    </Text>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main.cpp">
+      <Filter>Dump Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

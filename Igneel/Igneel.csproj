@@ -1,0 +1,633 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{DAF07C37-563A-4BE2-BB47-32147DFE12DC}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Igneel</RootNamespace>
+    <AssemblyName>Igneel</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <PlatformTarget>x86</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <UseVSHostingProcess>true</UseVSHostingProcess>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="antlr.runtime, Version=2.7.7.1, Culture=neutral, PublicKeyToken=d7701e059243744f, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\Debug\antlr.runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="Antlr3.Runtime, Version=3.1.0.39271, Culture=neutral, PublicKeyToken=3a9cab8f8d22bfb7, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\Debug\Antlr3.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="Antlr3.Utility, Version=0.1.0.37314, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\Debug\Antlr3.Utility.dll</HintPath>
+    </Reference>
+    <Reference Include="ClrPlatformLib, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\Debug\ClrPlatformLib.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Xna.Framework.Math">
+      <HintPath>..\..\..\XNA Math Helper DLL\C#\Microsoft.Xna.Framework.Math.dll</HintPath>
+    </Reference>
+    <Reference Include="StringTemplate, Version=3.0.1.21733, Culture=neutral, PublicKeyToken=beee492b52c41e85, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>bin\Debug\StringTemplate.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Design" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Drawing.Design" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Animations\Animation.cs" />
+    <Compile Include="Animations\AnimationCursor.cs" />
+    <Compile Include="Animations\AnimationCurve.cs" />
+    <Compile Include="Animations\AnimationManager.cs" />
+    <Compile Include="Animations\AnimationNode.cs" />
+    <Compile Include="Animations\AnimationPlayback.cs" />
+    <Compile Include="Animations\AnimationSecuenceGraph.cs" />
+    <Compile Include="Animations\AnimationTransition.cs" />
+    <Compile Include="Animations\BoneInfo.cs" />
+    <Compile Include="Animations\Deformers\Deformer.cs" />
+    <Compile Include="Animations\Deformers\SkinDeformer.cs" />
+    <Compile Include="Animations\IAnimationContext.cs" />
+    <Compile Include="Animations\ICurveOutput.cs" />
+    <Compile Include="Animations\SceneNodeAnimContext.cs" />
+    <Compile Include="Animations\SceneNodePoseResetter.cs" />
+    <Compile Include="Animations\SecuenceNode.cs" />
+    <Compile Include="Animations\SecuenceTransition.cs" />
+    <Compile Include="Assets\ApplicationAsset.cs" />
+    <Compile Include="Assets\ApplicationState.cs" />
+    <Compile Include="Assets\Asset.cs" />
+    <Compile Include="Assets\AssetContextFactory.cs" />
+    <Compile Include="Assets\AssetContexts.cs" />
+    <Compile Include="Assets\AssetManager.cs" />
+    <Compile Include="Assets\AssetReference.cs" />
+    <Compile Include="Assets\AssetStorage.cs" />
+    <Compile Include="Assets\ContentPackage.cs" />
+    <Compile Include="Assets\DelegateConverters.cs" />
+    <Compile Include="Assets\IAssetContext.cs" />
+    <Compile Include="Assets\IAssetProvider.cs" />
+    <Compile Include="Assets\IAssetRepository.cs" />
+    <Compile Include="Assets\IEngineSetting.cs" />
+    <Compile Include="Assets\LocalAssetRepository.cs" />
+    <Compile Include="Assets\MemberStorage.cs" />
+    <Compile Include="Assets\StateStore.cs" />
+    <Compile Include="Collections\Utils.cs" />
+    <Compile Include="Components\DrawingEntry.cs" />
+    <Compile Include="Graphics\OutputMerge\DepthStencilDesc.cs" />
+    <Compile Include="Graphics\Resources\ShaderBuffer.cs" />
+    <Compile Include="Graphics\Shaders\ShaderReflection.cs" />
+    <Compile Include="Graphics\TargaImage.cs" />
+    <Compile Include="IA\Inference\Facts.cs" />
+    <Compile Include="IA\StateMachines\InferenceEngine.cs" />
+    <Compile Include="Importers\BVH\BVHAnimationImporter.cs" />
+    <Compile Include="Importers\BVH\bvhLexer.cs" />
+    <Compile Include="Importers\BVH\BVHNode.cs" />
+    <Compile Include="Importers\BVH\bvhParser.cs" />
+    <Compile Include="Importers\BVH\BVHSkelletonRender.cs" />
+    <Compile Include="Math\Ray.cs" />
+    <Compile Include="Physics\Scene\ContactReport.cs" />
+    <Compile Include="Physics\Scene\ITriggerCallback.cs" />
+    <Compile Include="Physics\Scene\RaycastHit.cs" />
+    <Compile Include="Rendering\Bindings\TransformsBindings.cs" />
+    <Compile Include="Components\BillBoard.cs" />
+    <Compile Include="Components\Camera.cs" />
+    <Compile Include="Components\GraphicObject.cs" />
+    <Compile Include="Components\IGraphicObject.cs" />
+    <Compile Include="Components\INodeObject.cs" />
+    <Compile Include="Components\IShadingInput.cs" />
+    <Compile Include="Components\Lights\GlobalLigth.cs" />
+    <Compile Include="Components\Lights\Light.cs" />
+    <Compile Include="Components\Lights\LightInstance.cs" />
+    <Compile Include="Components\Meshes\MaterialComponent.cs" />
+    <Compile Include="Components\Meshes\MeshComponents.cs" />
+    <Compile Include="Components\NodeObjectColletion.cs" />
+    <Compile Include="Components\ParticlesSystem\ParticleEmitter.cs" />
+    <Compile Include="Components\ParticlesSystem\ParticleSystem.cs" />
+    <Compile Include="Components\ScreenDecal.cs" />
+    <Compile Include="Components\Meshes\SkinInstance.cs" />
+    <Compile Include="Components\SkyDome.cs" />
+    <Compile Include="Components\Terrain\HeightFieldSection.cs" />
+    <Compile Include="Components\Terrain\Terrain.cs" />
+    <Compile Include="Components\Terrain\TerrainHeightField.cs" />
+    <Compile Include="Components\Water.cs" />
+    <Compile Include="Controllers\FPCameraController.cs" />
+    <Compile Include="Controllers\INodeController.cs" />
+    <Compile Include="Controllers\NodeController.cs" />
+    <Compile Include="Controllers\ThirdPersonController.cs" />
+    <Compile Include="Controllers\Vehicles\InputMap.cs" />
+    <Compile Include="Controllers\Vehicles\LinearInterpolationValues.cs" />
+    <Compile Include="Controllers\Vehicles\RayCastWheel.cs" />
+    <Compile Include="Controllers\Vehicles\SimpleVehicle.cs" />
+    <Compile Include="Controllers\Vehicles\Vehicle.cs" />
+    <Compile Include="Controllers\Vehicles\VehicleMotor.cs" />
+    <Compile Include="Controllers\Vehicles\Wheel.cs" />
+    <Compile Include="Controllers\WaterSimulator.cs" />
+    <Compile Include="Engine\Engine.cs" />
+    <Compile Include="Exceptions\GraphicsExceptions.cs" />
+    <Compile Include="Rendering\Effects\SystemEffects\CheckTransparenceEffect.cs" />
+    <Compile Include="Rendering\Effects\SystemEffects\DefferedLightingEffect.cs" />
+    <Compile Include="Rendering\Effects\SystemEffects\HDREffect.cs" />
+    <Compile Include="Rendering\Effects\SystemEffects\MeshEffects.cs" />
+    <Compile Include="Rendering\Effects\SystemEffects\RenderQuadEffect.cs" />
+    <Compile Include="Rendering\Effects\SystemEffects\ShadowEdgeEffect.cs" />
+    <Compile Include="Rendering\Effects\SystemEffects\SkinnedEffect.cs" />
+    <Compile Include="Rendering\Bindings\TechniquesBinding\ReflectionMapBinding.cs" />
+    <Compile Include="Rendering\Effects\SystemEffects\HeightFieldEffect.cs" />
+    <Compile Include="Rendering\Effects\SystemEffects\ParticleSystemEffect.cs" />
+    <Compile Include="Rendering\Effects\SystemEffects\BillboardEffect.cs" />
+    <Compile Include="Graphics\Resources\GraphicFont.cs" />
+    <Compile Include="Graphics\Resources\ISurface.cs" />
+    <Compile Include="Graphics\Shaders\IShaderManager.cs" />
+    <Compile Include="Graphics\Shaders\IShaderRepository.cs" />
+    <Compile Include="Graphics\Shaders\ShaderStage.cs" />
+    <Compile Include="Graphics\Shaders\ShaderTypes.cs" />
+    <Compile Include="Engine\Extensions.cs" />
+    <Compile Include="Engine\IgneelApplication.cs" />
+    <Compile Include="Engine\Timer.cs" />
+    <Compile Include="EngineState\EngineState.cs" />
+    <Compile Include="EngineState\Lighting\GSAO.cs" />
+    <Compile Include="EngineState\Lighting\HDR.cs" />
+    <Compile Include="EngineState\Lighting\Lighting.cs" />
+    <Compile Include="EngineState\Lighting\PRT.cs" />
+    <Compile Include="EngineState\Lighting\ReflectionState.cs" />
+    <Compile Include="EngineState\Lighting\SSAO.cs" />
+    <Compile Include="EngineState\PhysicState.cs" />
+    <Compile Include="EngineState\Shading\DeferredLighting.cs" />
+    <Compile Include="EngineState\Shading\DeferredLightingState.cs" />
+    <Compile Include="EngineState\Shading\DephtOfField.cs" />
+    <Compile Include="EngineState\Shading\Fog.cs" />
+    <Compile Include="EngineState\Shading\LensFlare.cs" />
+    <Compile Include="EngineState\Shading\MotionBlur.cs" />
+    <Compile Include="EngineState\Shading\ShadingState.cs" />
+    <Compile Include="EngineState\Shadowing\ShadowMapState.cs" />
+    <Compile Include="EngineState\Shadowing\ShadowState.cs" />
+    <Compile Include="Components\Meshes\BasicModels.cs" />
+    <Compile Include="Components\Meshes\Mesh.cs" />
+    <Compile Include="Components\Meshes\MeshPart.cs" />
+    <Compile Include="Components\Meshes\ShadowVolumeMesh.cs" />
+    <Compile Include="Components\Meshes\VertexBufferBuilder.cs" />
+    <Compile Include="Engine\BufferView.cs" />
+    <Compile Include="Graphics\OutputMerge\SwapChain.cs" />
+    <Compile Include="Rendering\Bindings\CameraBinding.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Rendering\Bindings\IdBinding.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Rendering\Renders\IRenderBinding.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Rendering\Bindings\LightBinding.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Rendering\Bindings\MeshMaterialBinding.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Rendering\Bindings\PixelClippingBinding.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Rendering\Renders\RenderParamBinding.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Rendering\Bindings\SceneNodeBindings.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Rendering\Bindings\SkinBinding.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Rendering\Bindings\SkyDomeBinding.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Rendering\Bindings\TechniquesBinding\ClipSceneTechniqueBinding.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Rendering\Bindings\TechniquesBinding\EnvironmentMapBinding.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Rendering\Bindings\TechniquesBinding\LigthingShadowed.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Rendering\Bindings\TechniquesBinding\TechniqueBinding.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Rendering\Engine.Rendering.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Components\Meshes\MeshMaterial.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Rendering\NotAvailableException.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Rendering\Registrator.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Rendering\RenderingPipelineUtilities.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Rendering\Renders\BillBoardRender.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Rendering\Renders\MeshRenders\MeshRender.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Rendering\Renders\MeshRenders\MeshRenderRegistrator.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Rendering\Renders\ParticleSystemRender.cs" />
+    <Compile Include="Rendering\Renders\ParticleSystem\ParticleSystemRender.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Rendering\Renders\ParticleSystem\Registrator.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Rendering\Renders\PhysicRenders\ActorRender.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Rendering\Renders\Render.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Rendering\Renders\ShapeRender.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Rendering\Renders\SkyDomeRender.cs" />
+    <Compile Include="Rendering\Renders\TerrainRenders\HeightFieldRegistrator.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Rendering\Renders\TerrainRenders\HeightFieldRender.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Rendering\Renders\VolumeRender.cs" />
+    <Compile Include="Rendering\Renders\WaterRender.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Rendering\RenderTexture.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Rendering\Techniques\GlareDef.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Rendering\Techniques\HDRTechnique.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Rendering\Techniques\HitTestTechnique.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Rendering\Techniques\NodeTechniques\CubeMapTechique.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Rendering\Techniques\NodeTechniques\EnvironmentMapTechinique.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Rendering\Techniques\NodeTechniques\PlaneReflectionTechnique.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Rendering\Techniques\NodeTechniques\ShadowMapTechinique.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Rendering\Techniques\PhysicTechniques.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Rendering\Techniques\DefferedLigthing.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Rendering\Techniques\Shadows\EdgeShadowFilteringTechnique.cs" />
+    <Compile Include="Rendering\Techniques\Shadows\SceneShadowMapping.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Rendering\Techniques\SceneTechniques.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Rendering\SpriteRender.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Rendering\Techniques\Technique.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Rendering\EffectPass.cs" />
+    <Compile Include="Rendering\DynamicMapping.cs" />
+    <Compile Include="Graphics\Shaders\ShaderProgram.cs" />
+    <Compile Include="Graphics\Shaders\ShaderProgramDesc.cs" />
+    <Compile Include="Importers\AssetImporter.cs" />
+    <Compile Include="Importers\Collada\ColladaImporter.cs" />
+    <Compile Include="Importers\Collada\ColladaLoader.Classes.cs" />
+    <Compile Include="Importers\Collada\ColladaLoader.Utilities.cs" />
+    <Compile Include="Input\Inputs.cs" />
+    <Compile Include="Input\Joystick.cs" />
+    <Compile Include="Input\Keyboard.cs" />
+    <Compile Include="Input\Keys.cs" />
+    <Compile Include="Input\Mouse.cs" />
+    <Compile Include="Math\Frustum.cs" />
+    <Compile Include="Math\Matrix.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Math\OrientedBox.cs" />
+    <Compile Include="Math\Plane.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Math\Quaternion.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Math\Vector2.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Math\Vector3.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Math\Vector4.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Physics\Actor\Actor.cs" />
+    <Compile Include="Physics\Actor\ActorDesc.cs" />
+    <Compile Include="Physics\Actor\ActorShape.cs" />
+    <Compile Include="Physics\Actor\ActorShapeDesc.cs" />
+    <Compile Include="Physics\Actor\Enums.cs" />
+    <Compile Include="Physics\Actor\IActor.cs" />
+    <Compile Include="Physics\Actor\SweepQueryHit.cs" />
+    <Compile Include="Physics\CharacterController\CharacterController.cs" />
+    <Compile Include="Physics\CharacterController\CharacterControllerDesc.cs" />
+    <Compile Include="Physics\CharacterController\CharacterControllerManager.cs" />
+    <Compile Include="Physics\CharacterController\Enums.cs" />
+    <Compile Include="Physics\CharacterController\ICharacterController.cs" />
+    <Compile Include="Physics\CharacterController\IUserControllerHitReport.cs" />
+    <Compile Include="Physics\Scene\SweepCache.cs" />
+    <Compile Include="Physics\TriangleMesh.cs" />
+    <Compile Include="Physics\Actor\Utilities.cs" />
+    <Compile Include="Physics\Enums.cs" />
+    <Compile Include="Physics\Scene\MaterialDesc.cs" />
+    <Compile Include="Physics\PhysicManager.cs" />
+    <Compile Include="Physics\Scene\PhysicMaterial.cs" />
+    <Compile Include="Physics\Scene\PhysicScene.cs" />
+    <Compile Include="Physics\Scene\PhysicSceneDesc.cs" />
+    <Compile Include="Rendering\Presenters\GraphicPresenter.cs" />
+    <Compile Include="Rendering\Presenters\MultyViewPresenter.cs" />
+    <Compile Include="Rendering\Presenters\SingleViewPresenter.cs" />
+    <Compile Include="Rendering\Presenters\SwapChainPresenter.cs" />
+    <Compile Include="Components\CullQuadTree.cs" />
+    <Compile Include="Components\ICullingTest.cs" />
+    <Compile Include="Components\Scene.cs" />
+    <Compile Include="Components\SceneManager.cs" />
+    <Compile Include="Components\SceneNode.cs" />
+    <Compile Include="Components\SceneState.cs" />
+    <Compile Include="Components\SceneStateTriggers.cs" />
+    <Compile Include="Services\CommonService.cs" />
+    <Compile Include="Services\INotificationService.cs" />
+    <Compile Include="Services\IPickingService.cs" />
+    <Compile Include="IA\StateMachines\Automata.cs" />
+    <Compile Include="IA\StateMachines\State.cs" />
+    <Compile Include="Tools\CharacterControllerTagProcessor.cs" />
+    <Compile Include="Tools\EnvironmentMapTagProcessor.cs" />
+    <Compile Include="Tools\ActorTagProcessor.cs" />
+    <Compile Include="Tools\ReflectiveMapTagProcessor.cs" />
+    <Compile Include="Tools\ShadowMapTagProcessor.cs" />
+    <Compile Include="Tools\TagProcessor.cs" />
+    <Compile Include="Utilities\Bounds3.cs" />
+    <Compile Include="Collections\NamedItemCollection.cs" />
+    <Compile Include="Collections\ObservableCollection.cs" />
+    <Compile Include="Design\Controls\AngleControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Design\Controls\AttitudePicker.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Design\Controls\AttitudePicker.Designer.cs">
+      <DependentUpon>AttitudePicker.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Design\Controls\ColorPicker.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Design\Controls\ColorPicker.Designer.cs">
+      <DependentUpon>ColorPicker.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Design\Controls\DirectionPicker.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Design\Controls\DirectionPicker.Designer.cs">
+      <DependentUpon>DirectionPicker.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Design\Controls\EulerEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Design\Controls\EulerEditor.Designer.cs">
+      <DependentUpon>EulerEditor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Design\Controls\NumericStep.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Design\Controls\NumericStep.Designer.cs">
+      <DependentUpon>NumericStep.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Design\Controls\Vector3Editor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Design\Controls\Vector3Editor.Designer.cs">
+      <DependentUpon>Vector3Editor.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Design\CustumPropertyDescritors.cs" />
+    <Compile Include="Design\DesignAttributes.cs" />
+    <Compile Include="Design\Form\AttitudePickerForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Design\Form\AttitudePickerForm.Designer.cs">
+      <DependentUpon>AttitudePickerForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Design\DesignTypeConverter.cs" />
+    <Compile Include="Design\Form\TypeProviderForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Design\Form\TypeProviderForm.Designer.cs">
+      <DependentUpon>TypeProviderForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Design\PDProviders\PDProvider.cs" />
+    <Compile Include="Design\UITypeEditors\UIActionEditor.cs" />
+    <Compile Include="Design\UITypeEditors\UIAttitudeTypeEditor.cs" />
+    <Compile Include="Design\UITypeEditors\UIColorTypeEditor.cs" />
+    <Compile Include="Design\UITypeEditors\UICreatorEditor.cs" />
+    <Compile Include="Design\UITypeEditors\UIDirectionEditor.cs" />
+    <Compile Include="Design\UITypeEditors\UIInmediateNumericEditor.cs" />
+    <Compile Include="Design\UITypeEditors\UIRadianTypeEditor.cs" />
+    <Compile Include="Design\UITypeEditors\UIRotationMatrixEditor.cs" />
+    <Compile Include="Design\UITypeEditors\UIVector3TypeEditor.cs" />
+    <Compile Include="Utilities\Generator.cs" />
+    <Compile Include="Graphics\Color.cs" />
+    <Compile Include="Graphics\Exceptions.cs" />
+    <Compile Include="Graphics\GraphicDevice\Adapter.cs" />
+    <Compile Include="Graphics\GraphicDevice\Enums.cs" />
+    <Compile Include="Graphics\GraphicDevice\GraphicDeviceDesc.cs" />
+    <Compile Include="Graphics\GraphicDevice\GraphicDeviceFactory.cs" />
+    <Compile Include="Graphics\GraphicDevice\SamplerState.cs" />
+    <Compile Include="Graphics\OutputMerge\DepthStencilState.cs" />
+    <Compile Include="Graphics\OutputMerge\Enums.cs" />
+    <Compile Include="Graphics\OutputMerge\GraphicDevice.OutputMergeStage.cs" />
+    <Compile Include="Graphics\Resources\Structs.cs" />
+    <Compile Include="Graphics\Resources\RenderTarget.cs" />
+    <Compile Include="Graphics\OutputMerge\BlendState.cs" />
+    <Compile Include="Graphics\Rasterizer\ViewPort.cs" />
+    <Compile Include="Graphics\Rasterizer\Enums.cs" />
+    <Compile Include="Graphics\Rasterizer\GraphicDeviceState.cs" />
+    <Compile Include="Graphics\Rasterizer\GraphicDevice.RasterizerStateStage.cs" />
+    <Compile Include="Graphics\GraphicDevice\GraphicDevice.cs" />
+    <Compile Include="Graphics\InputAssembler\GraphicDevice.InputAssemblerStage.cs" />
+    <Compile Include="Graphics\Rasterizer\RasterizerState.cs" />
+    <Compile Include="Graphics\InputAssembler\Enums.cs" />
+    <Compile Include="Graphics\InputAssembler\InputLayout.cs" />
+    <Compile Include="Graphics\Shaders\ShaderCode.cs" />
+    <Compile Include="Graphics\Resources\Texture.cs" />
+    <Compile Include="Graphics\Resources\Texture3D.cs" />
+    <Compile Include="Graphics\Resources\Texture2D.cs" />
+    <Compile Include="Graphics\Resources\Enums.cs" />
+    <Compile Include="Graphics\Resources\Texture1D.cs" />
+    <Compile Include="Graphics\Resources\TextureCube.cs" />
+    <Compile Include="Rendering\EffectVariable.cs" />
+    <Compile Include="Rendering\Effect.cs" />
+    <Compile Include="Graphics\Shaders\Enums.cs" />
+    <Compile Include="Graphics\Shaders\IUniformSetter.cs" />
+    <Compile Include="Graphics\Shaders\Include.cs" />
+    <Compile Include="Graphics\Shaders\ShaderMacro.cs" />
+    <Compile Include="Graphics\Shaders\Shaders.cs" />
+    <Compile Include="Graphics\Shaders\GraphicDevice.Shaders.cs" />
+    <Compile Include="Graphics\Resources\GraphicBuffer.cs" />
+    <Compile Include="Graphics\InputAssembler\VertexDescriptor.cs" />
+    <Compile Include="Graphics\Resources\Resources.cs" />
+    <Compile Include="Engine\IBoundable.cs" />
+    <Compile Include="Engine\IInitializable.cs" />
+    <Compile Include="Engine\IRenderable.cs" />
+    <Compile Include="Math\Volumes.cs" />
+    <Compile Include="Math\Triangle.cs" />
+    <Compile Include="Math\Rand.cs" />
+    <Compile Include="Engine\IAffectable.cs" />
+    <Compile Include="Engine\IDeferreable.cs" />
+    <Compile Include="Engine\IDynamic.cs" />
+    <Compile Include="Math\Cylindrical.cs" />
+    <Compile Include="Math\Euler.cs" />
+    <Compile Include="Math\Geometry.cs" />
+    <Compile Include="Math\Numerics.cs" />
+    <Compile Include="Math\Spherical.cs" />
+    <Compile Include="Engine\IRenderRegistrator.cs" />
+    <Compile Include="Engine\IResourceAllocator.cs" />
+    <Compile Include="Engine\ITransformable.cs" />
+    <Compile Include="Engine\IDisposeNotifable.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Engine\SerializableBase.cs" />
+    <Compile Include="Services\Singleton.cs" />
+    <Compile Include="Services\Factory.cs" />
+    <Compile Include="Services\IDependencyResolver.cs" />
+    <Compile Include="Services\ILogService.cs" />
+    <Compile Include="Services\InitializationService.cs" />
+    <Compile Include="Utilities\Shapes\ArrowBuilder.cs" />
+    <Compile Include="Utilities\Shapes\BoxBuilder.cs" />
+    <Compile Include="Utilities\Shapes\CapsuleBuilder.cs" />
+    <Compile Include="Utilities\Shapes\CircleBuilder.cs" />
+    <Compile Include="Utilities\Shapes\ConeBuilder.cs" />
+    <Compile Include="Utilities\Shapes\CylindreBuilder.cs" />
+    <Compile Include="Utilities\Shapes\DomeBuilder.cs" />
+    <Compile Include="Utilities\Shapes\ShapeBuilder.cs" />
+    <Compile Include="Utilities\Shapes\SphereBuilder.cs" />
+    <Compile Include="Utilities\StringConverter.cs" />
+    <Compile Include="Utilities\Structs.cs" />
+    <Compile Include="Utilities\Util.cs" />
+    <Compile Include="Graphics\InputAssembler\VertexComponents.cs" />
+    <Compile Include="Graphics\InputAssembler\VertexElement.cs" />
+    <Compile Include="Graphics\InputAssembler\Vertices.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Design\Controls\AngleControl.resx">
+      <DependentUpon>AngleControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Design\Controls\AttitudePicker.resx">
+      <DependentUpon>AttitudePicker.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Design\Controls\ColorPicker.resx">
+      <DependentUpon>ColorPicker.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Design\Controls\DirectionPicker.resx">
+      <DependentUpon>DirectionPicker.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Design\Controls\EulerEditor.resx">
+      <DependentUpon>EulerEditor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Design\Controls\NumericStep.resx">
+      <DependentUpon>NumericStep.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Design\Controls\Vector3Editor.resx">
+      <DependentUpon>Vector3Editor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Design\Form\AttitudePickerForm.resx">
+      <DependentUpon>AttitudePickerForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Design\Form\TypeProviderForm.resx">
+      <DependentUpon>TypeProviderForm.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Rendering\Renders\Recorte.txt" />
+    <Content Include="Components\PhysicsTag.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram1.cd" />
+    <None Include="ClassDiagram2.cd" />
+    <None Include="ClassDiagram3.cd" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="IA\Learning\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

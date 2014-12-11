@@ -1,0 +1,46 @@
+F:\Projects\Igneel\Igneel\bin\Debug\Igneel.dll
+F:\Projects\Igneel\Igneel\bin\Debug\Igneel.pdb
+F:\Projects\Igneel\Igneel\obj\Debug\Igneel.Design.Controls.AngleControl.resources
+F:\Projects\Igneel\Igneel\obj\Debug\Igneel.Design.Controls.AttitudePicker.resources
+F:\Projects\Igneel\Igneel\obj\Debug\Igneel.Design.Controls.ColorPicker.resources
+F:\Projects\Igneel\Igneel\obj\Debug\Igneel.Design.Controls.DirectionPicker.resources
+F:\Projects\Igneel\Igneel\obj\Debug\Igneel.Design.Controls.EulerEditor.resources
+F:\Projects\Igneel\Igneel\obj\Debug\Igneel.Design.Controls.NumericStep.resources
+F:\Projects\Igneel\Igneel\obj\Debug\Igneel.Design.Controls.Vector3Editor.resources
+F:\Projects\Igneel\Igneel\obj\Debug\Igneel.Design.Forms.AttitudePickerForm.resources
+F:\Projects\Igneel\Igneel\obj\Debug\Igneel.Design.Forms.TypeProviderForm.resources
+F:\Projects\Igneel\Igneel\obj\Debug\Igneel.csproj.GenerateResource.Cache
+F:\Projects\Igneel\Igneel\obj\Debug\Igneel.dll
+F:\Projects\Igneel\Igneel\obj\Debug\Igneel.pdb
+F:\Projects\Igneel\Igneel\obj\Debug\Igneel.csprojResolveAssemblyReference.cache
+G:\Ansel\Develop\Visual Studio 2010\Igneel\Igneel\bin\Debug\Igneel.dll
+G:\Ansel\Develop\Visual Studio 2010\Igneel\Igneel\bin\Debug\Igneel.pdb
+G:\Ansel\Develop\Visual Studio 2010\Igneel\Igneel\bin\Debug\Microsoft.Xna.Framework.Math.dll
+G:\Ansel\Develop\Visual Studio 2010\Igneel\Igneel\obj\Debug\Igneel.Design.Controls.AngleControl.resources
+G:\Ansel\Develop\Visual Studio 2010\Igneel\Igneel\obj\Debug\Igneel.Design.Controls.AttitudePicker.resources
+G:\Ansel\Develop\Visual Studio 2010\Igneel\Igneel\obj\Debug\Igneel.Design.Controls.ColorPicker.resources
+G:\Ansel\Develop\Visual Studio 2010\Igneel\Igneel\obj\Debug\Igneel.Design.Controls.DirectionPicker.resources
+G:\Ansel\Develop\Visual Studio 2010\Igneel\Igneel\obj\Debug\Igneel.Design.Controls.EulerEditor.resources
+G:\Ansel\Develop\Visual Studio 2010\Igneel\Igneel\obj\Debug\Igneel.Design.Controls.NumericStep.resources
+G:\Ansel\Develop\Visual Studio 2010\Igneel\Igneel\obj\Debug\Igneel.Design.Controls.Vector3Editor.resources
+G:\Ansel\Develop\Visual Studio 2010\Igneel\Igneel\obj\Debug\Igneel.Design.Forms.AttitudePickerForm.resources
+G:\Ansel\Develop\Visual Studio 2010\Igneel\Igneel\obj\Debug\Igneel.Design.Forms.TypeProviderForm.resources
+G:\Ansel\Develop\Visual Studio 2010\Igneel\Igneel\obj\Debug\Igneel.csproj.GenerateResource.Cache
+G:\Ansel\Develop\Visual Studio 2010\Igneel\Igneel\obj\Debug\Igneel.dll
+G:\Ansel\Develop\Visual Studio 2010\Igneel\Igneel\obj\Debug\Igneel.pdb
+G:\Ansel\Develop\Visual Studio 2010\Igneel\Igneel\obj\Debug\Igneel.csprojResolveAssemblyReference.cache
+E:\Projects\Igneel\Igneel\bin\Debug\Igneel.dll
+E:\Projects\Igneel\Igneel\bin\Debug\Igneel.pdb
+E:\Projects\Igneel\Igneel\obj\Debug\Igneel.Design.Controls.AngleControl.resources
+E:\Projects\Igneel\Igneel\obj\Debug\Igneel.Design.Controls.AttitudePicker.resources
+E:\Projects\Igneel\Igneel\obj\Debug\Igneel.Design.Controls.ColorPicker.resources
+E:\Projects\Igneel\Igneel\obj\Debug\Igneel.Design.Controls.DirectionPicker.resources
+E:\Projects\Igneel\Igneel\obj\Debug\Igneel.Design.Controls.EulerEditor.resources
+E:\Projects\Igneel\Igneel\obj\Debug\Igneel.Design.Controls.NumericStep.resources
+E:\Projects\Igneel\Igneel\obj\Debug\Igneel.Design.Controls.Vector3Editor.resources
+E:\Projects\Igneel\Igneel\obj\Debug\Igneel.Design.Forms.AttitudePickerForm.resources
+E:\Projects\Igneel\Igneel\obj\Debug\Igneel.Design.Forms.TypeProviderForm.resources
+E:\Projects\Igneel\Igneel\obj\Debug\Igneel.csproj.GenerateResource.Cache
+E:\Projects\Igneel\Igneel\obj\Debug\Igneel.dll
+E:\Projects\Igneel\Igneel\obj\Debug\Igneel.pdb
+E:\Projects\Igneel\Igneel\obj\Debug\Igneel.csprojResolveAssemblyReference.cache

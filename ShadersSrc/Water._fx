@@ -1,0 +1,243 @@
+//********************************************************
+//
+//	Water Shading for the GEngine Graphic Engine
+//	developed by Ansel Castro Cabrera copyrights 2012
+//
+//********************************************************
+
+#include "LigthingShadowed.fxh"
+#include "Common.fx"
+
+int DESCRIPTION
+<
+	string ShaderModel = "3.0";
+	string Version = "1.0.0";
+	int NumberOfLights = 4;
+	int DiffuseSamplersNumbers = 1;
+	int DiffuseSamplerStartRegister = 0;
+	int NormalMapRegister = 1;
+	int ShadowSamplersNumbers = 2;
+	int ShadowSamplerStartRegister = 4;
+	bool SupportAmbient = true;	
+	bool SupportSurfaceInfo = true;
+	bool SupportNormalMap = true;
+	int	ReflectionMapRegister = 2;
+	int	RefractionMapRegister = 3;
+>;
+
+bool useDiffuse    : DIFFUSE_MAP_FLAG;
+bool useNormalMap  :NORMAL_MAP_FLAG;
+
+//uniforms
+float4x4 projTexM;
+float4x4 waterTexM;
+float4x4 custicTexM;
+float waveHeight		: FLOAT;
+
+sampler s0	: register(s0); // Diffuse Sampler or srcTexture
+sampler s1	: register(s1); // Normal Sampler or caustic map
+sampler s2  : register(s2); // Reflection Sampler
+sampler s3	: register(s3); // Refraction Sampler
+sampler s4	: register(s4); // Shadow sampler 1
+sampler s5	: register(s5); // Shadow sampler2
+
+struct VSOut
+{
+	float4 PositionH		: POSITION;
+	float3 PositionW		: TEXCOORD0;	
+	float3 NormalW			: TEXCOORD1;
+	float2 TexCoord			: TEXCOORD2;
+	float4 ReflSamplingPos	: TEXCOORD3;
+	float4 RefrSamplingPos	: TEXCOORD4;
+};
+struct SMVSOut
+{
+	float4 PositionH		: POSITION;
+	float3 PositionW		: TEXCOORD0;	
+	float3 NormalW			: TEXCOORD1;
+	float2 TexCoord			: TEXCOORD2;
+	float4 ReflSamplingPos	: TEXCOORD3;
+	float4 RefrSamplingPos	: TEXCOORD4;
+	float4 PositionL		: TEXCOORD5;
+};
+struct SMVSOut_2L
+{
+	float4 PositionH		: POSITION;
+	float3 PositionW		: TEXCOORD0;	
+	float3 NormalW			: TEXCOORD1;
+	float2 TexCoord			: TEXCOORD2;
+	float4 ReflSamplingPos	: TEXCOORD3;
+	float4 RefrSamplingPos	: TEXCOORD4;
+	float4 PositionL0		: TEXCOORD5;
+	float4 PositionL1		: TEXCOORD6;
+};
+//************************* Simple Phong Per Pixel Lighting Unshadowed **************************************
+
+VSOut SimpleVertexShader(float3 position : POSITION, 
+						 float3 normal	 : NORMAL, 
+						 float2 texCoord : TEXCOORD0)
+{
+    VSOut output;
+
+	float4 posW = mul(float4(position ,1),World);	
+	output.PositionH = mul(posW, ViewProj);
+	output.PositionW = posW;
+	output.NormalW =normalize(mul(float4(normal, 0), World));
+	output.TexCoord =mul(float4(texCoord,0,1) , waterTexM);
+		
+	output.ReflSamplingPos = mul(posW, projTexM);
+	output.RefrSamplingPos = output.ReflSamplingPos;	
+
+    return output;
+}
+
+float4 PhongPixelShader(VSOut v) : COLOR0
+{   				
+	float3 normal  = v.NormalW;	
+	if(useNormalMap)
+	{
+		normal = tex2D(s1, v.TexCoord) * 2 - 1;
+		normal = normalize(float3(normal.x ,normal.z ,-normal.y));
+	}
+	float4 diffuse = useDiffuse ? tex2D(s0, v.TexCoord) * float4(surface.Diffuse , 1) 
+									: float4(surface.Diffuse , 1);
+	
+	float2 perturbation = waveHeight * (normal.xz);
+	float2 reflTex = (v.ReflSamplingPos.xy / v.ReflSamplingPos.w) + perturbation;
+	float2 refrTex = (v.RefrSamplingPos.xy / v.RefrSamplingPos.w) + perturbation;
+	
+	float4 reflecColor = tex2D(s2, reflTex) * surface.Reflectivity;
+    float4 refracColor = tex2D(s3, refrTex) * (1 - surface.Alpha);	
+	
+	float3 toEye = normalize(eyePos - v.PositionW);	
+	float fresnel = 1.0 - saturate(dot(toEye, normal)); //fresne 0 grades = 0  90 grades = 1
+	
+	float4 color = LightingAmbient(v.PositionW, normal, diffuse, surface.Specular * fresnel, 0);	
+					
+	if(eyePos.y < v.PositionW.y)
+		color += reflecColor;
+	else
+		color += lerp(refracColor , reflecColor ,fresnel);
+		
+	color.a = surface.Alpha;
+    return color;
+}
+
+// ********************** Shadowed **************************************************
+SMVSOut ShadowVertexShader(float3 position : POSITION, 
+						 float3 normal	 : NORMAL, 
+						 float2 texCoord : TEXCOORD0)
+{
+    SMVSOut output;
+
+	float4 posW = mul(float4(position ,1),World);	
+	output.PositionH = mul(posW, ViewProj);
+	output.PositionW = posW;
+	output.NormalW =normalize(mul(float4(normal, 0), World));
+	output.TexCoord =mul(float4(texCoord,0,1) , waterTexM);		
+	output.ReflSamplingPos = mul(posW, projTexM);
+	output.RefrSamplingPos = output.ReflSamplingPos;
+	output.PositionL = mul(posW, LightVP[0]);
+
+    return output;
+}
+float4 ShadowPixelShader(SMVSOut v) : COLOR0
+{   				
+	float3 normal  = v.NormalW;	
+	if(useNormalMap)
+	{
+		normal = tex2D(s1, v.TexCoord) * 2 - 1;
+		normal = normalize(float3(normal.x ,normal.z , -normal.y));
+	}
+	float4 diffuse = useDiffuse ? tex2D(s0, v.TexCoord) * float4(surface.Diffuse , 1) 
+									: float4(surface.Diffuse , 1);
+	
+	float2 perturbation = waveHeight * (normal.xz);
+	float2 reflTex = (v.ReflSamplingPos.xy / v.ReflSamplingPos.w) + perturbation;
+	float2 refrTex = (v.RefrSamplingPos.xy / v.RefrSamplingPos.w) + perturbation;
+	
+	float4 reflecColor = tex2D(s2, reflTex) * surface.Reflectivity;
+    float4 refracColor = tex2D(s3, refrTex) * (1 - surface.Alpha);	
+	
+	float3 toEye = normalize(eyePos - v.PositionW);	
+	float fresnel = 1.0 - saturate(dot(toEye, normal)); //fresne 0 grades = 0  90 grades = 1
+	
+	float4 color = LightingAmbientShadowed(light[0], v.PositionW, normal, diffuse, surface.Specular * fresnel, 0 , v.PositionL , s4);
+					
+	if(eyePos.y < v.PositionW.y)
+		color += reflecColor;
+	else
+		color += lerp(refracColor , reflecColor ,fresnel);
+		
+	color.a = surface.Alpha;
+    return color;
+}
+
+
+
+float4 MergeCaustic(in float2 texCoord : TEXCOORD0 , uniform int operation) : COLOR0
+{
+	float4 srcColor = tex2D(s0, texCoord);
+
+	float2 transTex = mul(float4(texCoord ,0 ,1), custicTexM);
+
+	float4 caustic = tex2D(s1, transTex);
+	float4 color = 0;
+	if(operation == 0)
+		color = srcColor * caustic;
+	if(operation == 1)
+		color = srcColor + caustic;
+	if(operation == 2)
+		color = srcColor - caustic;
+		
+	color.a = 1;
+	
+	return color;
+}
+
+//******************************************************************************************************
+
+technique tech1
+{
+    pass Pass1
+    {
+        // TODO: set renderstates here.		
+        VertexShader = compile vs_1_1 SimpleVertexShader();
+        PixelShader = compile ps_3_0 PhongPixelShader();		
+    }
+}
+
+technique tech1_Shadowed
+{
+    pass Pass1
+    {
+        // TODO: set renderstates here.		
+        VertexShader = compile vs_1_1 ShadowVertexShader();
+        PixelShader = compile ps_3_0 ShadowPixelShader();
+    }
+}
+
+technique ModulateMerge
+{
+    pass Pass1
+    {
+        // TODO: set renderstates here.        
+        PixelShader = compile ps_2_0 MergeCaustic(0);
+    }
+}
+technique AdditiveMerge
+{
+    pass Pass1
+    {
+        // TODO: set renderstates here.        
+        PixelShader = compile ps_2_0 MergeCaustic(1);
+    }
+}
+technique SubstractiveMerge
+{
+    pass Pass1
+    {
+        // TODO: set renderstates here.        
+        PixelShader = compile ps_2_0 MergeCaustic(2);
+    }
+}

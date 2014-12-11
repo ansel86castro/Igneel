@@ -1,0 +1,433 @@
+
+#include "../Include/Lighting.fx"
+#include "../Include/Common.fx"
+//--------------------------------------------------------------------------------------
+// Global variables
+//--------------------------------------------------------------------------------------
+bool useDiffuse 				: DIFFUSE_MAP_FLAG;
+bool useDirectional;
+float3   Ambient 				 :AMBIENT;             // Ambient light color
+float3 LightDir					 :LIGHTDIRECTION;
+float4x4 ViewProj				 :VIEWPROJ;
+float4x4 World					 :WORLD;
+SurfaceInfo Surface			 	 :SURFACE;
+texture  DiffuseMap	             :DIFFUSEMAP;         // texture for scene rendering
+texture normalMap				 :NORMALMAP;
+float    ExtrudeBias  			 :FLOAT0;               // Z of far clip plane
+float4   g_vShadowColor;
+float4 skyColor;
+float4 groundColor;
+
+//-----------------------------------------------------------------------------
+// Texture samplers
+//-----------------------------------------------------------------------------
+sampler diffuseSampler = sampler_state
+{
+    Texture = <DiffuseMap>;
+    MinFilter = Linear;
+    MagFilter = Linear;
+    MipFilter = Linear;
+};
+sampler2D normalSampler = sampler_state
+{
+	Texture = (normalMap);
+    MinFilter = Linear;
+    MagFilter = Linear;
+};
+
+void VertSceneAmbient( float4 vPos : POSITION,
+					   float3 vNormal : NORMAL,
+                       float2 vTex0 : TEXCOORD0,
+                       out float4 oPos : POSITION,
+                       out float2 oTex0 : TEXCOORD0,
+					   out float3 oNormal:TEXCOORD1)
+{
+    // Transform the position from object space to homogeneous projection space
+	float4 posW = mul(vPos , World);
+    oPos = mul( posW, ViewProj);
+	oNormal = mul(float4(vNormal, 0) ,World);
+    // Just copy the texture coordinate through
+    oTex0 = vTex0;
+}
+
+float4 PixSceneAmbient( float2 Tex0 : TEXCOORD0 ,float3 normal:TEXCOORD1) : COLOR0
+{
+    // Lookup mesh texture and modulate it with material and ambient amount
+	float3 diffuse = useDiffuse ? tex2D( diffuseSampler, Tex0 ) * Surface.Diffuse : Surface.Diffuse;
+	
+	//ambient is computed width hemisphericalLighting
+	float4 ambient = HemisphereLighting(skyColor ,groundColor ,float3(0,1,0), normal);
+    return float4(ambient * diffuse, Surface.Alpha);
+}
+
+BumpVSOutput BumpVertexShader(float3 position : POSITION,
+							  float3 tangent  : TANGENT,
+							  float3 normal   : NORMAL,
+							  float2 texCoord : TEXCOORD0)
+{
+	BumpVSOutput output;
+
+	float4 posW = mul(float4(position ,1), World);
+	
+	output.PositionH = mul(posW, ViewProj);
+	output.PositionW = posW;
+	output.NormalW = normalize(mul(float4(normal, 0) ,World));
+	output.TangentW = normalize(mul(float4(tangent, 0) ,World));	
+	output.BinormalW = normalize(cross(output.NormalW ,output.TangentW));
+	output.TexCoord = texCoord;
+
+	return output;
+}
+
+float4 BumpPixelShader(BumpVSOutput input) : COLOR0
+{		
+	//pick and decode normal from the normal map 
+	float3 normal = tex2D(normalSampler, input.TexCoord);
+	normal = (normal * 2) - 1;
+
+	// Move the normal from tangent space to world space
+	float3x3 tangentMatrix = {input.TangentW, input.BinormalW, input.NormalW};
+	normal = normalize(mul(normal, tangentMatrix));
+		
+	return PixSceneAmbient(input.TexCoord, normal);
+}
+						  
+void VertShadowVolume( float4 vPos : POSITION,
+                       float3 vNormal : NORMAL,
+                       out float4 oPos : POSITION )
+{
+    // Compute view space normal
+    float3 normal = mul( vNormal, (float3x3)World );
+
+    // Obtain view space position
+    float4 posW = mul( vPos, World );
+
+    // Light-to-vertex vector in world space
+    float3 lightVec = useDirectional ? LightDir : posW - LightDir;	
+	
+    // Perform reverse vertex extrusion
+    // Extrude the vertex away from light if it's facing away from the light.
+    if( dot( normal, -lightVec ) < 0.0f )
+    {        
+        posW.xyz += lightVec * ExtrudeBias;    
+    }    
+	// Transform the position from world space to homogeneous projection space
+	oPos = mul( posW, ViewProj );
+}
+
+void VertShadowVolume2(float4 vPos:POSITION , out float4 oPos :POSITION)
+{
+	float4 posW = mul( vPos, World );
+	oPos = mul(posW, ViewProj);
+}
+
+float4 PixShadowVolume() : COLOR0
+{
+    return g_vShadowColor;
+}
+
+
+//--------------------------------------------------------------------------------------
+// Techniques
+//--------------------------------------------------------------------------------------
+technique RenderSceneAmbient
+{
+    pass P0
+    {
+		AlphaBlendEnable = TRUE;
+        SrcBlend         = SRCALPHA;
+        DestBlend        = INVSRCALPHA;
+		BlendOp          = ADD;
+	
+        VertexShader = compile vs_2_0 VertSceneAmbient();
+        PixelShader  = compile ps_2_0 PixSceneAmbient();
+        //StencilEnable = false;
+        //ZFunc = LessEqual;
+    }
+}
+
+technique BumpRenderSceneAmbient
+{
+    pass P0
+    {
+        VertexShader = compile vs_2_0 BumpVertexShader();
+        PixelShader  = compile ps_2_0 BumpPixelShader();
+        StencilEnable = false;
+        ZFunc = LessEqual;
+    }
+}
+
+
+technique ShowShadowVolume
+{
+    pass P0
+    {
+        VertexShader = compile vs_2_0 VertShadowVolume();
+        PixelShader  = compile ps_2_0 PixShadowVolume();
+        // CullMode = Ccw;
+        // AlphaBlendEnable = true;
+        // SrcBlend = SrcAlpha;
+        // DestBlend = InvSrcAlpha;
+        // // Disable writing to depth buffer
+        // ZWriteEnable = false;
+        // ZFunc = Less;
+        // // Setup stencil states
+        // StencilEnable = true;
+        // StencilRef = 1;
+        // StencilMask = 0xFFFFFFFF;
+        // StencilWriteMask = 0xFFFFFFFF;
+        // StencilFunc = Always;
+        // StencilZFail = Decr;
+        // StencilPass = Keep;
+    }
+    // pass P1
+    // {
+        // VertexShader = compile vs_2_0 VertShadowVolume();
+        // PixelShader  = compile ps_2_0 PixShadowVolume();
+        // CullMode = Cw;
+        // StencilZFail = Incr;
+    // }
+}
+technique ShowShadowVolume2
+{
+    pass P0
+    {
+        VertexShader = compile vs_2_0 VertShadowVolume2();
+        PixelShader  = compile ps_2_0 PixShadowVolume();
+		AlphaBlendEnable = TRUE;
+        SrcBlend         = SRCALPHA;
+        DestBlend        = INVSRCALPHA;
+		BlendOp          = ADD;
+         // CullMode = Ccw;
+         // AlphaBlendEnable = true;
+         // SrcBlend = SrcAlpha;
+         // DestBlend = InvSrcAlpha;
+        // // Disable writing to depth buffer
+        // ZWriteEnable = false;
+        // ZFunc = Less;
+        // // Setup stencil states
+        // StencilEnable = true;
+        // StencilRef = 1;
+        // StencilMask = 0xFFFFFFFF;
+        // StencilWriteMask = 0xFFFFFFFF;
+        // StencilFunc = Always;
+        // StencilZFail = Decr;
+        // StencilPass = Keep;
+    }
+    // pass P1
+    // {
+        // VertexShader = compile vs_2_0 VertShadowVolume();
+        // PixelShader  = compile ps_2_0 PixShadowVolume();
+        // CullMode = Cw;
+        // StencilZFail = Incr;
+    // }
+}
+
+
+technique ShowShadowVolume2Sided
+{
+    pass P0
+    {
+        VertexShader = compile vs_2_0 VertShadowVolume();
+        PixelShader  = compile ps_2_0 PixShadowVolume();
+        // CullMode = None;
+        // AlphaBlendEnable = true;
+        // SrcBlend = SrcAlpha;
+        // DestBlend = InvSrcAlpha;
+        // // Disable writing to depth buffer
+        // ZWriteEnable = false;
+        // ZFunc = Less;
+        // // Setup stencil states
+        // TwoSidedStencilMode = true;
+        // StencilEnable = true;
+        // StencilRef = 1;
+        // StencilMask = 0xFFFFFFFF;
+        // StencilWriteMask = 0xFFFFFFFF;
+        // Ccw_StencilFunc = Always;
+        // Ccw_StencilZFail = Incr;
+        // Ccw_StencilPass = Keep;
+        // StencilFunc = Always;
+        // StencilZFail = Decr;
+        // StencilPass = Keep;
+    }
+}
+technique ShowShadowVolume2Sided2
+{
+    pass P0
+    {
+        VertexShader = compile vs_2_0 VertShadowVolume2();
+        PixelShader  = compile ps_2_0 PixShadowVolume();
+        // CullMode = None;
+        // AlphaBlendEnable = true;
+        // SrcBlend = SrcAlpha;
+        // DestBlend = InvSrcAlpha;
+        // // Disable writing to depth buffer
+        // ZWriteEnable = false;
+        // ZFunc = Less;
+        // // Setup stencil states
+        // TwoSidedStencilMode = true;
+        // StencilEnable = true;
+        // StencilRef = 1;
+        // StencilMask = 0xFFFFFFFF;
+        // StencilWriteMask = 0xFFFFFFFF;
+        // Ccw_StencilFunc = Always;
+        // Ccw_StencilZFail = Incr;
+        // Ccw_StencilPass = Keep;
+        // StencilFunc = Always;
+        // StencilZFail = Decr;
+        // StencilPass = Keep;
+    }
+}
+
+technique RenderShadowVolume
+{
+    pass P0
+    {
+        VertexShader = compile vs_2_0 VertShadowVolume();
+        PixelShader  = compile ps_2_0 PixShadowVolume();
+        CullMode = Ccw;
+        // Disable writing to the frame buffer
+        AlphaBlendEnable = true;
+        SrcBlend = Zero;
+        DestBlend = One;
+        // Disable writing to depth buffer
+        ZWriteEnable = false;
+        ZFunc = Less;
+        // Setup stencil states
+        StencilEnable = true;
+        StencilRef = 1;
+        StencilMask = 0xFFFFFFFF;
+        StencilWriteMask = 0xFFFFFFFF;
+        StencilFunc = Always;
+        StencilZFail = Decr;
+        StencilPass = Keep;
+    }
+    pass P1
+    {
+        VertexShader = compile vs_2_0 VertShadowVolume();
+        PixelShader  = compile ps_2_0 PixShadowVolume();
+        CullMode = Cw;
+        StencilZFail = Incr;
+    }
+}
+
+
+technique RenderShadowVolume2Sided
+{
+    pass P0
+    {
+        VertexShader = compile vs_2_0 VertShadowVolume();
+        PixelShader  = compile ps_2_0 PixShadowVolume();
+        CullMode = None;
+        // Disable writing to the frame buffer
+        AlphaBlendEnable = true;
+        SrcBlend = Zero;
+        DestBlend = One;
+        // Disable writing to depth buffer
+        ZWriteEnable = false;
+        ZFunc = Less;
+        // Setup stencil states
+        TwoSidedStencilMode = true;
+        StencilEnable = true;
+        StencilRef = 1;
+        StencilMask = 0xFFFFFFFF;
+        StencilWriteMask = 0xFFFFFFFF;
+        Ccw_StencilFunc = Always;
+        Ccw_StencilZFail = Incr;
+        Ccw_StencilPass = Keep;
+        StencilFunc = Always;
+        StencilZFail = Decr;
+        StencilPass = Keep;
+    }
+}
+
+technique RenderShadowVolume2
+{
+    pass P0
+    {
+        VertexShader = compile vs_2_0 VertShadowVolume2();
+        PixelShader  = compile ps_2_0 PixShadowVolume();
+        CullMode = Ccw;
+        // Disable writing to the frame buffer
+        AlphaBlendEnable = true;
+        SrcBlend = Zero;
+        DestBlend = One;
+        // Disable writing to depth buffer
+        ZWriteEnable = false;
+        ZFunc = Less;
+        // Setup stencil states
+        StencilEnable = true;
+        StencilRef = 1;
+        StencilMask = 0xFFFFFFFF;
+        StencilWriteMask = 0xFFFFFFFF;
+        StencilFunc = Always;
+        StencilZFail = Decr;
+        StencilPass = Keep;
+    }
+    pass P1
+    {
+        VertexShader = compile vs_2_0 VertShadowVolume2();
+        PixelShader  = compile ps_2_0 PixShadowVolume();
+        CullMode = Cw;
+        StencilZFail = Incr;
+    }
+}
+
+technique RenderShadowVolume2Sided2
+{
+    pass P0
+    {
+        VertexShader = compile vs_2_0 VertShadowVolume2();
+        PixelShader  = compile ps_2_0 PixShadowVolume();
+        CullMode = None;
+        // Disable writing to the frame buffer
+        AlphaBlendEnable = true;
+        SrcBlend = Zero;
+        DestBlend = One;
+        // Disable writing to depth buffer
+        ZWriteEnable = false;
+        ZFunc = Less;
+        // Setup stencil states
+        TwoSidedStencilMode = true;
+        StencilEnable = true;
+        StencilRef = 1;
+        StencilMask = 0xFFFFFFFF;
+        StencilWriteMask = 0xFFFFFFFF;
+        Ccw_StencilFunc = Always;
+		 Ccw_StencilZFail =Keep;
+        Ccw_StencilPass =Decr;
+        StencilFunc = Always;
+        StencilZFail =Keep;
+        StencilPass =Incr; 
+		StencilFail = Keep;
+        // Ccw_StencilZFail =Incr;
+        // Ccw_StencilPass =Keep;
+        // StencilFunc = Always;
+        // StencilZFail =Decr;
+        // StencilPass =Keep;
+		//StencilFail = Keep;
+    }
+}
+
+technique RenderShadowVolumeComplexity
+{
+    pass P0
+    {
+        VertexShader = compile vs_2_0 VertShadowVolume();
+        PixelShader  = compile ps_2_0 PixShadowVolume();
+        CullMode = None;
+        // Disable writing to the frame buffer
+        AlphaBlendEnable = false;
+        // Disable writing to depth buffer
+        ZWriteEnable = false;
+        ZFunc = Less;
+        // Setup stencil states
+        StencilEnable = true;
+        StencilRef = 1;
+        StencilMask = 0xFFFFFFFF;
+        StencilWriteMask = 0xFFFFFFFF;
+        StencilFunc = Always;
+        StencilZFail = Incr;
+        StencilPass = Incr;
+    }
+}
