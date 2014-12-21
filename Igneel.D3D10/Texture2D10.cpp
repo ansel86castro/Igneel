@@ -100,24 +100,14 @@ namespace IgneelD3D10
 		stagingDesc.Usage = D3D10_USAGE_STAGING;
 		stagingDesc.CPUAccessFlags = D3D10_CPU_ACCESS_READ | D3D10_CPU_ACCESS_WRITE;
 		stagingDesc.BindFlags = 0;
-		ID3D10Texture2D *temp;
-		if(_desc.Usage == ResourceUsage::Default && _desc.CPUAccessFlags != CpuAccessFlags::None)
-		{			 			
-			SAFECALL( device->CreateTexture2D(&stagingDesc, NULL, &temp) );
-			_stagingTexture = temp;						
-		}
-		if(_stagingTexture == nullptr)
-		{			
-			SAFECALL( device->CreateTexture2D(&stagingDesc, NULL, &temp) );
-		}
+		ID3D10Texture2D *temp;		
+		SAFECALL( device->CreateTexture2D(&stagingDesc, NULL, &temp) );		
 
 		D3D10_MAPPED_TEXTURE2D locRec;
 		SAFECALL(temp->Map(0, D3D10_MAP_READ, 0, & locRec)); 
-		temp->Unmap(0);
-		if(_stagingTexture == nullptr)
-		{
-			temp->Release();
-		}
+		temp->Unmap(0);		
+		temp->Release();		
+		temp = NULL;
 
 		int size = 0;
 		for (int i = 0; i < td.MipLevels; i++)
@@ -126,6 +116,22 @@ namespace IgneelD3D10
 		}
 
 		GC::AddMemoryPressure(size);
+	}
+
+	void Texture2D10::CreateStagingResource()
+	{
+		if(_desc.Usage == ResourceUsage::Default && _desc.CPUAccessFlags != CpuAccessFlags::None && _stagingTexture == NULL)
+		{
+			D3D10_TEXTURE2D_DESC td;
+			_texture->GetDesc(&td);
+			D3D10_TEXTURE2D_DESC stagingDesc = td;
+			stagingDesc.Usage = D3D10_USAGE_STAGING;
+			stagingDesc.CPUAccessFlags = D3D10_CPU_ACCESS_READ | D3D10_CPU_ACCESS_WRITE;
+			stagingDesc.BindFlags = 0;
+			ID3D10Texture2D *temp;							 			
+			SAFECALL( _device->CreateTexture2D(&stagingDesc, NULL, &temp) );
+			_stagingTexture = temp;						
+		}
 	}
 
 	void Texture2D10::OnDispose(bool dispose)
@@ -152,6 +158,7 @@ namespace IgneelD3D10
 		D3D10_MAPPED_TEXTURE2D data;
 		auto dxmap = static_cast<D3D10_MAP>(map);
 		lastMap = dxmap;
+		CreateStagingResource();
 		if(_stagingTexture)
 		{
 			if((dxmap & D3D10_MAP_READ) || (dxmap & D3D10_MAP_WRITE))
@@ -179,6 +186,9 @@ namespace IgneelD3D10
 				(lastMap & D3D10_MAP_WRITE_DISCARD) || 
 				((lastMap & D3D10_MAP_WRITE_NO_OVERWRITE) == D3D10_MAP_WRITE_NO_OVERWRITE))
 				_device->CopySubresourceRegion(_texture, subResource, 0,0,0, _stagingTexture, subResource, NULL);
+
+			_stagingTexture->Release();
+			_stagingTexture=NULL;
 		}
 		else
 			_texture->Unmap(subResource);

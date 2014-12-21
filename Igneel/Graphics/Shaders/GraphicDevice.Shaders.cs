@@ -17,9 +17,9 @@ namespace Igneel.Graphics
     }
 
     public abstract partial class GraphicDevice
-    {      
+    {              
         private ShaderProgram program;        
-        private ShaderStage vs;
+        private ShaderStage vs ;
         private ShaderStage ps;
         private ShaderStage gs;
         private ShaderStage hs;
@@ -44,12 +44,7 @@ namespace Igneel.Graphics
                 return s;
             }
 
-        }
-
-        static protected class ShaderStages<T>
-        {
-            public static T Stage;
-        }
+        }       
 
         public ShaderProgram Program 
         { 
@@ -60,6 +55,7 @@ namespace Igneel.Graphics
                 {
                     SetProgram(value);
                     program = value;
+                    IAInputLayout = value.InputDefinition;
                 }
             }
         }
@@ -105,7 +101,7 @@ namespace Igneel.Graphics
 
         protected abstract void SetProgram(ShaderProgram program);
 
-        public abstract ShaderBuffer CreateShaderBuffer(BufferDesc desc);
+       //public abstract ShaderBuffer CreateShaderBuffer(BufferDesc desc);
 
         #region States
 

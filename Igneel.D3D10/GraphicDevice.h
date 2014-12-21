@@ -103,7 +103,7 @@ namespace IgneelD3D10
 		public:
 			 OVERRIDE(InputLayout^ CreateInputLayout(array<VertexElement>^ elements ,ShaderCode^ signature));
 
-			 OVERRIDE(GraphicBuffer^ CreateVertexBuffer(int size, int stride,  ResourceUsage usage, CpuAccessFlags cpuAcces, IntPtr data));
+			 OVERRIDE(GraphicBuffer^ CreateVertexBuffer(int size, int stride,  ResourceUsage usage, CpuAccessFlags cpuAcces, ResBinding binding,IntPtr data));
 
 			 OVERRIDE(GraphicBuffer^ CreateIndexBuffer(int size,  IndexFormat format , ResourceUsage usage, CpuAccessFlags cpuAcces, IntPtr data));		
 
@@ -159,7 +159,7 @@ namespace IgneelD3D10
 		public:
 			OVERRIDE( ShaderProgram^ CreateProgram(ShaderProgramDesc^ desc) );
 
-			OVERRIDE( ShaderBuffer^ CreateShaderBuffer(BufferDesc desc));
+			//OVERRIDE( ShaderBuffer^ CreateShaderBuffer(BufferDesc desc));
 
 	};
 

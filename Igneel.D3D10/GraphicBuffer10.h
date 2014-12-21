@@ -15,9 +15,9 @@ namespace IgneelD3D10
 		ID3D10Device* device;
 		ID3D10ShaderResourceView* _srv;
 	internal:
-		GraphicBuffer10(ID3D10Device* device, ID3D10Buffer * _buffer, int size, int stride,  ResourceUsage usage, CpuAccessFlags cpuAcces , D3D10_SUBRESOURCE_DATA* sbData);
+		GraphicBuffer10(ID3D10Device* device, ID3D10Buffer * _buffer, int size, int stride,  ResourceUsage usage, CpuAccessFlags cpuAcces , D3D10_SUBRESOURCE_DATA* sbData, ResBinding binding);
 
-		GraphicBuffer10(ID3D10Device* device, BufferDesc desc);
+		/*GraphicBuffer10(ID3D10Device* device, BufferDesc desc);*/	
 
 	protected:		
 			OVERRIDE(void OnDispose(bool));
@@ -29,6 +29,9 @@ namespace IgneelD3D10
 			OVERRIDE(void Unmap());		
 
 			virtual ID3D10Resource* GetResource(){ return _buffer;  }
+
+	private:
+		void CreateStaginResource();		
 	};
 
 }

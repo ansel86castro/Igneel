@@ -32,12 +32,9 @@ namespace Igneel.Graphics
             {
                 return _inputLayout;
             }
-            set
+            protected set
             {
-                if (_inputLayout != value)
-                {
-                    _inputLayout = value;                    
-                }
+                _inputLayout = value;
             }
         }
 
@@ -48,7 +45,6 @@ namespace Igneel.Graphics
                 return shaders != null ? shaders.Length : 0;
             }
         }
-
 
         public static bool SupportShader<T>()
             where T:Shader

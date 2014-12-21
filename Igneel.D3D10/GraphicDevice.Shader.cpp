@@ -49,8 +49,8 @@ namespace IgneelD3D10 {
 		_device->GSSetShader(NULL);
 	}
 
-	 ShaderBuffer^ GraphicDevice10::CreateShaderBuffer(BufferDesc desc)
+	 /*ShaderBuffer^ GraphicDevice10::CreateShaderBuffer(BufferDesc desc)
 	 {
 		 return gcnew GraphicBuffer10(_device, desc);
-	 }
+	 }*/
 }

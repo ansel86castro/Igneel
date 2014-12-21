@@ -1,41 +1,61 @@
 #include "Stdafx.h"
 #include "GraphicBuffer10.h"
+#include "Utils.h"
 
 using namespace System::Runtime::InteropServices;
 
 namespace IgneelD3D10
 {
-	GraphicBuffer10::GraphicBuffer10(ID3D10Device* device, ID3D10Buffer * buffer , int size, int stride,  ResourceUsage usage, CpuAccessFlags cpuAcces, D3D10_SUBRESOURCE_DATA* sbData)
+	GraphicBuffer10::GraphicBuffer10(ID3D10Device* device, ID3D10Buffer * buffer , int size, int stride,  ResourceUsage usage, CpuAccessFlags cpuAcces, D3D10_SUBRESOURCE_DATA* sbData, ResBinding binding)
 	{
+		_srv = NULL;
+		_stagingBuffer = NULL;		
 		this->device = device;
 		this->_buffer = buffer;
 		_lenght = size;
 		_usage = usage;
 		_cpuAccesType = cpuAcces;		
-		_type = ResourceType::Buffer;				
+		_type = ResourceType::Buffer;	
+		_binding = binding;		
 		this->_stride = stride;
 		if(stride == 2)
 			this->_format = DXGI_FORMAT_R16_UINT;
 		else if(stride == 4)
 			this->_format = DXGI_FORMAT_R32_UINT;
+				
+		if(FLAG_SET(binding, ResBinding::ShaderResource))
+		{
+			D3D10_SHADER_RESOURCE_VIEW_DESC viewDesc;
+			ZeroMemory(&viewDesc,  sizeof(D3D10_SHADER_RESOURCE_VIEW_DESC));
+			viewDesc.ViewDimension = D3D10_SRV_DIMENSION_BUFFER;
+			viewDesc.Buffer.FirstElement = 0;
+			viewDesc.Buffer.ElementWidth = stride;
+			
+			ID3D10ShaderResourceView * pview;
+			SAFECALL( device->CreateShaderResourceView(_buffer, &viewDesc , &pview) );
+			_srv = pview;
+		}
 
-		if(usage == ResourceUsage::Default && cpuAcces != CpuAccessFlags::None)
+		GC::AddMemoryPressure(size);		
+	}
+
+	void GraphicBuffer10::CreateStaginResource()
+	{
+		if(_usage == ResourceUsage::Default && _cpuAccesType != CpuAccessFlags::None && _stagingBuffer == NULL)
 		{
 			D3D10_BUFFER_DESC stagingDesc;
-			buffer->GetDesc(&stagingDesc);
+			_buffer->GetDesc(&stagingDesc);
 			stagingDesc.Usage = D3D10_USAGE_STAGING;
 			stagingDesc.BindFlags = 0;
 			stagingDesc.CPUAccessFlags = D3D10_CPU_ACCESS_READ | D3D10_CPU_ACCESS_WRITE;
 
 			ID3D10Buffer* staginbBuff;
-			SAFECALL( device->CreateBuffer(&stagingDesc, sbData, &staginbBuff) );
+			SAFECALL( device->CreateBuffer(&stagingDesc, NULL, &staginbBuff) );
 			_stagingBuffer = staginbBuff;			
 		}	
-		
-		GC::AddMemoryPressure(size);		
 	}
-	
-	GraphicBuffer10::GraphicBuffer10(ID3D10Device* device, BufferDesc desc)
+
+	/*GraphicBuffer10::GraphicBuffer10(ID3D10Device* device, BufferDesc desc)
 	{		
 		D3D10_BUFFER_DESC bd;
 		ZeroMemory(&bd, sizeof(D3D10_BUFFER_DESC));
@@ -118,11 +138,12 @@ namespace IgneelD3D10
 				
 
 		GC::AddMemoryPressure(desc.SizeInBytes);		
-	}
+	}*/
 
 	IntPtr GraphicBuffer10::Map(MapType map, bool doNotWait)
 	{
 		void *pData = NULL;
+		CreateStaginResource();
 		if(_stagingBuffer)
 		{			
 			if((map & MapType::Read) == MapType::Read || (map & MapType::Write) == MapType::Write)
@@ -152,6 +173,8 @@ namespace IgneelD3D10
 			//_stagingBuffer->Map(D3D10_MAP::D3D10_MAP_READ, D3D10_MAP_FLAG_DO_NOT_WAIT , &pData);
 			//device->UpdateSubresource(_buffer, 0, NULL, pData, 0, 0);
 			device->CopyResource(_buffer,_stagingBuffer);
+			_stagingBuffer->Release();
+			_stagingBuffer = NULL;
 		}
 		else
 		{

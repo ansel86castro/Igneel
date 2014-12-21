@@ -6,14 +6,7 @@ using System.Threading.Tasks;
 
 namespace Igneel.Graphics
 {
-    [Flags]
-    public enum BufferBinding
-    {
-        None          = 0 ,
-        VertexBuffer  = 1 << 0,
-        StreamOutput  = 1 << 1,
-        ShaderResource= 1 << 2
-    }
+   
 
     public struct BufferDesc
     {
@@ -36,21 +29,21 @@ namespace Igneel.Graphics
         /// <summary>
         /// Binding of the Resource to the Pipeline. Can be any combination of the values 
         /// </summary>
-        public BufferBinding Binding;
+        public ResBinding Binding;
 
         public IntPtr Data;
     }
 
     public interface ShaderBuffer : GraphicBuffer, ShaderResource
     {
-        BufferBinding Binding { get; }
+        ResBinding Binding { get; }
     }
 
     public abstract class ShaderBufferBase : GraphicBufferBase, ShaderBuffer
     {
-        protected BufferBinding binding;
+        protected ResBinding binding;
 
-        public BufferBinding Binding
+        public ResBinding Binding
         {
             get { return binding; }
         }

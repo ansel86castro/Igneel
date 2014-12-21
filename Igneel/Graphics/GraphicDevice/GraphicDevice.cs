@@ -204,6 +204,7 @@ namespace Igneel.Graphics
         /// <param name="srcRowPith"></param>
         /// <param name="srcDepthPitch"></param>
         protected unsafe abstract void UpdateSubResource(Texture dest, int subResource, DataBox* box, void* srcPointer, int srcRowPith, int srcDepthPitch);
+        
 
         #endregion
 

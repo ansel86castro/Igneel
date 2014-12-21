@@ -7,7 +7,17 @@ using System.Threading.Tasks;
 
 namespace Igneel.Graphics
 {
-    public interface GraphicBuffer : IResourceAllocator, IGraphicResource
+    [Flags]
+    public enum ResBinding
+    {
+        None = 0,
+        VertexBuffer = 1 << 0,
+        StreamOutput = 1 << 1,
+        ShaderResource = 1 << 2,
+        IndexBuffer = 1 << 3
+    }
+
+    public interface GraphicBuffer : ShaderResource, IResourceAllocator, IGraphicResource
     {
         long SizeInBytes { get; }
 
@@ -16,6 +26,8 @@ namespace Igneel.Graphics
         ResourceUsage Usage { get; }
 
         CpuAccessFlags CpuAccess { get; }
+
+        ResBinding Binding { get; }
 
         IntPtr Map(MapType map = MapType.Read, bool doNotWait = false);
 
@@ -28,6 +40,7 @@ namespace Igneel.Graphics
         protected ResourceUsage _usage;
         protected CpuAccessFlags _cpuAccesType;
         protected int _stride;
+        protected ResBinding _binding;
 
         public GraphicBufferBase()
             : base(ResourceType.Buffer)
@@ -51,6 +64,8 @@ namespace Igneel.Graphics
         /// </summary>
         public CpuAccessFlags CpuAccess { get { return _cpuAccesType; } }
 
+        public ResBinding Binding { get { return _binding; } }
+
         /// <summary>
         /// Get a pointer to the data contained in the resource and deny GPU access to the resource.
         /// </summary>
@@ -63,8 +78,7 @@ namespace Igneel.Graphics
         /// Release the mapping pointer and allow gpu acces to this resources
         /// </summary>
         public abstract void Unmap();
-
-      
+       
     }
 
     public static class BufferUtils

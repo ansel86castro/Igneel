@@ -94,12 +94,11 @@ namespace IgneelD3D10
 		return gcnew InputLayout10(input);
 	}
 
-	GraphicBuffer^ GraphicDevice10::CreateVertexBuffer(int size, int stride,  ResourceUsage usage, CpuAccessFlags cpuAcces, IntPtr data)
+	GraphicBuffer^ GraphicDevice10::CreateVertexBuffer(int size, int stride,  ResourceUsage usage, CpuAccessFlags cpuAcces, ResBinding binding, IntPtr data)
 	{
 		D3D10_BUFFER_DESC bd;
 		ZeroMemory(&bd, sizeof(D3D10_BUFFER_DESC));
 
-		bd.BindFlags = D3D10_BIND_VERTEX_BUFFER;
 		bd.ByteWidth = size;		
 		bd.MiscFlags = 0;
 		bd.Usage = (D3D10_USAGE)usage;		
@@ -107,6 +106,16 @@ namespace IgneelD3D10
 			bd.CPUAccessFlags = 0;
 		else
 			bd.CPUAccessFlags =	 (UINT)cpuAcces;
+
+		if(FLAG_SET(binding,ResBinding::VertexBuffer))
+			bd.BindFlags |= D3D10_BIND_VERTEX_BUFFER;
+		if(FLAG_SET(binding,ResBinding::ShaderResource))
+			bd.BindFlags |= D3D10_BIND_SHADER_RESOURCE;
+		if(FLAG_SET(binding,ResBinding::StreamOutput))
+			bd.BindFlags |= D3D10_BIND_STREAM_OUTPUT;
+
+		if(!bd.BindFlags)
+			throw gcnew ArgumentException(L"binding");
 
 		ID3D10Buffer * buffer;
 		if(data != IntPtr::Zero)
@@ -121,12 +130,12 @@ namespace IgneelD3D10
 			if(FAILED(hr))
 				throw gcnew InvalidOperationException();
 
-			return gcnew GraphicBuffer10(_device, buffer, size, stride, usage, cpuAcces ,&sbData);
+			return gcnew GraphicBuffer10(_device, buffer, size, stride, usage, cpuAcces ,&sbData, binding);
 		}
 		else
 		{
 			SAFECALL(_device->CreateBuffer(&bd, NULL, &buffer) );
-			return gcnew GraphicBuffer10(_device, buffer, size, stride, usage, cpuAcces, NULL);
+			return gcnew GraphicBuffer10(_device, buffer, size, stride, usage, cpuAcces, NULL, binding);
 		}
 		
 
@@ -157,12 +166,12 @@ namespace IgneelD3D10
 			HRESULT hr = _device->CreateBuffer(&bd, &sbData, &buffer);		
 			if(FAILED(hr))
 				throw gcnew InvalidOperationException();
-			return gcnew GraphicBuffer10(_device, buffer, size,  format==IndexFormat::Index16?2:4, usage, cpuAcces ,&sbData);
+			return gcnew GraphicBuffer10(_device, buffer, size,  format==IndexFormat::Index16?2:4, usage, cpuAcces ,&sbData, ResBinding::IndexBuffer);
 		}
 		else
 		{
 			SAFECALL(_device->CreateBuffer(&bd, NULL, &buffer) );
-			return gcnew GraphicBuffer10(_device,buffer, size, format==IndexFormat::Index16?2:4, usage, cpuAcces, NULL);
+			return gcnew GraphicBuffer10(_device,buffer, size, format==IndexFormat::Index16?2:4, usage, cpuAcces, NULL,ResBinding::IndexBuffer);
 		}		
 	}
 

@@ -39,10 +39,8 @@ namespace Igneel.Graphics
             {
                 return _iaInputLayout;
             }
-            set
-            {
-                if (value == null) throw new ArgumentNullException();
-
+            private set
+            {               
                 if (_iaInputLayout != value)
                 {
                     _iaInputLayout = value;
@@ -85,7 +83,7 @@ namespace Igneel.Graphics
 
         public abstract InputLayout CreateInputLayout(VertexElement[] elements, ShaderCode signature);
 
-        public abstract GraphicBuffer CreateVertexBuffer(int size, int stride, ResourceUsage usage = ResourceUsage.Default, CpuAccessFlags cpuAcces = CpuAccessFlags.ReadWrite, IntPtr data = default(IntPtr));
+        public abstract GraphicBuffer CreateVertexBuffer(int size, int stride, ResourceUsage usage = ResourceUsage.Default, CpuAccessFlags cpuAcces = CpuAccessFlags.ReadWrite, ResBinding binding = ResBinding.VertexBuffer , IntPtr data = default(IntPtr));
 
         public abstract GraphicBuffer CreateIndexBuffer(int size, IndexFormat format = IndexFormat.Index16, ResourceUsage usage = ResourceUsage.Default, CpuAccessFlags cpuAcces = CpuAccessFlags.ReadWrite, IntPtr data = default(IntPtr));
 
@@ -93,7 +91,7 @@ namespace Igneel.Graphics
         
         #endregion
 
-        public void IASetVertexBuffer(int slot, GraphicBuffer vertexBuffer, int offset)
+        public void IASetVertexBuffer(int slot, GraphicBuffer vertexBuffer, int offset = 0)
         {
             BufferBind bind;
             bind.buffer= vertexBuffer;
@@ -114,7 +112,6 @@ namespace Igneel.Graphics
 
             IASetVertexBufferImpl(slot, vertexBuffer, offset, stride);
         }
-
 
         public GraphicBuffer IAGetVertexBuffer(int slot, out int offset)
         {
@@ -137,14 +134,14 @@ namespace Igneel.Graphics
             return _iaIndexBufferBind.buffer;
         }
 
-        public GraphicBuffer CreateVertexBuffer(int size, int stride, Array data, ResourceUsage usage = ResourceUsage.Default, CpuAccessFlags cpuAcces = CpuAccessFlags.ReadWrite)
+        public GraphicBuffer CreateVertexBuffer(int size, int stride, Array data, ResourceUsage usage = ResourceUsage.Default, CpuAccessFlags cpuAcces = CpuAccessFlags.ReadWrite, ResBinding binding = ResBinding.VertexBuffer)
         {
             GCHandle handle = GCHandle.Alloc(data, GCHandleType.Pinned);
             var pter = Marshal.UnsafeAddrOfPinnedArrayElement(data, 0);
             GraphicBuffer buffer;
             try
             {
-                buffer = CreateVertexBuffer(size, stride, usage, cpuAcces, pter);
+                buffer = CreateVertexBuffer(size, stride, usage, cpuAcces, binding ,pter);
             }
             finally
             {
@@ -170,18 +167,18 @@ namespace Igneel.Graphics
             }
             return buffer;
         }
-        
-        public GraphicBuffer CreateVertexBuffer<T>(ResourceUsage usage = ResourceUsage.Default, CpuAccessFlags cpuAcces = CpuAccessFlags.ReadWrite, T[] data = null)
+
+        public GraphicBuffer CreateVertexBuffer<T>(ResourceUsage usage = ResourceUsage.Default, CpuAccessFlags cpuAcces = CpuAccessFlags.ReadWrite, ResBinding binding = ResBinding.VertexBuffer, T[] data = null)
         {
             int stride = Marshal.SizeOf(typeof(T));
             int size = data.Length * stride;
-            return CreateVertexBuffer(size, stride, data, usage, cpuAcces);
+            return CreateVertexBuffer(size, stride, data, usage, cpuAcces, binding);
         }
 
-        public GraphicBuffer CreateVertexBuffer<T>(int stride, ResourceUsage usage = ResourceUsage.Default, CpuAccessFlags cpuAcces = CpuAccessFlags.ReadWrite, T[] data = null)
+        public GraphicBuffer CreateVertexBuffer<T>(int stride, ResourceUsage usage = ResourceUsage.Default, CpuAccessFlags cpuAcces = CpuAccessFlags.ReadWrite, ResBinding binding = ResBinding.VertexBuffer, T[] data = null)
         {
             int size = data.Length * Marshal.SizeOf(typeof(T));
-            return CreateVertexBuffer(size, stride,data, usage, cpuAcces);
+            return CreateVertexBuffer(size, stride,data, usage, cpuAcces, binding);
         }
 
         public GraphicBuffer CreateIndexBuffer<T>(ResourceUsage usage = ResourceUsage.Default, CpuAccessFlags cpuAcces = CpuAccessFlags.ReadWrite, T[] data = null)

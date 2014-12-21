@@ -10,7 +10,6 @@ namespace Igneel.Graphics
     {
         private List<ShaderHandler> shaders = new List<ShaderHandler>();
         private Dictionary<Type, Shader> shaderLookup = new Dictionary<Type, Shader>();
-
        
         public void SetShader<T>(T shader)
            where T : Shader
@@ -62,7 +61,7 @@ namespace Igneel.Graphics
             }
         }
 
-        public void SetShader<TInput>(string filename)
+        public void SetVertexShader<TInput>(string filename)
             where TInput :struct
         {
             if (filename.Length < 2) throw new ArgumentException();

@@ -27,6 +27,9 @@ namespace IgneelD3D10
 		OVERRIDE( void UnMap(int subResource) );
 
 		virtual ID3D10Resource* GetResource(){ return _texture;  }
+
+	private:
+		void CreateStagingResource();
 	};
 
 	

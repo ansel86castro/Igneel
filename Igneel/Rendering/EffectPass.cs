@@ -81,7 +81,7 @@ namespace Igneel.Rendering
                     v.Variable.SetSetter(v.Setter);
                 }
                 //setup Input Assembler Layout
-                device.IAInputLayout = program.InputDefinition;
+                //device.IAInputLayout = program.InputDefinition;
 
                 //Setup Shaders
                 device.Program = program;                             
@@ -147,7 +147,7 @@ namespace Igneel.Rendering
              where TVert : struct
         {
             EffectPassDesc desc = new EffectPassDesc();
-            desc.WithShader<TVert>(shaders[0]);
+            desc.WithVertexShader<TVert>(shaders[0]);
             for (int i = 1; i < shaders.Length; i++)
             {
                 desc.WithShader(shaders[i]);
@@ -163,7 +163,7 @@ namespace Igneel.Rendering
         public TechniqueDesc Pass(params string[] shaders)       
         {
             EffectPassDesc desc = new EffectPassDesc();
-            desc.WithShader<TVert>(shaders[0]);
+            desc.WithVertexShader<TVert>(shaders[0]);
             for (int i = 1; i < shaders.Length; i++)
             {
                 desc.WithShader(shaders[i]);
@@ -223,10 +223,10 @@ namespace Igneel.Rendering
             return this;
         }
 
-        public EffectPassDesc WithShader<TInput>(string filename)
+        public EffectPassDesc WithVertexShader<TInput>(string filename)
             where TInput : struct
         {
-            Program.SetShader<TInput>(filename);
+            Program.SetVertexShader<TInput>(filename);
             return this;
         }
     }

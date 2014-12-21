@@ -240,7 +240,7 @@ namespace Igneel.Components
                 indices[6 * i + 5] = (short)(4 * i + 3);
             }
 
-            vb = Engine.Graphics.CreateVertexBuffer(ResourceUsage.Dynamic, CpuAccessFlags.Write, quads);
+            vb = Engine.Graphics.CreateVertexBuffer(ResourceUsage.Dynamic, CpuAccessFlags.Write, data:quads);
             ib =  Engine.Graphics.CreateIndexBuffer(data: indices);            
         }
 

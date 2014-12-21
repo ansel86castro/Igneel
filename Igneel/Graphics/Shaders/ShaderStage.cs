@@ -91,7 +91,6 @@ namespace Igneel.Graphics
             //}  
         }
         
-
         protected abstract void OnSetSampler(int slot, SamplerState state);
 
         protected abstract void OnSetSamplers(int slot, SamplerState[] state);

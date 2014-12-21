@@ -31,17 +31,7 @@ namespace IgneelD3D10
 		desc.Options = static_cast<ResourceOptionFlags>(td.MiscFlags);		
 
 		Description = desc;		
-
-		if(td.Usage == D3D10_USAGE_DEFAULT && td.CPUAccessFlags != 0)
-		{
-			D3D10_TEXTURE1D_DESC stagingDesc = td;		
-			stagingDesc.Usage = D3D10_USAGE_STAGING;
-			stagingDesc.CPUAccessFlags = D3D10_CPU_ACCESS_READ | D3D10_CPU_ACCESS_WRITE;
-			stagingDesc.BindFlags = 0;
-			ID3D10Texture1D* stTexture;
-			SAFECALL( device->CreateTexture1D(&stagingDesc, NULL, &stTexture) );
-			_stagingTexture = stTexture;			
-		}
+		_stagingTexture = NULL;
 			
 		int size = 0;
 		for (int i = 0; i < td.MipLevels; i++)
@@ -99,18 +89,7 @@ namespace IgneelD3D10
 			SAFECALL(device->CreateShaderResourceView(texture, NULL, &rv));
 			_shaderResource = rv;		
 		}
-
-		if(td.Usage == D3D10_USAGE_DEFAULT && desc.CPUAccessFlags != CpuAccessFlags::None)
-		{
-			D3D10_TEXTURE1D_DESC stagingDesc = td;			
-			stagingDesc.Usage = D3D10_USAGE_STAGING;
-			stagingDesc.CPUAccessFlags = D3D10_CPU_ACCESS_READ | D3D10_CPU_ACCESS_WRITE;
-			stagingDesc.BindFlags = 0;
-
-			ID3D10Texture1D* stTexture;
-			SAFECALL( device->CreateTexture1D(&stagingDesc, NULL, &stTexture) );
-			_stagingTexture = stTexture;			
-		}
+		
 		int size = 0;
 		for (int i = 0; i < td.MipLevels; i++)
 		{
@@ -118,6 +97,23 @@ namespace IgneelD3D10
 		}
 
 		GC::AddMemoryPressure(size);
+	}
+
+	void Texture1D10::CreateStagingResource()
+	{
+		auto des = Description;
+		if(des.Usage == ResourceUsage::Default && des.CPUAccessFlags != CpuAccessFlags::None && _stagingTexture==NULL)
+		{
+			D3D10_TEXTURE1D_DESC td;
+			_texture->GetDesc(&td);
+			D3D10_TEXTURE1D_DESC stagingDesc = td;		
+			stagingDesc.Usage = D3D10_USAGE_STAGING;
+			stagingDesc.CPUAccessFlags = D3D10_CPU_ACCESS_READ | D3D10_CPU_ACCESS_WRITE;
+			stagingDesc.BindFlags = 0;
+			ID3D10Texture1D* stTexture;
+			SAFECALL( device->CreateTexture1D(&stagingDesc, NULL, &stTexture) );
+			_stagingTexture = stTexture;			
+		}
 	}
 
 	void Texture1D10::OnDispose(bool dispose)
@@ -142,6 +138,8 @@ namespace IgneelD3D10
 		void* data;
 		auto dxmap = static_cast<D3D10_MAP>(map);
 		lastMap = dxmap;
+		CreateStagingResource();
+
 		if(_stagingTexture)
 		{
 			if(dxmap & D3D10_MAP_READ || dxmap & D3D10_MAP_WRITE)
@@ -165,6 +163,9 @@ namespace IgneelD3D10
 				lastMap & D3D10_MAP_WRITE_DISCARD || 
 				lastMap & D3D10_MAP_WRITE_NO_OVERWRITE)
 				device->CopySubresourceRegion(_texture, subResource, 0,0,0, _stagingTexture, subResource, NULL);
+
+			_stagingTexture->Release();
+			_stagingTexture = NULL;
 		}
 		else
 		{
