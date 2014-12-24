@@ -25,7 +25,9 @@ namespace Igneel.Rendering
             //render a mesh with shadow map technique
             Register<SceneShadowMapping, MeshRender<MeshShadowMapEffect, MeshInstance>>();
 
-            Register<EdgeShadowFilteringTechnique, MeshRender<ShadowEdgeEffect, MeshInstance>>();
+            Register<EdgeShadowFilteringTechnique.SillueteRender, MeshRender<ShadowEdgeEffect, MeshInstance>>();
+
+            Register<EdgeShadowFilteringTechnique, MeshRender<RenderShadowEdge, MeshInstance>>();
 
             //render mesh shadow factor technique
             //Register<RenderShadowFactorTechnique, MeshRender<RenderShadowFactorEffect, MeshInstance>>(() =>                

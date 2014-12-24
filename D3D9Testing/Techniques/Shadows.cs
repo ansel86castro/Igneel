@@ -151,13 +151,28 @@ namespace D3D9Testing.Techniques
             Engine.Scene.AmbientLight.SkyColor = new Vector3(0.2f, 0.2f, 0.2f);
 
             Engine.Presenter.Rendering += Presenter_Rendering;
+            Engine.Scene.Dynamics.Add(new Dynamic(x =>
+            {
+                if (Engine.KeyBoard.IsKeyPressed(Igneel.Input.Keys.D1))
+                    technique.KernelSize = 3;
+                else if (Engine.KeyBoard.IsKeyPressed(Igneel.Input.Keys.D2))
+                    technique.KernelSize = 5;
+                else if (Engine.KeyBoard.IsKeyPressed(Igneel.Input.Keys.D3))
+                    technique.KernelSize = 7;
+                else if (Engine.KeyBoard.IsKeyPressed(Igneel.Input.Keys.D4))
+                    technique.KernelSize = 1;
+            }));
         }
 
         [TestMethod]
         public void EdgeFiltering()
         {
             SceneTests.InitializeScene();
-            var content = ImportContent();
+            
+            //var content = ImportContent();
+            var content = ContentImporter.Import(Engine.Scene, @"C:\Users\ansel\Documents\3dsmax\export\shadowScene.DAE");
+
+            Engine.Shadow.ShadowMapping.PCFBlurSize = 5;
             content.OnAddToScene(Engine.Scene);
 
             //ContentImporter.Import(Engine.Scene, @"C:\Users\ansel\Documents\3dsmax\export\nissan2.DAE");
@@ -188,41 +203,43 @@ namespace D3D9Testing.Techniques
             Engine.Scene.AmbientLight.GroundColor = new Vector3(0, 0, 0);
             Engine.Scene.AmbientLight.SkyColor = new Vector3(0.2f, 0.2f, 0.2f);
 
+            Engine.Shadow.ShadowMapping.PCFBlurSize = 3;
             var edgeTechnique = new EdgeShadowFilteringTechnique();
+            Engine.PushTechnique(edgeTechnique);
+            
+           
+            //Form form = new Form();
+            //form.BackColor = Color.Blue;
+            //form.StartPosition = FormStartPosition.CenterScreen;
+            //form.Size = new System.Drawing.Size(800, 600);
 
-            Form form = new Form();
-            form.BackColor = Color.Blue;
-            form.StartPosition = FormStartPosition.CenterScreen;
-            form.Size = new System.Drawing.Size(800, 600);
+            //form.SuspendLayout();
 
-            form.SuspendLayout();
+            //Canvas3D canvas = new Canvas3D()
+            //{
+            //    Width = form.Width,
+            //    Height = form.Height
+            //};
+            //canvas.Dock = DockStyle.Fill;
+            //var presenter = canvas.CreateSwapChainPresenter();
+            //form.Controls.Add(canvas);
+            //form.ResumeLayout();
 
-            Canvas3D canvas = new Canvas3D()
-            {
-                Width = form.Width,
-                Height = form.Height
-            };
-            canvas.Dock = DockStyle.Fill;
-            var presenter = canvas.CreateSwapChainPresenter();
-            form.Controls.Add(canvas);
-            form.ResumeLayout();
+            //Engine.RenderFrame += () =>
+            //{
+            //    presenter.Begin(Color.Aqua);
 
-            Engine.RenderFrame += () =>
-            {
-                presenter.Begin(Color.Aqua);
+            //    var device = Engine.Graphics;
+            //    device.PSStage.SetSampler(0, SamplerState.Linear);
+            //    device.OMBlendState = SceneTechnique.NoBlend;
+                
+            //    var texture = edgeTechnique.EdgeTexture;
+            //    RenderTexture(device, texture, width: device.OMBackBuffer.Width, height: device.OMBackBuffer.Height);
 
-                var device = Engine.Graphics;
-                device.PSStage.SetSampler(0, SamplerState.Linear);
-                device.OMBlendState = SceneTechnique.NoBlend;
+            //    presenter.End();
+            //};
 
-                Engine.ApplyTechnique(edgeTechnique);
-
-                RenderTexture(device, edgeTechnique.EdgeTexture, width: form.Width, height: form.Height);                    
-                               
-                presenter.End();
-            };
-
-            form.Show();
+            //form.Show();
          
         }
        
@@ -272,6 +289,7 @@ namespace D3D9Testing.Techniques
             var untranformed = Service.Require<RenderQuadEffect>();
             var sprite = Service.Require<Sprite>();
             device.PSStage.SetResource(0, texture );
+            device.PSStage.SetSampler(0, SamplerState.Linear);
 
             sprite.Begin();
             sprite.SetTrasform(untranformed, new Igneel.Rectangle(x, y, width, height), Matrix.Identity);

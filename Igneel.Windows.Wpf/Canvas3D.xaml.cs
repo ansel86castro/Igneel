@@ -35,6 +35,8 @@ namespace Igneel.Windows.Wpf
             {
                 this.SetStyle(System.Windows.Forms.ControlStyles.Opaque | System.Windows.Forms.ControlStyles.AllPaintingInWmPaint, true);
             }
+
+            
         }
 
         public Canvas3D()

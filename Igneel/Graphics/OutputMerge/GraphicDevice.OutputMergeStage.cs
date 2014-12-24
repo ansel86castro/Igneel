@@ -43,7 +43,8 @@ namespace Igneel.Graphics
         protected List<SwapChain> _swapChains = new List<SwapChain>();
         private ReadOnlyCollection<SwapChain> _swapChainsView;
         protected DepthStencil _omBackDepthStencil;
-        protected SwapChain _swapChain0;    
+        protected SwapChain _swapChain0;
+        int numRenderTargets;
 
         public RenderTarget OMBackBuffer { get { return _omBackBuffer; } }
 
@@ -105,11 +106,14 @@ namespace Igneel.Graphics
             get { return _swapChain0; }
         }
 
+        public int NbRenderTargets { get { return numRenderTargets; } }
+
         #region Protected 
 
         protected void InitOM()
         {
             OMInitialization init = GetOMInitialization();
+            numRenderTargets = init.NbRenderTargets;            
             _omRenderTargets = new RenderTarget[init.NbRenderTargets];            
             if (init.SwapChain != null)
             {
@@ -286,7 +290,6 @@ namespace Igneel.Graphics
         //        OMSetRenderTargets(v.nbActiveRenderTargets, v.targets, v.dephBuffer);
         //    }
         //}
-
 
 
         protected virtual void DisposeOM()

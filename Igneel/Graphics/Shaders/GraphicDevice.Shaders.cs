@@ -105,7 +105,7 @@ namespace Igneel.Graphics
 
         #region States
 
-        public void PushGraphicState<T>(T state)            
+        public void PushGraphicState<T>(T state)               
         {
             StateStack<T>.Push(state);
         }

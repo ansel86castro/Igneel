@@ -167,7 +167,7 @@ namespace Igneel.Rendering.Effects
         public override void OnRenderCreated(Render render)
         {
             base.OnRenderCreated(render);
-            render.BindWith(new ShadowMapBinding());
+            render.BindWith(new ShadowMapBinding());            
         }
     }
 

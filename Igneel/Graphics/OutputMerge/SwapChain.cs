@@ -36,7 +36,7 @@ namespace Igneel.Graphics
 
         public RenderTarget BackBuffer { get { return _backBuffers; } }
 
-        public SwapChainDesc Desc { get { return _desc; } set { _desc = value; } }       
+        public SwapChainDesc Desc { get { return _desc; } protected set { _desc = value; } }       
 
         protected override void OnDispose(bool disposing)
         {
