@@ -206,40 +206,45 @@ namespace D3D9Testing.Techniques
             Engine.Shadow.ShadowMapping.PCFBlurSize = 3;
             var edgeTechnique = new EdgeShadowFilteringTechnique();
             Engine.PushTechnique(edgeTechnique);
-            
-           
-            //Form form = new Form();
-            //form.BackColor = Color.Blue;
-            //form.StartPosition = FormStartPosition.CenterScreen;
-            //form.Size = new System.Drawing.Size(800, 600);
+            bool debug = true;
 
-            //form.SuspendLayout();
+            if (debug)
+            {
+                Form form = new Form();
+                form.BackColor = Color.Blue;
+                form.StartPosition = FormStartPosition.CenterScreen;
+                form.Size = new System.Drawing.Size(edgeTechnique.ShadowFactorTex.Width, edgeTechnique.ShadowFactorTex.Height);
 
-            //Canvas3D canvas = new Canvas3D()
-            //{
-            //    Width = form.Width,
-            //    Height = form.Height
-            //};
-            //canvas.Dock = DockStyle.Fill;
-            //var presenter = canvas.CreateSwapChainPresenter();
-            //form.Controls.Add(canvas);
-            //form.ResumeLayout();
+                form.SuspendLayout();
 
-            //Engine.RenderFrame += () =>
-            //{
-            //    presenter.Begin(Color.Aqua);
+                Canvas3D canvas = new Canvas3D()
+                {
+                    Width = form.Width,
+                    Height = form.Height
+                };
+                canvas.Dock = DockStyle.Fill;
+                var presenter = canvas.CreateSwapChainPresenter();
+                form.Controls.Add(canvas);
+                form.ResumeLayout();
 
-            //    var device = Engine.Graphics;
-            //    device.PSStage.SetSampler(0, SamplerState.Linear);
-            //    device.OMBlendState = SceneTechnique.NoBlend;
-                
-            //    var texture = edgeTechnique.EdgeTexture;
-            //    RenderTexture(device, texture, width: device.OMBackBuffer.Width, height: device.OMBackBuffer.Height);
+                Engine.RenderFrame += () =>
+                {
+                    presenter.Begin(Color.Aqua);
 
-            //    presenter.End();
-            //};
+                    var device = Engine.Graphics;
+                    device.PS.SamplerStacks[0].Push(SamplerState.Linear);                    
+                    device.OMBlendState = SceneTechnique.NoBlend;
 
-            //form.Show();
+                    var texture = edgeTechnique.EdgeSrcTexture;
+                    RenderTexture(device, texture, width: texture.Width, height: texture.Height);
+
+                    device.PS.SamplerStacks[0].Pop();
+
+                    presenter.End();
+                };
+
+                form.Show();
+            }            
          
         }
        
@@ -273,13 +278,13 @@ namespace D3D9Testing.Techniques
             var device = Engine.Graphics;
             var effect = Service.Require<RenderMeshIdEffect>();            
 
-            effect.Constants.World = translation * targetCamera.InvViewProjection;
-            effect.Constants.ViewProj = Engine.Scene.ActiveCamera.ViewProj;
-            effect.Constants.gId = new Vector4(1);
+            effect.U.World = translation * targetCamera.InvViewProjection;
+            effect.U.ViewProj = Engine.Scene.ActiveCamera.ViewProj;
+            effect.U.gId = new Vector4(1);
 
-            device.PushGraphicState<RasterizerState>(rastState);
+            device.RasterizerStack.Push(rastState);
             box.Draw(device, effect);            
-            device.PopGraphicState<RasterizerState>();
+            device.RasterizerStack.Pop();
 
             RenderTexture(device, technique.DepthTexture);
         }
@@ -288,15 +293,15 @@ namespace D3D9Testing.Techniques
         {
             var untranformed = Service.Require<RenderQuadEffect>();
             var sprite = Service.Require<Sprite>();
-            device.PSStage.SetResource(0, texture );
-            device.PSStage.SetSampler(0, SamplerState.Linear);
+            device.PS.SetResource(0, texture );
+            device.PS.SetSampler(0, SamplerState.Linear);
 
             sprite.Begin();
             sprite.SetTrasform(untranformed, new Igneel.Rectangle(x, y, width, height), Matrix.Identity);
             sprite.DrawQuad(untranformed);
             sprite.End();
 
-            device.PSStage.SetResource(0, null);
+            device.PS.SetResource(0, null);
         }
     }
 }

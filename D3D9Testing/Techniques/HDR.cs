@@ -106,7 +106,7 @@ namespace D3D9Testing.Techniques
                         //sprite.SetTrasform(untranformed, new Igneel.Rectangle(0, 0, width, height), Matrix.Identity);                           
                         //sprite.DrawQuad(untranformed);
 
-                        Engine.Graphics.PSStage.SetSampler(0, SamplerState.Point);
+                        Engine.Graphics.PS.SetSampler(0, SamplerState.Point);
 
                         for (int i = 0; i < textures.GetLength(0); i++)
                         {

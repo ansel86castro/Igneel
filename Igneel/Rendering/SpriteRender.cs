@@ -104,8 +104,8 @@ namespace Igneel.Rendering
                                    0, 0, 1, 0,
                                    -1, 1, 0, 1);
 
-            effect.Constants.Transform = transform;
-            effect.Constants.TexTransform = textureTransform;
+            effect.U.Transform = transform;
+            effect.U.TexTransform = textureTransform;
         }
 
         public void SetFullScreenTransform(IShaderInput input, Matrix texture)
@@ -123,20 +123,20 @@ namespace Igneel.Rendering
         }
         public void SetFullScreenTransform(Effect effect, Matrix texture)
         {
-            effect.Constants.Transform = new Matrix(2, 0, 0, 0,
+            effect.U.Transform = new Matrix(2, 0, 0, 0,
                                          0, -2, 0, 0,
                                          0, 0, 1, 0,
                                          -1, 1, 0, 1);
-            effect.Constants.TexTransform = texture;
+            effect.U.TexTransform = texture;
         }
         public void SetFullScreenTransform(Effect effect)
         {
-            effect.Constants.Transform = new Matrix(2, 0, 0, 0,
+            effect.U.Transform = new Matrix(2, 0, 0, 0,
                                          0, -2, 0, 0,
                                          0, 0, 1, 0,
                                          -1, 1, 0, 1);
 
-            effect.Constants.TexTransform = Matrix.Identity;
+            effect.U.TexTransform = Matrix.Identity;
         }
 
         public void DrawQuad(Effect effect = null)

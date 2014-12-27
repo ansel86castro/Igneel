@@ -37,30 +37,15 @@ namespace Igneel.Rendering
 
         public event EventHandler<EffectChangedEventArg> EffectHasChanged;
 
-        public Effect()
+        public Effect(GraphicDevice device =null)
         {
-            device = Engine.Graphics;
+            this.device = device ?? Engine.Graphics;        
             var techs = GetTechniques();
             if (techs != null)
-                SetTechniques(techs);
+                _SetTechniques(techs);
         }
 
-        //public static Effect Current { get { return current; } set { current = value; } }
-        private static void Using(Effect value)
-        {
-            effectChanged = current != value;           
-            if (effectChanged)
-            {
-                var previus = current;
-                current = value; 
-
-                var ev = current.EffectHasChanged;
-                if (ev != null)
-                {
-                    ev(current, new EffectChangedEventArg { Current = current, Previus = previus });
-                }
-            }            
-        }
+        public GraphicDevice Device { get { return device; } }
 
         public static bool CurrentChanged { get { return effectChanged; } }
 
@@ -88,7 +73,7 @@ namespace Igneel.Rendering
 
         public IReadOnlyDictionary<string, int> Techniques { get { return techniquesLookup; } }
 
-        public dynamic Constants
+        public dynamic U
         {
             get
             {
@@ -99,7 +84,23 @@ namespace Igneel.Rendering
                 }
                 return dynamicMap;
             }
-        }       
+        }
+
+        private static void Using(Effect value)
+        {
+            effectChanged = current != value;
+            if (effectChanged)
+            {
+                var previus = current;
+                current = value;
+
+                var ev = current.EffectHasChanged;
+                if (ev != null)
+                {
+                    ev(current, new EffectChangedEventArg { Current = current, Previus = previus });
+                }
+            }
+        }
 
         public InputLayout GetInputLayout(int technique, int pass)
         {
@@ -216,9 +217,13 @@ namespace Igneel.Rendering
             variables.Add(name, v);           
         }
 
+        /// <summary>
+        /// Derived classes must return an array containing the descriptions for the techniques
+        /// </summary>
+        /// <returns></returns>
         protected abstract TechniqueDesc[] GetTechniques();
 
-        private void SetTechniques(params TechniqueDesc[] techniques)
+        private void _SetTechniques(params TechniqueDesc[] techniques)
         {
             this.techniques = new EffectPass[techniques.Length][];
             for (int i = 0; i < techniques.Length; i++)
@@ -253,39 +258,15 @@ namespace Igneel.Rendering
         {
             if (name == null)
                 name = "t" + counter++;
-            return new TechniqueDesc() { Name = name };
-        }       
-
-        public TechniqueDesc[] Descriptions(params TechniqueDesc[] tech)
-        {
-            return tech;
-        }
-        
-        public TechniqueDesc<TVert>[] Descriptions<TVert>(params TechniqueDesc<TVert>[] tech)
-            where TVert:struct
-        {
-            return tech;
+            return new TechniqueDesc(device) { Name = name };
         }
 
-        //public EffectPassDesc Pass(RasterizerState rasterizer = null,
-        //                     BlendState blend = null,
-        //                     DepthStencilState zbuffer = null,
-        //                     params string[] shaders)
+        //protected TechniqueDesc Tech<TVert>(string name = null) where TVert : struct
         //{
-        //    return new EffectPassDesc(rasterizer, blend, zbuffer, shaders);
-        //}
-        //public EffectPassDesc Pass(params string[] shaders)
-        //{
-        //    return new EffectPassDesc(null, null, null, shaders);
-        //}
-
-        //protected EffectPass Pass(Action<EffectPassDesc> init)
-        //{
-        //    EffectPassDesc desc = new EffectPassDesc();
-
-        //    init(desc);
-        //    return new EffectPass(Engine.Graphics.CreateProgram(desc.Program));
-        //}
+        //    if (name == null)
+        //        name = "t" + counter++;
+        //    return new TechniqueDesc<TVert>(device) { Name = name };
+        //}                        
 
         public virtual void OnRender(Render render) { }
 

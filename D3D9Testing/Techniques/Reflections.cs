@@ -53,10 +53,10 @@ namespace D3D9Testing.Techniques
                         var device = Engine.Graphics;
                         var effect = Service.Require<RenderMeshColorEffect>();
 
-                        effect.Constants.ViewProj = Engine.Scene.ActiveCamera.ViewProj;
-                        effect.Constants.Color = new Vector4(1);
+                        effect.U.ViewProj = Engine.Scene.ActiveCamera.ViewProj;
+                        effect.U.Color = new Vector4(1);
 
-                        device.PushGraphicState<RasterizerState>(rastState);
+                        device.RasterizerStack.Push(rastState);
                         device.IAPrimitiveTopology = IAPrimitive.TriangleList;
                         device.IASetVertexBuffer(0, vb, 0);
                         var oldtech = effect.Technique;
@@ -65,7 +65,7 @@ namespace D3D9Testing.Techniques
                             effect.Apply(pass);
                             foreach (var camera in technique.Cameras)
                             {
-                                effect.Constants.World = camera.InvViewProjection;
+                                effect.U.World = camera.InvViewProjection;
                                 device.Draw(boxBuilder.Vertices.Length, 0);
                                 //device.DrawIndexedUser(0, boxBuilder.Vertices.Length, boxBuilder.Indices.Length / 3, boxBuilder.Indices, boxBuilder.Vertices);
                             }
@@ -73,7 +73,7 @@ namespace D3D9Testing.Techniques
                         effect.EndPasses();
 
                         effect.Technique = oldtech;
-                        device.PopGraphicState<RasterizerState>();
+                        device.RasterizerStack.Pop();
                     };
                 }
             }
@@ -94,9 +94,9 @@ namespace D3D9Testing.Techniques
                     {                        
                          var untranformed = Service.Require<RenderQuadEffect>();
                         var sprite = Service.Require<Sprite>();
-                        Engine.Graphics.PSStage.SetResource(0, technique.ReflectionTexture);
+                        Engine.Graphics.PS.SetResource(0, technique.ReflectionTexture);
 
-                        untranformed.Constants.alpha = 1;
+                        untranformed.U.alpha = 1;
                         untranformed.Technique = 1;
 
                         sprite.Begin();

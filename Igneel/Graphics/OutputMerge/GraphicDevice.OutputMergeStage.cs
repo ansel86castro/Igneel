@@ -132,8 +132,8 @@ namespace Igneel.Graphics
             renderTargetStack = new Stack<RenderStackValue>();
             renderTargetsStack = new Stack<RenderStackValues>();
 
-            StateStack<BlendState>.states.Push(_omBlendState);
-            StateStack<DepthStencilState>.states.Push(_omDepthStencilStage);
+            BlendStack.Push(_omBlendState);
+            DepthStencilStack.Push(_omDepthStencilStage);
         }
 
         protected abstract OMInitialization GetOMInitialization();
@@ -224,9 +224,9 @@ namespace Igneel.Graphics
             _omRenderTargets[0] = renderTarget;
         }
 
-        public abstract void OMSetRenderTargetsImp(int numTargets, RenderTarget[] renderTargets, DepthStencil dephtStencil);
+        protected abstract void OMSetRenderTargetsImp(int numTargets, RenderTarget[] renderTargets, DepthStencil dephtStencil);
 
-        public abstract void OMSetRenderTargetImpl(RenderTarget renderTarget, DepthStencil dephtStencil);
+        protected abstract void OMSetRenderTargetImpl(RenderTarget renderTarget, DepthStencil dephtStencil);
 
         //public void OMPushRenderTarget(int slot, RenderTarget renderTarget, DepthStencil dephtStencil = null)
         //{

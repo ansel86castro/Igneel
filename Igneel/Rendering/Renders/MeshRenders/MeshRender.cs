@@ -14,9 +14,9 @@ namespace Igneel.Rendering
     /// textures as  diffuse, normal , cube enviroment and a SurfaceInfo. This techniques is the base of 
     /// technique that render Model3D objects
     /// </summary>
-    public class MeshRender<TShader, T> :  GraphicObjectRender<TShader, T>
-        where T : IMeshContainer, IMaterialContainer
-        where TShader : Effect, new()
+    public class MeshRender<TEffect, TMesh> :  GraphicObjectRender<TEffect, TMesh>
+        where TMesh : IMeshContainer, IMaterialContainer
+        where TEffect : Effect, new()
     {
 
         public MeshRender()
@@ -24,7 +24,7 @@ namespace Igneel.Rendering
                         
         }
 
-        public override void Draw(T component)
+        public override void Draw(TMesh component)
         {
             var mesh = component.Mesh;
            
@@ -64,8 +64,9 @@ namespace Igneel.Rendering
 
         private void RenderLayers(GraphicDevice device, MeshPart[] layers)
         {
-            var effect = Effect;
+            var effect = this.Effect;
             effect.OnRender(this);
+
             foreach (var pass in effect.Passes())
             {
                 effect.Apply(pass);
@@ -73,8 +74,7 @@ namespace Igneel.Rendering
                 {                   
                     Bind(layer);
 
-                    device.DrawIndexed(layer.primitiveCount * 3 , layer.startIndex, 0);
-                    //device.DrawIndexed(0, layer.startVertex, layer.vertexCount, layer.startIndex, layer.primitiveCount);
+                    device.DrawIndexed(layer.primitiveCount * 3 , layer.startIndex, 0);                    
                 }
             }
             effect.EndPasses();           

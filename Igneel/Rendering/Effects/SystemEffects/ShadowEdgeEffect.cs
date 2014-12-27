@@ -13,15 +13,16 @@ namespace Igneel.Rendering.Effects
         protected override TechniqueDesc[] GetTechniques()
         {
             return new TechniqueDesc[]{
-                Tech("tech0").Pass<MeshVertex>("PreFilterVS", "PreFilterPS"),
-                Tech("tech1").Pass<VertexPTxH>("RenderQuadVS", "DownSampleEdgePS"),
+                Tech().Pass<MeshVertex>("PreFilterVS", "RenderShadowPS"),
+                Tech().Pass<VertexPTxH>("RenderQuadVS", "ShadowEdgeDetectPS"),
+                Tech().Pass<VertexPTxH>("RenderQuadVS", "DownSampleEdgePS"),
             };
 
         }
         public override void OnRenderCreated(Render render)
         {
               render.BindWith(new CameraBinding())
-                    .BindWith(new SceneNodeWorldBinding())
+                    .BindWith(new SceneNodeBinding())
                     .BindWith(new EdgeShadowFilteringTechnique.ShadowMapBinding());
         }
     }

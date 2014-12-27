@@ -156,7 +156,7 @@ namespace Igneel.Rendering
                 var activeLights = scene.ActiveLights;
                 int nbLight = activeLights.Count;
 
-                device.PSStage.SetResources(0, comp.textures);               
+                device.PS.SetResources(0, comp.textures);               
 
                 #region Lighting
 
@@ -176,7 +176,7 @@ namespace Igneel.Rendering
 
                 Bind(activeLights[0]);    
 
-                device.PSStage.SetSampler(0, SamplerState.Point);
+                device.PS.SetSampler(0, SamplerState.Point);
                 sinput.invViewProj = scene.ActiveCamera.InvViewProjection;
                 sprite.DrawQuad(effect);
                 
@@ -196,7 +196,7 @@ namespace Igneel.Rendering
                 sprite.End();
                 #endregion
 
-                device.PSStage.SetResources(0, comp.textures.Length, null);
+                device.PS.SetResources(0, comp.textures.Length, null);
                 UnBindScene();
 
                 Engine.Lighting.EnableAmbient = enableAmbient;

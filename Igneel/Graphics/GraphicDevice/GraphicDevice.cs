@@ -8,22 +8,18 @@ using System.Threading.Tasks;
 
 namespace Igneel.Graphics
 {
-    public struct SOInitialization
-    {
-        public int NbStremOutputBuffers { get; set; }
-    }
-
+   
     public abstract partial class GraphicDevice: ResourceAllocator
     {        
-        private BufferBind[] _soTargetBind;
+       
         private DeviceInfo _deviceInfo;
         protected GraphicDeviceDesc _desc;
 
         public GraphicDevice(GraphicDeviceDesc desc)
         {
-            StateStack<BlendState>.setter = x => OMBlendState = x;
-            StateStack<DepthStencilState>.setter = x => OMDepthStencilState = x;
-            StateStack<RasterizerState>.setter = x => RSState = x;           
+            rasStack = new RasterizerStateStack(this);
+            blendStack = new BlendStateStack(this);
+            depthStack = new DepthStencilStateStack(this);
 
             _desc = desc;            
  
@@ -31,31 +27,12 @@ namespace Igneel.Graphics
             InitIA();         
             InitShading();
             InitRS();
-            InitOM();
-
-            var soini = GetSOInitialization();
-            _soTargetBind = new BufferBind[soini.NbStremOutputBuffers];
+            InitOM();         
         }       
 
         public DeviceInfo Info { get { return _deviceInfo; } protected set { _deviceInfo = value; } }
 
-        public bool FullScreen { get { return _desc.FullScreen; } set { _desc.FullScreen = value; } }
-
-        public bool SupportStreamOutput { get { return _soTargetBind.Length > 0; } }      
-
-        public void SOSetTarget(int slot, GraphicBuffer buffer, int offset)
-        {
-            _soTargetBind[slot].buffer = buffer;
-            _soTargetBind[slot].offset = offset;
-
-            SOSetTargetImpl(slot, buffer, offset);
-        }
-
-        public  GraphicBuffer SOGetTarget(int slot, out int offset)
-        {
-            offset = _soTargetBind[slot].offset;
-            return _soTargetBind[slot].buffer;
-        }
+        public bool FullScreen { get { return _desc.FullScreen; } set { _desc.FullScreen = value; } }                
 
         public void Clear(ClearFlags flags, int color, float depth, Color4 stencil)
         {
@@ -85,11 +62,7 @@ namespace Igneel.Graphics
         /// <returns>Number of quality levels supported by the adapter</returns>
         public abstract int CheckMultisampleQualityLevels(Format format, int multySampleCount, bool windowed);
 
-        protected abstract DeviceInfo InitDevice(GraphicDeviceDesc desc);
-
-        protected abstract SOInitialization GetSOInitialization();
-
-        protected abstract void SOSetTargetImpl(int slot, GraphicBuffer buffer, int offset);                
+        protected abstract DeviceInfo InitDevice(GraphicDeviceDesc desc);        
 
         public abstract SamplerState CreateSamplerState(SamplerDesc desc);
 
@@ -203,8 +176,7 @@ namespace Igneel.Graphics
         /// <param name="srcPointer"></param>
         /// <param name="srcRowPith"></param>
         /// <param name="srcDepthPitch"></param>
-        protected unsafe abstract void UpdateSubResource(Texture dest, int subResource, DataBox* box, void* srcPointer, int srcRowPith, int srcDepthPitch);
-        
+        protected unsafe abstract void UpdateSubResource(Texture dest, int subResource, DataBox* box, void* srcPointer, int srcRowPith, int srcDepthPitch);        
 
         #endregion
 

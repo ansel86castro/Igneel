@@ -12,20 +12,20 @@ namespace Igneel.Graphics
         public int NbVertexBuffers;
     }
 
-    public abstract partial class GraphicDevice
+    public struct BufferBind
     {
-        
-        protected struct BufferBind
-        {
-            public int offset;
-            public int stride;
-            public GraphicBuffer buffer;
+        public int offset;
+        public int stride;
+        public GraphicBuffer buffer;
 
-            public void Dispose()
-            {
-                buffer.Dispose();
-            }
+        public void Dispose()
+        {
+            buffer.Dispose();
         }
+    }
+
+    public abstract partial class GraphicDevice
+    {               
 
         private BufferBind[] _iaVertexBufferBind;
         private BufferBind _iaIndexBufferBind;

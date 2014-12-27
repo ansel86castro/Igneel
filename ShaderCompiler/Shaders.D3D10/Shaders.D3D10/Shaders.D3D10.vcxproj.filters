@@ -172,13 +172,16 @@
     <FxCompile Include="PreFilterVS.hlsl">
       <Filter>System\Mesh\PreFilterShadow</Filter>
     </FxCompile>
-    <FxCompile Include="PreFilterPS.hlsl">
-      <Filter>System\Mesh\PreFilterShadow</Filter>
-    </FxCompile>
     <FxCompile Include="DownSampleEdgePS.hlsl">
       <Filter>System\Mesh\PreFilterShadow</Filter>
     </FxCompile>
     <FxCompile Include="Mesh_ShadowEdge3KPS.hlsl">
+      <Filter>System\Mesh\PreFilterShadow</Filter>
+    </FxCompile>
+    <FxCompile Include="RenderShadowPS.hlsl">
+      <Filter>System\Mesh\PreFilterShadow</Filter>
+    </FxCompile>
+    <FxCompile Include="ShadowEdgeDetectPS.hlsl">
       <Filter>System\Mesh\PreFilterShadow</Filter>
     </FxCompile>
   </ItemGroup>

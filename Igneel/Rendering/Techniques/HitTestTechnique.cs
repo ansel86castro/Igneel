@@ -123,8 +123,9 @@ namespace Igneel.Rendering
           
             var oldvp = graphics.RSViewPort;
             graphics.RSViewPort = vp;
-            graphics.PushGraphicState(rast);
-            graphics.PushGraphicState(blend);            
+
+            graphics.RasterizerStack.Push(rast);
+            graphics.BlendStack.Push(blend);            
 
             graphics.OMSaveRenderTarget();
 
@@ -147,8 +148,8 @@ namespace Igneel.Rendering
             }
 
             graphics.OMRestoreRenderTarget();
-            graphics.PopGraphicState<BlendState>();
-            graphics.PopGraphicState<RasterizerState>();            
+            graphics.BlendStack.Pop();
+            graphics.RasterizerStack.Pop();            
                        
             graphics.RSViewPort = oldvp;
             lighting.TransparencyEnable = transp;          

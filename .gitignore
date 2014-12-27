@@ -1,0 +1,16 @@
+*.metagen
+/D3D9Testing/bin/Debug/*.exe
+/D3D9Testing/obj/Debug/*.cache
+*.pdb
+*.tlog
+*.obj
+*.ilk
+*.exe
+*.lastbuildstate
+*.cache
+*.log
+*.pch
+*.fxo
+*.cso
+*.ipch
+Debug

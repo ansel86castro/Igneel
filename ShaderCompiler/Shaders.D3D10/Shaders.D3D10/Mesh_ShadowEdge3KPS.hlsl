@@ -1,4 +1,4 @@
-#define KERNEL_SIZE 5
+#define KERNEL_SIZE 3
 
 #include "Common.hlsli"
 #include "Lighting.hlsli"
@@ -24,7 +24,7 @@ float4 main(SMVSOutput input) : SV_TARGET0
 
 	[branch]
 	if(edge > 0)
-		ComputeShadowFactor();	
+	 	 return float4(1,0,0,1);//ComputeShadowFactor();	
 	else
 		gShadowFactor = t7.SampleCmpLevelZero(s7, gShadowTexCoord.xy , gShadowTexCoord.z);	
 

@@ -66,7 +66,7 @@ namespace Igneel.Rendering.Effects
             render.BindWith(new CameraBinding())
                   .BindWith(new LightBinding())
                   .BindWith(new AmbientLightBinding())
-                  .BindWith(new SceneNodeWorldBinding())
+                  .BindWith(new SceneNodeBinding())
                   .BindWith(new MeshMaterialBinding())
                   .BindWith(new EnvironmentMapBinding())
                   .BindWith(new PlaneReflectionBinding())
@@ -79,16 +79,17 @@ namespace Igneel.Rendering.Effects
     {
         protected override TechniqueDesc[] GetTechniques()
         {
-            return Descriptions(
+            return new TechniqueDesc[]{
                 Tech("tech0")
                     .Pass<MeshVertex>("Mesh_RenderDepthVS", "Mesh_RenderDepthPS")
-            );
+            };
         }
+       
         public override void OnRenderCreated(Render render)
         {
             render.BindWith(new CameraBinding())
                   .BindWith(new BuildSMapMatBinding())
-                  .BindWith(new SceneNodeWorldBinding());
+                  .BindWith(new SceneNodeBinding());
 
         }
     }
@@ -98,16 +99,16 @@ namespace Igneel.Rendering.Effects
     {
         protected override TechniqueDesc[] GetTechniques()
         {
-            return Descriptions(
+            return new TechniqueDesc[]{
                 Tech("tech0")
                     .Pass<T>("Mesh_IdRenderVS", "Mesh_IdRenderPS")
-            );
+            };
         }
 
         public override void OnRenderCreated(Render render)
         {
             render.BindWith(new CameraBinding())
-                  .BindWith(new SceneNodeWorldBinding());               
+                  .BindWith(new SceneNodeBinding());               
         }
     }
 
@@ -175,10 +176,10 @@ namespace Igneel.Rendering.Effects
     {
         protected override TechniqueDesc[] GetTechniques()
         {
-            return Descriptions(
+            return new TechniqueDesc[]{
                 Tech("tech0")
                     .Pass<VertexPositionColor>("Mesh_ColoredVS", "Mesh_ColoredPS")
-            );
+            };
         }
         public override void OnRender(Render render)
         {
@@ -199,7 +200,7 @@ namespace Igneel.Rendering.Effects
         public override void OnRenderCreated(Render render)
         {
             render.BindWith(new CameraBinding())          
-                .BindWith(new SceneNodeWorldBinding())
+                .BindWith(new SceneNodeBinding())
                 .BindWith(new MeshMaterialBinding())
                 .BindWith(new EnvironmentMapBinding())
                 .BindWith(new PlaneReflectionBinding())

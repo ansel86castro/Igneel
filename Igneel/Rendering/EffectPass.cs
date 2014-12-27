@@ -21,6 +21,13 @@ namespace Igneel.Rendering
             }
         }
 
+        struct SamplerBind
+        {
+            public int Index;
+            public IShaderStage Stage;
+            public SamplerState Sampler;
+        }
+
         internal int index;
         internal ShaderProgram program;
         List<VariableBinding> variables = new List<VariableBinding>();
@@ -28,7 +35,7 @@ namespace Igneel.Rendering
         RasterizerState rState, oldrsState;
         BlendState blendState, oldBlendState;
         DepthStencilState zBufferState, oldzBufferState;
-           
+        //List<SamplerBind> samplerBinds = new List<SamplerBind>(0);
 
         public RasterizerState RState
         {
@@ -131,6 +138,13 @@ namespace Igneel.Rendering
 
     public class TechniqueDesc
     {
+        protected GraphicDevice device;
+
+        public TechniqueDesc(GraphicDevice device)
+        {
+            this.device = device;
+        }
+
         public string Name { get; set; }
         public List<EffectPassDesc> Passes = new List<EffectPassDesc>();
 
@@ -139,14 +153,14 @@ namespace Igneel.Rendering
                              DepthStencilState zbuffer = null,
                              params string[] shaders)
         {
-            Passes.Add(new EffectPassDesc(rasterizer, blend, zbuffer, shaders));
+            Passes.Add(new EffectPassDesc(device,rasterizer, blend, zbuffer, shaders));
             return this;
         }
 
         public TechniqueDesc Pass<TVert>(params string[] shaders)
              where TVert : struct
         {
-            EffectPassDesc desc = new EffectPassDesc();
+            EffectPassDesc desc = new EffectPassDesc(device);
             desc.WithVertexShader<TVert>(shaders[0]);
             for (int i = 1; i < shaders.Length; i++)
             {
@@ -157,29 +171,32 @@ namespace Igneel.Rendering
         }
     }
 
-    public class TechniqueDesc<TVert> : TechniqueDesc
-           where TVert : struct
-    {
-        public TechniqueDesc Pass(params string[] shaders)       
-        {
-            EffectPassDesc desc = new EffectPassDesc();
-            desc.WithVertexShader<TVert>(shaders[0]);
-            for (int i = 1; i < shaders.Length; i++)
-            {
-                desc.WithShader(shaders[i]);
-            }
-            Passes.Add(desc);
-            return this;
-        }
-    }
+    //public class TechniqueDesc<TVert> : TechniqueDesc
+    //       where TVert : struct
+    //{
+    //    public TechniqueDesc(GraphicDevice device) : base(device) { }
+
+    //    public TechniqueDesc Pass(params string[] shaders)       
+    //    {
+    //        EffectPassDesc desc = new EffectPassDesc(device);
+    //        desc.WithVertexShader<TVert>(shaders[0]);
+    //        for (int i = 1; i < shaders.Length; i++)
+    //        {
+    //            desc.WithShader(shaders[i]);
+    //        }
+    //        Passes.Add(desc);
+    //        return this;
+    //    }
+    //}
 
    public class EffectPassDesc
     {
-       public EffectPassDesc()
+       public EffectPassDesc(GraphicDevice device)
        {
-           Program = new ShaderProgramDesc();
+           Program = new ShaderProgramDesc(device);
        }
-       public EffectPassDesc(RasterizerState rasterizer = null,
+       public EffectPassDesc(GraphicDevice device,
+                             RasterizerState rasterizer = null,
                              BlendState blend = null,
                              DepthStencilState zbuffer = null,
                              params string[] shaders)           
@@ -190,10 +207,10 @@ namespace Igneel.Rendering
            BlendState = blend;
            ZBufferState = zbuffer;
 
-           Program = new ShaderProgramDesc();
+           Program = new ShaderProgramDesc(device);
            foreach (var item in shaders)
            {
-               Program.SetShader(item);
+               Program.LinkShader(item);
            }
        }
 
@@ -219,14 +236,14 @@ namespace Igneel.Rendering
         }
         public EffectPassDesc WithShader(string filename)            
         {
-            Program.SetShader(filename);
+            Program.LinkShader(filename);
             return this;
         }
 
         public EffectPassDesc WithVertexShader<TInput>(string filename)
             where TInput : struct
         {
-            Program.SetVertexShader<TInput>(filename);
+            Program.LinkVertexShader<TInput>(filename);
             return this;
         }
     }

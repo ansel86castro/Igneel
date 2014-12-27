@@ -44,7 +44,6 @@ namespace Igneel.Rendering
             swapChaing.Present();
         }
 
-
         public override void Resize(Size size)
         {
             Engine.Graphics.ResizeBackBuffer(size.Width, size.Height);

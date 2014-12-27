@@ -9,8 +9,8 @@ using System.Threading.Tasks;
 namespace Igneel.Rendering
 {
     public class EdgeShadowFilteringTechnique : SceneTechnique
-    {       
-        RenderTexture2D[] downSampledRts = new RenderTexture2D[2];
+    {        
+        RenderTexture2D[] downSampledRts = new RenderTexture2D[3];
         Effect effect;
         Sprite sprite;
         Igneel.Rendering.Sprite.IShaderInput input;
@@ -32,7 +32,11 @@ namespace Igneel.Rendering
             Initialize();
         }
 
-        public Texture2D EdgeTexture { get { return downSampledRts[1].Texture; } }
+        public Texture2D EdgeTexture { get { return downSampledRts[2].Texture; } }
+
+        public Texture2D EdgeSrcTexture { get { return downSampledRts[1].Texture; } }
+
+        public Texture2D ShadowFactorTex { get { return silluteRender.ShadowFatorTex.Texture; } }
 
         private void Initialize()
         {
@@ -40,30 +44,59 @@ namespace Igneel.Rendering
             {
                 if (downSampled != null)
                     downSampled.Dispose();   
-            }         
+            }           
 
             var bb =Engine.Graphics.OMBackBuffer;
             var kernel = Engine.Shadow.ShadowMapping.PCFBlurSize;
-
-            downSampledRts[0] = new RenderTexture2D(bb.Width / kernel, bb.Height / kernel, Graphics.Format.R8G8B8A8_UNORM);
-            downSampledRts[1] = new RenderTexture2D(downSampledRts[0].Width / kernel, downSampledRts[0].Height / kernel, Graphics.Format.R8G8B8A8_UNORM);            
+            
+            int w = bb.Width;
+            int h = bb.Height;
+            for (int i = 0; i < downSampledRts.Length; i++)
+            {                
+                downSampledRts[i] = new RenderTexture2D(w, h, Graphics.Format.R8G8B8A8_UNORM);
+                h /= kernel;
+                w /= kernel;
+            }            
         }
 
         public override void Apply()
         {
             
             var graphic = Engine.Graphics;
-            graphic.PSStage.SetResource(8, null);
+            var ps = graphic.PS;
+            ps.SetResource(8, null);
 
-            //render to silluete texture
+            //render to shadow factor texture
             Engine.ApplyTechnique(silluteRender);
 
+            #region render to edgeTexture
+
+            var edgeTexture = silluteRender.ShadowFatorTex;
+
+            downSampledRts[0].SetTarget(graphic);
+            edgeTexture.SetTexture(0, graphic);
+            effect.Technique = 1;
+            ps.SetSampler(0, SamplerState.Point);
+
+            sprite.Begin();
+            sprite.SetFullScreenTransform(input);
+            sprite.DrawQuad(effect);
+            sprite.End();
+
+            #endregion
+
             #region DownSampling
+            ps.SetSampler(0, SamplerState.Point);
 
-            var edgeTexture = silluteRender.EdgeTexture;
-            DownSample(graphic, edgeTexture, downSampledRts[0]);
-            DownSample(graphic, downSampledRts[0], downSampledRts[1]);
-
+            effect.Technique = 2;
+            sprite.Begin();
+            for (int i = 0; i < downSampledRts.Length - 1; i++)
+            {
+                DownSample(graphic, downSampledRts[i], downSampledRts[i + 1]);
+                ps.SetResource(0, null);  
+            }
+            sprite.End();  
+            effect.Technique = 0;                  
             graphic.OMRestoreRenderTarget();
 
             #endregion
@@ -71,24 +104,11 @@ namespace Igneel.Rendering
             base.Apply();
         }
 
-        private void DownSample(GraphicDevice graphic, RenderTexture2D edgeTexture, RenderTexture2D downSampled)
+        private void DownSample(GraphicDevice graphic, RenderTexture2D src, RenderTexture2D dest)
         {           
-
-            downSampled.SetTarget(graphic);
-            edgeTexture.SetTexture(0, graphic);
-            graphic.PSStage.SetSampler(0, SamplerState.Point);
-
-            effect.Technique = 1;
-
-            sprite.Begin();
-            sprite.SetFullScreenTransform(input);
-            sprite.DrawQuad(effect);
-            sprite.End();
-
-            effect.Technique = 0;
-         
-            graphic.PSStage.SetResource(0, null);
-            graphic.OMSetRenderTarget(null);
+            dest.SetTarget(graphic);
+            src.SetTexture(0, graphic);                                 
+            sprite.DrawQuad(effect);                                        
         }
 
         public class ShadowMapBinding : RenderBinding<ShadowMapTechnique>
@@ -137,31 +157,32 @@ namespace Igneel.Rendering
                     mapping.SHADOW_EPSILON = value.bias;
                     mapping.SM_SIZE = value.size;
 
-                    Engine.Graphics.PSStage.SetResource(register, value.DepthTexture);
-                    Engine.Graphics.PSStage.SetSampler(register, pointSampler);
+                    Engine.Graphics.PS.SetResource(register, value.DepthTexture);
+                    Engine.Graphics.PS.SetSampler(register, pointSampler);
                 }
             }
 
             public override void OnUnBind(ShadowMapTechnique value)
             {
-                Engine.Graphics.PSStage.SetResource(register, null);
+                Engine.Graphics.PS.SetResource(register, null);
             }
         }
 
         public class SillueteRender : SceneTechnique
         {
-            RenderTexture2D edgeTexture;
+            RenderTexture2D shadowRt;
             ViewPort vp;
-            public RenderTexture2D EdgeTexture
-            {
-                get { return edgeTexture; }               
-            }
 
+            public RenderTexture2D ShadowFatorTex
+            {
+                get { return shadowRt; }               
+            }
+           
             public SillueteRender()
             {
                 Initialize();
-                Engine.Graphics.OMBackBuffer.Resized += OMBackBuffer_Resized;
-               
+                Engine.Graphics.OMBackBuffer.Resized += OMBackBuffer_Resized;                
+
             }
 
             void OMBackBuffer_Resized(RenderTarget obj)
@@ -171,13 +192,13 @@ namespace Igneel.Rendering
 
             private void Initialize()
             {
-                if (edgeTexture != null)
-                    edgeTexture.Dispose();             
+                if (shadowRt != null)
+                    shadowRt.Dispose();             
                 var bb = Engine.Graphics.OMBackBuffer;
                 var kernel = Engine.Shadow.ShadowMapping.PCFBlurSize;
 
-                edgeTexture = new RenderTexture2D(bb.Width, bb.Height, Graphics.Format.R8G8B8A8_UNORM);
-                vp = new ViewPort(0, 0, edgeTexture.Width, edgeTexture.Height);
+                shadowRt = new RenderTexture2D(bb.Width, bb.Height, Format.R8G8B8A8_UNORM);
+                vp = new ViewPort(0, 0, shadowRt.Width, shadowRt.Height);
             }
 
             public override void Apply()
@@ -188,9 +209,9 @@ namespace Igneel.Rendering
                 var oldvp = graphic.RSViewPort;
                 graphic.RSViewPort = vp;
 
-                edgeTexture.SetTarget(graphic);
-                graphic.Clear(Graphics.ClearFlags.Target | Graphics.ClearFlags.ZBuffer, new Color4(1, 0, 0, 0), 1, 0);
-                base.Apply();
+                shadowRt.SetTarget(graphic);
+                graphic.Clear(Graphics.ClearFlags.Target | Graphics.ClearFlags.ZBuffer, new Color4(0, 0, 0, 0), 1, 0);
+                base.Apply();             
 
                 graphic.OMSetRenderTarget(null);
                 graphic.RSViewPort = oldvp;
@@ -213,15 +234,15 @@ namespace Igneel.Rendering
             public override void OnBind(EdgeShadowFilteringTechnique value)
             {
                 var device = Engine.Graphics;
-                device.PSStage.SetResource(8, value.EdgeTexture);
-                device.PSStage.SetSampler(8, SamplerState.Linear);
+                device.PS.SetResource(8, value.EdgeTexture);
+                device.PS.SetSampler(8, SamplerState.Point);
             }
 
             public override void OnUnBind(EdgeShadowFilteringTechnique value)
             {
                 var device = Engine.Graphics;
-                device.PSStage.SetResource(8, null);
-                device.PSStage.SetSampler(8, null);
+                device.PS.SetResource(8, null);
+                device.PS.SetSampler(8, null);
             }
         }
     }

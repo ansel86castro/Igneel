@@ -72,12 +72,37 @@ namespace IgneelD3D10 {
 		_pvs = vs;			
 	}		
 
+	void D3DVertexShader::Set(ID3D10Device* device)
+	{		
+		for (int i = 0;	i < ConstantBuffers->Length; i++)
+		{
+			auto bind = ConstantBuffers[i];
+			bind.handle->Close();
+			ID3D10Buffer* cb = bind.handle->cb; 
+			device->VSSetConstantBuffers(bind.bindPoint, 1, &cb);
+		}
+		 device->VSSetShader(_pvs);
+	}
+
 	D3DPixelShader::D3DPixelShader(ID3D10Device * device, ID3D10PixelShader* ps,  ShaderCode^ bytecode)
 		:D3D10Shader(device, ps,  bytecode) 
 	{
 		_pps = ps;	
 	}
 	
+	void D3DPixelShader::Set(ID3D10Device* device)
+	{
+		auto buffers = ConstantBuffers;
+		
+		for (int i = 0;	i < buffers->Length; i++)
+		{
+			auto bind = buffers[i];
+			bind.handle->Close();
+			ID3D10Buffer* cb = bind.handle->cb; 
+			device->PSSetConstantBuffers(bind.bindPoint, 1, &cb);
+		}
+		device->PSSetShader(_pps);
+	}
 
 	D3DGeometryShader::D3DGeometryShader(ID3D10Device * device, ID3D10GeometryShader* shader,  ShaderCode^ bytecode)
 		:D3D10Shader(device, shader,  bytecode) 
@@ -85,4 +110,17 @@ namespace IgneelD3D10 {
 		this->_shader = shader;
 	}
 		
+	void D3DGeometryShader::Set(ID3D10Device* device)
+	{
+		auto buffers = ConstantBuffers;
+	
+		for (int i = 0;	i < buffers->Length; i++)
+		{
+			auto bind = buffers[i];
+			bind.handle->Close();
+			ID3D10Buffer* cb = bind.handle->cb;
+			device->GSSetConstantBuffers(bind.bindPoint, 1, &cb);
+		}
+		 device->GSSetShader(_shader);
+	}
 }

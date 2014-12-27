@@ -55,14 +55,14 @@ namespace Igneel.Rendering.Bindings
                 mapping.SHADOW_EPSILON = value.bias;
                 mapping.SM_SIZE = value.size;                
 
-                Engine.Graphics.PSStage.SetResource(register, value.DepthTexture);
-                Engine.Graphics.PSStage.SetSampler(register, pointSampler);
+                Engine.Graphics.PS.SetResource(register, value.DepthTexture);
+                Engine.Graphics.PS.SetSampler(register, pointSampler);
             }
         }
 
         public override void OnUnBind(ShadowMapTechnique value)
         {
-            Engine.Graphics.PSStage.SetResource(register, null);
+            Engine.Graphics.PS.SetResource(register, null);
         }
     }
 
@@ -104,13 +104,13 @@ namespace Igneel.Rendering.Bindings
 
             if (value.ContainsTrasparency && value.DiffuseMap != null)
             {
-                Engine.Graphics.PSStage.SetResource(0, value.DiffuseMap);
+                Engine.Graphics.PS.SetResource(0, value.DiffuseMap);
                 mapping.USE_DIFFUSE_MAP = true;
             }
             else
             {
                 mapping.USE_DIFFUSE_MAP = false;
-                Engine.Graphics.PSStage.SetResource(0, null);
+                Engine.Graphics.PS.SetResource(0, null);
             }
         }
 

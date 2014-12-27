@@ -93,7 +93,6 @@
     <ClInclude Include="SamplerState10.h" />
     <ClInclude Include="ShaderProgram.h" />
     <ClInclude Include="Shaders.h" />
-    <ClInclude Include="ShaderSetter.h" />
     <ClInclude Include="ShaderStages.h" />
     <ClInclude Include="Stdafx.h" />
     <ClInclude Include="SwapChain.h" />
@@ -123,7 +122,6 @@
     <ClCompile Include="SamplerState10.cpp" />
     <ClCompile Include="ShaderProgram.cpp" />
     <ClCompile Include="Shaders.cpp" />
-    <ClCompile Include="ShaderSetter.cpp" />
     <ClCompile Include="ShaderStages.cpp" />
     <ClCompile Include="Stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

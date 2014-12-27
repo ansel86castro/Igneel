@@ -6,15 +6,13 @@ using namespace Igneel::Graphics;
 using namespace System::Collections::Generic;
 
 namespace IgneelD3D10{
-
+	
 	public ref class D3DShaderProgram : public ShaderProgram
 	{				
 	public:		
-		GraphicDevice^ _graphicDevice;
+		GraphicDevice^ _graphicDevice;		
 
-		D3DShaderProgram(GraphicDevice^ graphicDevice, ShaderProgramDesc^ desc);
-
-		static void RegisterSetters(ID3D10Device * device);
+		D3DShaderProgram(GraphicDevice^ graphicDevice, ShaderProgramDesc^ desc);		
 
 		OVERRIDE(IUniformSetter^ CreateUniformSetter(String^ name));
 

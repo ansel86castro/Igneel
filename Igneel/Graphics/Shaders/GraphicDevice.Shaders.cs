@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,43 +9,33 @@ namespace Igneel.Graphics
 {
     public struct ShadingInitialization
     {
-        public ShaderStage VS { get; set; }
-        public ShaderStage PS { get; set; }
-        public ShaderStage GS { get; set; }
-        public ShaderStage HS { get; set; }
-        public ShaderStage DS { get; set; }
-        public ShaderStage CS { get; set; }
+        public IVertexShaderStage VS { get; set; }
+        public IPixelShaderStage PS { get; set; }
+        public IGeometryShaderStage GS { get; set; }
+        public IHullShaderStage HS { get; set; }
+        public IDomainShaderStage DS { get; set; }
+        public IComputeShaderStage CS { get; set; }
     }
 
     public abstract partial class GraphicDevice
-    {              
-        private ShaderProgram program;        
-        private ShaderStage vs ;
-        private ShaderStage ps;
-        private ShaderStage gs;
-        private ShaderStage hs;
-        private ShaderStage ds;
-        private ShaderStage cs;
-
-        static class StateStack<T>
+    {
+        struct ShaderCacheEntry
         {
-            public static Stack<T> states = new Stack<T>();
-            internal static Action<T> setter;
+            public ShaderCode Code;
+            public Shader Shader;
+        }
+           
+        private ShaderProgram program;        
+        private IVertexShaderStage vs;
+        private IPixelShaderStage ps;
+        private IGeometryShaderStage gs;
+        private IHullShaderStage hs;
+        private IDomainShaderStage ds;
+        private IComputeShaderStage cs;
 
-            public static void Push(T state)
-            {
-                states.Push(state);
-                setter(state);
-            }
-
-            public static T Pop()
-            {
-                var s = states.Pop();
-                setter(states.Peek());
-                return s;
-            }
-
-        }       
+        private Dictionary<Type, IShaderStage> shaderStages;
+        private Dictionary<string, ShaderCacheEntry> shaderCache = new Dictionary<string, ShaderCacheEntry>();
+      
 
         public ShaderProgram Program 
         { 
@@ -60,32 +51,20 @@ namespace Igneel.Graphics
             }
         }
 
-        public ShaderStage VSStage { get { return vs; } }
+        public IVertexShaderStage VS { get { return vs; } }
 
-        public ShaderStage PSStage { get { return ps; } }
+        public IPixelShaderStage PS { get { return ps; } }
 
-        public ShaderStage GSStage { get { return gs; } }
+        public IGeometryShaderStage GS { get { return gs; } }
 
-        public ShaderStage HSStage { get { return hs; } }
+        public IHullShaderStage HS { get { return hs; } }
 
-        public ShaderStage DSStage { get { return ds; } }
+        public IDomainShaderStage DS { get { return ds; } }
 
-        public ShaderStage CSStage { get { return cs; } }
-
-        //public T GetShaderStage<T>()
-        //    where T:ShaderStage
-        //{
-        //    return ShaderStages<T>.Stage;
-        //}
-
-        //protected static void RegisterStage<T>(T stage)
-        //    where T:ShaderStage
-        //{
-        //    ShaderStages<T>.Stage = stage;
-        //}
+        public IComputeShaderStage CS { get { return cs; } }      
 
         protected void InitShading()
-        {            
+        {
             var ini = GetShadingInitialization();
             vs = ini.VS;
             ps = ini.PS;
@@ -93,29 +72,95 @@ namespace Igneel.Graphics
             hs = ini.HS;
             ds = ini.DS;
             cs = ini.CS;
+
+            shaderStages = new Dictionary<Type, IShaderStage>(6)
+            {
+                {typeof(VertexShader), vs},
+                {typeof(PixelShader), ps},
+                {typeof(GeometryShader), gs},
+                {typeof(HullShader), hs},
+                {typeof(DomainShader), ds},
+                {typeof(ComputeShader), cs},
+            };         
         }
 
         protected abstract ShadingInitialization GetShadingInitialization();        
 
         public abstract ShaderProgram CreateProgram(ShaderProgramDesc desc);              
 
-        protected abstract void SetProgram(ShaderProgram program);
+        protected abstract void SetProgram(ShaderProgram program);                    
 
-       //public abstract ShaderBuffer CreateShaderBuffer(BufferDesc desc);
-
-        #region States
-
-        public void PushGraphicState<T>(T state)               
+        public IShaderStage<T> GetShaderStage<T>() where T : Shader
         {
-            StateStack<T>.Push(state);
+            IShaderStage stage = null;
+            shaderStages.TryGetValue(typeof(T), out stage);
+            return (IShaderStage<T>)stage;
+        }        
+
+        public T CreateShader<T>(ShaderCode bytecode)
+              where T : Shader
+        {
+            var stage = GetShaderStage<T>();
+            if (stage == null)
+                throw new NotSupportedException(GetNoSuportedString<T>());
+            return stage.CreateShader(bytecode);
         }
 
-        public T PopGraphicState<T>()
+        private static string GetNoSuportedString<T>() where T : Shader
         {
-            return StateStack<T>.Pop();
+            return "The implementation of GraphicDevice does not support the creation of shaders of type \"" + typeof(T).Name + "\"";
         }
 
-        #endregion           
+        public  ShaderCompilationUnit<T> CreateShader<T>(string filename, string functionName, ShaderMacro[] defines = null)
+            where T : Shader
+        {            
+            ShaderCacheEntry entry;
+            var stage = GetShaderStage<T>();
+            if(stage == null)
+                throw new NotSupportedException(GetNoSuportedString<T>());
+
+            if (!shaderCache.TryGetValue(filename + ":" + functionName, out entry))
+            {                
+                var bytecode = stage.CompileFromFile(filename, functionName, defines);
+                entry = new ShaderCacheEntry
+                {
+                    Code = bytecode,
+                    Shader = CreateShader<T>(bytecode)
+                };
+                shaderCache[filename] = entry;
+            }
+            return new ShaderCompilationUnit<T>(entry.Code, (T)entry.Shader);
+        }
+
+        public ShaderCompilationUnit<T> CreateShader<T>(string filename, ShaderMacro[] defines = null)
+            where T : Shader
+        {
+            ShaderCacheEntry entry;
+            var stage = GetShaderStage<T>();
+            if (stage == null)
+                throw new NotSupportedException(GetNoSuportedString<T>());
+
+            if (!shaderCache.TryGetValue(filename, out entry))
+            {
+                var locator = Service.Require<IShaderRepository>();
+                string srcFile = locator.Locate(filename);
+                string ext = Path.GetExtension(srcFile);
+                ShaderCode code;
+
+                if (ext == ".cso")
+                {
+                    code = new ShaderCode(File.ReadAllBytes(srcFile), true);
+                }
+                else
+                {
+                    code = stage.CompileFromFile(srcFile, "main", defines);
+                }
+
+                entry = new  ShaderCacheEntry { Shader = CreateShader<T>(code), Code = code };
+                shaderCache[filename] = entry;
+            }
+            return new ShaderCompilationUnit<T>(entry.Code, (T)entry.Shader);
+        }       
     }    
    
 

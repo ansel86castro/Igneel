@@ -133,7 +133,7 @@ namespace Igneel.Rendering
                             Cull = CullMode.Front
                         });
                     }
-                    graphic.PushGraphicState<RasterizerState>(rasterizer);
+                    graphic.RasterizerStack.Push(rasterizer);
 
                     //var oldcamera = Engine.Scene.ActiveCamera;
                    
@@ -160,7 +160,7 @@ namespace Igneel.Rendering
                     tech.ReflectionMatrix = Matrix.Identity;
                     tech.Plane = new Plane();
 
-                    graphic.PopGraphicState<RasterizerState>();
+                    graphic.RasterizerStack.Pop();
                     //Engine.Scene.ActiveCamera = oldcamera;
                 }
 

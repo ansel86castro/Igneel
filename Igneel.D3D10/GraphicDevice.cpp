@@ -159,14 +159,7 @@ namespace IgneelD3D10
 		di.DeviceId = ad.DeviceId;	
 
 		return di;
-	}
-
-	SOInitialization GraphicDevice10::GetSOInitialization()
-	{
-		SOInitialization ini;
-		ini.NbStremOutputBuffers = 4;
-		return ini;
-	}
+	}	
 
 	bool GraphicDevice10::CheckFormatSupport(Format format, BindFlags binding, ResourceType type)
 	{
@@ -481,7 +474,6 @@ namespace IgneelD3D10
 		return static_cast<Texture3D^>(CreateTextureFromStream(ResourceType::Texture3D, stream, nullptr));
 	}
 
-
 	void GraphicDevice10::Clear(ClearFlags flags, Color4 color, float depth, int stencil)
 	{
 		DephtStencil10^ zbuffer = static_cast<DephtStencil10^>(_omDepthStencil);
@@ -569,19 +561,11 @@ namespace IgneelD3D10
 	{
 		auto destResource = GetResource(dest);
 		_device->UpdateSubresource(destResource, subResource, (D3D10_BOX*)box, srcPointer, srcRowPith, srcDepthPitch);
-	}
-
-	void GraphicDevice10::SOSetTargetImpl(int slot, GraphicBuffer^ buffer, int offset)
-	{
-		GraphicBuffer10^ buff = static_cast<GraphicBuffer10^>(buffer);
-		ID3D10Buffer* b[1] = { buff->_buffer };
-		_device->SOSetTargets(1 , b, (UINT*)&offset);
-	}
+	}	
 
 	void GraphicDevice10::OnDispose(bool disposing)
 	{
 		__super::OnDispose(disposing);
 		_device->Release();
-	}
-
+	}	
 }	

@@ -1,6 +1,5 @@
 #include "Stdafx.h"
 #include "ShaderProgram.h"
-#include "ShaderSetter.h"
 #include "Shaders.h"
 #include "D3DUniformSetter.h"
 #include "GraphicDevice.h"
@@ -77,18 +76,12 @@ namespace IgneelD3D10 {
 	}
 
 	D3DShaderProgram::D3DShaderProgram(GraphicDevice^ graphicDevice, ShaderProgramDesc^ desc)
-	{
-		shaders = desc->GetHandles();
-		this->InputDefinition = desc->Input;		
-		this->_graphicDevice = graphicDevice;
+		:ShaderProgram(desc)
+	{				
+		this->_graphicDevice = graphicDevice;		
 	}
 
-	void D3DShaderProgram::RegisterSetters(ID3D10Device * device)
-	{
-		RegisterShaderManager(gcnew VertexShaderSetter(device));
-		RegisterShaderManager(gcnew PixelShaderSetter(device));
-		RegisterShaderManager(gcnew GeometryShaderSetter(device));
-	}	
+	
 
 	IUniformSetter^ D3DShaderProgram::CreateUniformSetter(String^ name)
 	{
@@ -98,7 +91,7 @@ namespace IgneelD3D10 {
 				
 		for each (auto var in shaders)
 		{
-			D3D10Shader^ shader = static_cast<D3D10Shader^>(var->Function);
+			D3D10Shader^ shader = static_cast<D3D10Shader^>(var);
 			auto reflec = shader->ShaderReflection;			
 			auto cbuffers = shader->ConstantBuffers;
 			for each (auto cb in cbuffers)
@@ -127,7 +120,7 @@ namespace IgneelD3D10 {
 
 		for each (auto var in shaders)
 		{
-			D3D10Shader^ shader = static_cast<D3D10Shader^>(var->Function);
+			D3D10Shader^ shader = static_cast<D3D10Shader^>(var);
 			auto reflec = shader->ShaderReflection;			
 			auto cbuffers = shader->ConstantBuffers;
 			for each (auto cb in cbuffers)
@@ -156,7 +149,7 @@ namespace IgneelD3D10 {
 
 		 for each (auto var in shaders)
 		{
-			D3D10Shader^ shader = static_cast<D3D10Shader^>(var->Function);
+			D3D10Shader^ shader = static_cast<D3D10Shader^>(var);
 			auto reflec = shader->ShaderReflection;			
 			auto cbuffers = shader->ConstantBuffers;
 			for each (auto cb in cbuffers)
@@ -198,7 +191,7 @@ namespace IgneelD3D10 {
 
 		  for each (auto var in shaders)
 		{
-			D3D10Shader^ shader = static_cast<D3D10Shader^>(var->Function);
+			D3D10Shader^ shader = static_cast<D3D10Shader^>(var);
 			auto reflec = shader->ShaderReflection;			
 			auto cbuffers = shader->ConstantBuffers;
 			for each (auto cb in cbuffers)
@@ -230,12 +223,12 @@ namespace IgneelD3D10 {
 	 }
 
 	 void D3DShaderProgram::SetShaders(ID3D10Device* device)
-	 {		 
-		 interior_ptr<ShaderHandler^> pShaders = &shaders[0];
+	 {		 		 		 
+		 interior_ptr<Shader^> pShaders = &shaders[0];
 		 int count = shaders->Length;
 		 for (int i = 0; i < count; i++, pShaders++)
 		 {
-			 (*pShaders)->Set();
+			 static_cast<D3D10Shader^>((*pShaders))->Set(device);
 		 }
 	 }
 

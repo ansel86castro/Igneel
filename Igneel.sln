@@ -23,6 +23,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Igneel.Windows.Wpf", "Ignee
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Shaders.D3D10", "ShaderCompiler\Shaders.D3D10\Shaders.D3D10\Shaders.D3D10.vcxproj", "{EABEA70C-A5D1-4D08-A981-CDCF5DEE221F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Igneel.Portable", "Igneel.Portable\Igneel.Portable.csproj", "{5E30A0B3-EBF0-42DE-94F5-232288AE9959}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -183,6 +185,18 @@ Global
 		{EABEA70C-A5D1-4D08-A981-CDCF5DEE221F}.Release|Win32.Build.0 = Release|Win32
 		{EABEA70C-A5D1-4D08-A981-CDCF5DEE221F}.Release|x86.ActiveCfg = Release|Win32
 		{EABEA70C-A5D1-4D08-A981-CDCF5DEE221F}.Release|x86.Build.0 = Release|Win32
+		{5E30A0B3-EBF0-42DE-94F5-232288AE9959}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5E30A0B3-EBF0-42DE-94F5-232288AE9959}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5E30A0B3-EBF0-42DE-94F5-232288AE9959}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{5E30A0B3-EBF0-42DE-94F5-232288AE9959}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{5E30A0B3-EBF0-42DE-94F5-232288AE9959}.Debug|Win32.ActiveCfg = Debug|Any CPU
+		{5E30A0B3-EBF0-42DE-94F5-232288AE9959}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{5E30A0B3-EBF0-42DE-94F5-232288AE9959}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5E30A0B3-EBF0-42DE-94F5-232288AE9959}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5E30A0B3-EBF0-42DE-94F5-232288AE9959}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{5E30A0B3-EBF0-42DE-94F5-232288AE9959}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{5E30A0B3-EBF0-42DE-94F5-232288AE9959}.Release|Win32.ActiveCfg = Release|Any CPU
+		{5E30A0B3-EBF0-42DE-94F5-232288AE9959}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -61,7 +61,7 @@ namespace Igneel.Graphics
             _rsVewPort = ini.Viewport;
             _rsScissorRect = ini.ScissorRect;
 
-            StateStack<RasterizerState>.states.Push(_rsState);
+            RasterizerStack.Push(_rsState);
         }
 
         protected abstract RSInitialization GetRSInitialization();

@@ -21,7 +21,7 @@ namespace Igneel.Windows.Wpf
 
         public IgneelWpfApp(string shaderRepositoryDir)
         {
-            this.shaderRepositoryDir = shaderRepositoryDir;
+            this.shaderRepositoryDir = shaderRepositoryDir;           
         }
 
         public IgneelWpfApp()

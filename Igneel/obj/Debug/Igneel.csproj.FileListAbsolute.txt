@@ -43,4 +43,3 @@ E:\Projects\Igneel\Igneel\obj\Debug\Igneel.Design.Forms.TypeProviderForm.resourc
 E:\Projects\Igneel\Igneel\obj\Debug\Igneel.csproj.GenerateResource.Cache
 E:\Projects\Igneel\Igneel\obj\Debug\Igneel.dll
 E:\Projects\Igneel\Igneel\obj\Debug\Igneel.pdb
-E:\Projects\Igneel\Igneel\obj\Debug\Igneel.csprojResolveAssemblyReference.cache

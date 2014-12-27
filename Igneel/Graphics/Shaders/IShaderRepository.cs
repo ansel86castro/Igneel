@@ -8,10 +8,21 @@ namespace Igneel.Graphics
 {
     public interface IShaderRepository
     {
+        /// <summary>
+        /// returns the global path for the given shaderfilename
+        /// </summary>
+        /// <param name="shaderFilename">filename whitout extension</param>
+        /// <returns></returns>
         string Locate(string shaderFilename);       
 
+        /// <summary>
+        /// Shader compilation flags
+        /// </summary>
         ShaderFlags CompilerFlags { get; }
 
+        /// <summary>
+        /// Shader model used
+        /// </summary>
         string ShaderModel { get; }
     }
 

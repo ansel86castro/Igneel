@@ -11,10 +11,10 @@ namespace Igneel.Rendering.Effects
     {
         protected override TechniqueDesc[] GetTechniques()
         {
-            return Descriptions(
+            return new TechniqueDesc[]{
                 Tech("tech0")
                     .Pass<VertexPTxH>("RenderQuadVS", "CheckTransparencePS")
-            );
+            };
         }
     }
 }

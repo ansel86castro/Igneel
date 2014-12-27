@@ -11,19 +11,14 @@ using System.Threading.Tasks;
 namespace Igneel.Graphics
 {     
     public abstract class ShaderProgram
-    {        
-        internal protected static class ShaderStore<T> where T:Shader
-        { 
-            public static IShaderFactory<T> Setter;
-            public static Dictionary<string, ShaderCompilationUnit<T>> loadedShaders = new Dictionary<string, ShaderCompilationUnit<T>>();
-        }       
-
+    {               
         protected InputLayout _inputLayout;
-        protected ShaderHandler[] shaders;       
+        protected Shader[] shaders;        
 
-        public ShaderProgram()
+        protected ShaderProgram(ShaderProgramDesc desc)
         {
-            
+            _inputLayout = desc.Input;
+            shaders = desc.Shaders.ToArray();            
         }
 
         public InputLayout InputDefinition
@@ -31,89 +26,25 @@ namespace Igneel.Graphics
             get
             {
                 return _inputLayout;
-            }
-            protected set
-            {
-                _inputLayout = value;
-            }
+            }           
         }
 
-        public int NumberOfShaders
+        public int ShadersCount
         {
             get
             {
                 return shaders != null ? shaders.Length : 0;
             }
         }
-
-        public static bool SupportShader<T>()
-            where T:Shader
+       
+        public Shader[] GetShaders()
         {
-            return ShaderStore<T>.Setter != null;
+            return (Shader[])shaders.Clone();
         }
 
-        public static T CreateShader<T>(ShaderCode bytecode)
-              where T : Shader
+        public Shader GetShader(int idx)
         {
-            if (!ShaderProgram.SupportShader<T>())
-                throw new NotSupportedException("This implementation doesn't support shader of type \"" + typeof(T).Name + "\"");
-
-            return ShaderStore<T>.Setter.CreateShader(bytecode);
-        }
-
-        public static ShaderCompilationUnit<T> CreateShader<T>(string filename, string functionName, ShaderMacro[] defines)
-            where T:Shader
-        {
-             ShaderCompilationUnit<T> unit;
-             if (!ShaderStore<T>.loadedShaders.TryGetValue(filename+":"+functionName, out unit))
-             {
-                 var bytecode = ShaderStore<T>.Setter.CompileFromFile(filename, functionName, defines);
-                 unit =  new ShaderCompilationUnit<T> { Shader = CreateShader<T>(bytecode), Code = bytecode };
-                 ShaderStore<T>.loadedShaders[filename] = unit;  
-             }
-             return unit;
-        }
-
-        public static ShaderCompilationUnit<T> CreateShader<T>(string filename, ShaderMacro[] defines = null)
-            where T:Shader
-        {
-            ShaderCompilationUnit<T> unit;
-            if (!ShaderStore<T>.loadedShaders.TryGetValue(filename, out unit))
-            {
-                var locator = Service.Require<IShaderRepository>();
-                string srcFile = locator.Locate(filename);
-                string ext = Path.GetExtension(srcFile);
-                ShaderCode code;
-
-                if (ext == ".cso")
-                {
-                    code = new ShaderCode(File.ReadAllBytes(srcFile), true);
-                }
-                else
-                {
-                    code = ShaderStore<T>.Setter.CompileFromFile(srcFile, "main", defines);
-                }
-
-                 unit = new ShaderCompilationUnit<T> { Shader = CreateShader<T>(code), Code = code };
-                 ShaderStore<T>.loadedShaders[filename] = unit;                
-            }
-            return unit;
-        }
-
-        protected static void RegisterShaderManager<T>(IShaderFactory<T> setter)
-              where T : Shader
-        {
-            ShaderProgram.ShaderStore<T>.Setter = setter;
-        }
-
-        public IEnumerable<Shader> GetShaders()
-        {
-            return shaders.Select(x => x.Function);
-        }
-
-        public Shader GetShader(int index)
-        {
-            return shaders[index].Function;
+            return shaders[idx];
         }
 
         public abstract IUniformSetter CreateUniformSetter(string name);

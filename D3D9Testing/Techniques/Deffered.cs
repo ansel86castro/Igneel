@@ -82,19 +82,21 @@ namespace D3D9Testing.Techniques
                     var width = device.OMGetRenderTarget(0).Width / 2;
                     var height = device.OMGetRenderTarget(0).Height / 2;
 
-                    device.PSStage.SetSampler(0, SamplerState.Point);
+                    device.PS.SamplerStacks[0].Push(SamplerState.Point);
                     device.OMBlendState = SceneTechnique.NoBlend;
                     var textures = technique.Textures;
                     for (int i = 0; i < 2; i++)
                     {
                         for (int j = 0; j < 2; j++)
                         {
-                            device.PSStage.SetResource(0, textures[i * 2 + j]);
+                            device.PS.SetResource(0, textures[i * 2 + j]);
                             sprite.SetTrasform(untranformed, new Igneel.Rectangle(width * j, height * i, width, height), Matrix.Identity);
                             sprite.DrawQuad(untranformed);
                         }
                     }
                     sprite.End();
+
+                    device.PS.SamplerStacks[0].Pop();
 
                     presenter.End();
                 };

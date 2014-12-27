@@ -23,12 +23,12 @@ namespace Igneel.Rendering.Bindings
         public const int ReflectionSampler = 5;
         public const int RefractionSampler = 6;
 
-        ShaderStage stage;
+        IShaderStage stage;
         public bool UseNormalMap;
             
         public MeshMaterialBinding() 
         {
-            stage = Engine.Graphics.PSStage;
+            stage = Engine.Graphics.PS;
         }
                  
         public sealed override void OnBind(MeshMaterial value)

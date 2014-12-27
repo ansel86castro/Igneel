@@ -271,8 +271,8 @@ namespace Igneel.Components
             device.OMSaveRenderTarget();
             renderTexture.SetTarget();            
 
-            device.PSStage.SetResource(0, texture);
-            device.PSStage.SetSampler(0, samState);
+            device.PS.SetResource(0, texture);
+            device.PS.SetSampler(0, samState);
             
             sprite.Begin();
 

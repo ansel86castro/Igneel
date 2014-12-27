@@ -37,6 +37,12 @@ namespace Igneel.Graphics
     public struct ShaderCompilationUnit<T>
         where T:Shader
     {
+        public ShaderCompilationUnit(ShaderCode code, T shader)
+        {
+            Code = code;
+            Shader = shader;
+        }
+
         public ShaderCode Code;
         public T Shader;
     }

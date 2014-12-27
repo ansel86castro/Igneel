@@ -208,7 +208,7 @@ namespace Igneel.Rendering
             RenderTexture2D dest;
             RenderTexture2D source;
             RenderTexture2D lumen;
-            var stage = device.PSStage;
+            var stage = device.PS;
             var scene = Engine.Scene;
 
             #region Render To HDRTexture           
@@ -376,7 +376,7 @@ namespace Igneel.Rendering
 
         }
 
-        private void MensureLuminance(GraphicDevice device, ShaderStage stage)
+        private void MensureLuminance(GraphicDevice device, IShaderStage stage)
         {         
             effect.Technique = HDREffect.SampleAvgLum;
 
@@ -474,7 +474,7 @@ namespace Igneel.Rendering
                     int i; // Loop variables
                     StarDefinition starDef = glare.starDef;
 
-                    device.PSStage.SetSampler(0, linearSampler);
+                    device.PS.SetSampler(0, linearSampler);
 
                     float srcW = rtStartSource.Width;
                     float srcH = rtStartSource.Height;
@@ -575,7 +575,7 @@ namespace Igneel.Rendering
                     for (i = 0; i < lines; i++)
                     {
                         rtStarLines[i].SetTexture(i, device);
-                        device.PSStage.SetSampler(i, linearSampler);
+                        device.PS.SetSampler(i, linearSampler);
                         ptSampleWeights[i] = new Vector4(invLines, invLines, invLines, invLines);
                     }
 

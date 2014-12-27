@@ -11,12 +11,12 @@ namespace Igneel.Rendering.Effects
 {
     public class SkinWorldBiding : RenderBinding<SceneNode>
     {
-        SceneNodeWorldBinding.IWorldMapping mapping;
+        SceneNodeBinding.IWorldMapping mapping;
 
         protected override void OnEffectChanged(Effect effect)
         {
             base.OnEffectChanged(effect);
-            mapping = effect.Map<SceneNodeWorldBinding.IWorldMapping>(true);
+            mapping = effect.Map<SceneNodeBinding.IWorldMapping>(true);
         }
         public override void OnBind(SceneNode value)
         {
@@ -33,12 +33,12 @@ namespace Igneel.Rendering.Effects
     {
         protected override TechniqueDesc[] GetTechniques()
         {
-            return Descriptions(
+            return new TechniqueDesc[]{
                 Tech("tech0")
                     .Pass<SkinnedVertex>("Skin_PhongVS", "Mesh_PhongPS"),
                 Tech("tech1")
                     .Pass<SkinnedVertex>("Skin_BumpVS", "Mesh_BumpPS")
-            );
+            };
         }        
 
 
@@ -57,10 +57,10 @@ namespace Igneel.Rendering.Effects
     {
         protected override TechniqueDesc[] GetTechniques()
         {
-            return Descriptions(
+            return new TechniqueDesc[]{
                 Tech("tech0")
                     .Pass<SkinnedVertex>("Skin_IdRenderVS", "Mesh_IdRenderPS")
-            );
+            };
         }
         public override void OnRenderCreated(Render render)
         {
@@ -77,10 +77,10 @@ namespace Igneel.Rendering.Effects
     {
         protected override TechniqueDesc[] GetTechniques()
         {
-            return Descriptions(
+            return new TechniqueDesc[]{
                 Tech("tech0")
                     .Pass<SkinnedVertex>("Skin_RenderDepthVS", "Mesh_RenderDepthPS")
-            );
+            };
         }
         public override void OnRenderCreated(Render render)
         {
@@ -98,7 +98,7 @@ namespace Igneel.Rendering.Effects
     {
         protected override TechniqueDesc[] GetTechniques()
         {
-            return Descriptions(
+            return new TechniqueDesc[]{
                 Tech().Pass<SkinnedVertex>("Skin_ShadowPhongVS", "Mesh_ShadowPhong3KPS"),
                 Tech().Pass<SkinnedVertex>("Skin_ShadowPhongVS", "Mesh_ShadowPhong5KPS"),
                 Tech().Pass<SkinnedVertex>("Skin_ShadowPhongVS", "Mesh_ShadowPhong7KPS"),
@@ -106,7 +106,7 @@ namespace Igneel.Rendering.Effects
                 Tech().Pass<SkinnedVertex>("Skin_ShadowBumpVS", "Mesh_ShadowBump3KPS"),
                 Tech().Pass<SkinnedVertex>("Skin_ShadowBumpVS", "Mesh_ShadowBump5KPS"),
                 Tech().Pass<SkinnedVertex>("Skin_ShadowBumpVS", "Mesh_ShadowBump7KPS")
-            );
+            };
         }
 
         public override void OnRender(Render render)

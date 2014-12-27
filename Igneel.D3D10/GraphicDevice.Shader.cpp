@@ -2,7 +2,6 @@
 #include "GraphicDevice.h"
 #include "ShaderProgram.h"
 #include "Shaders.h"
-#include "ShaderSetter.h"
 #include "ShaderStages.h"
 #include "GraphicBuffer10.h"
 
@@ -16,9 +15,7 @@ namespace IgneelD3D10 {
 		ini.GS = gcnew GSStage10(_device);
 		ini.CS = nullptr;
 		ini.DS = nullptr;
-		ini.HS = nullptr;		
-
-		D3DShaderProgram::RegisterSetters(_device);
+		ini.HS = nullptr;			
 
 		return ini;
 	}

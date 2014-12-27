@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Igneel.Rendering.Bindings
 {        
-    public class SceneNodeWorldBinding : RenderBinding<SceneNode>
+    public class SceneNodeBinding : RenderBinding<SceneNode>
     {
         public interface IWorldMapping
         {

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,85 +9,90 @@ namespace Igneel.Graphics
 {
     public class ShaderProgramDesc
     {
-        private List<ShaderHandler> shaders = new List<ShaderHandler>();
+        private List<Shader> shaders = new List<Shader>();
+        private ReadOnlyCollection<Shader>shaderR;
         private Dictionary<Type, Shader> shaderLookup = new Dictionary<Type, Shader>();
-       
-        public void SetShader<T>(T shader)
-           where T : Shader
-        {
-            var setter = ShaderProgram.ShaderStore<T>.Setter;
-            if (setter == null)
-                throw new NotSupportedException("This implementation doesn't support shader of type \"" + typeof(T).Name + "\"");
+        private GraphicDevice device;
 
-            shaders.RemoveAll(x => x.GetType() == typeof(T));
-            var handle = setter.GetHandler(shader);
-            shaders.Add(handle);
+        public GraphicDevice Device { get { return device; } }
+
+        public ShaderProgramDesc(GraphicDevice device)
+        {
+            this.device = device;
+            shaderR = shaders.AsReadOnly();            
+        }
+       
+        public ReadOnlyCollection<Shader> Shaders { get{return shaderR;} }
+
+        public void LinkShader<T>(T shader) where T : Shader
+        {           
+            shaders.RemoveAll(x => x.GetType() == typeof(T));         
+            shaders.Add(shader);
             shaderLookup[typeof(T)] = shader;
         }
 
-        public void SetShader<TInput>(ShaderCompilationUnit<VertexShader>cunit)
+        public void LinkShader<TInput>(ShaderCompilationUnit<VertexShader>cunit)
             where TInput:struct
         {
-            SetShader(cunit.Shader);
+            LinkShader(cunit.Shader);
             Input = Engine.Graphics.CreateInputLayout<TInput>(cunit.Code);
         }
 
-        public void SetShader(string filename)
+        public void LinkShader(string filename)
         {
-            if(filename.Length < 2)throw new ArgumentException();
+            if(filename.Length < 2)throw new ArgumentException();          
 
             string type = filename.Substring(filename.Length - 2, 2).ToLower();
             switch (type)
             {
                 case "vs":
-                   SetShader(ShaderProgram.CreateShader<VertexShader>(filename).Shader);
+                    LinkShader(device.CreateShader<VertexShader>(filename).Shader);
                     break;
                 case "ps":
-                    SetShader(ShaderProgram.CreateShader<PixelShader>(filename).Shader);
+                    LinkShader(device.CreateShader<PixelShader>(filename).Shader);
                     break;
                 case "gs":
-                    SetShader(ShaderProgram.CreateShader<GeometryShader>(filename).Shader);
+                    LinkShader(device.CreateShader<GeometryShader>(filename).Shader);
                     break;
                 case "hs":
-                    SetShader(ShaderProgram.CreateShader<HullShader>(filename).Shader);
+                    LinkShader(device.CreateShader<HullShader>(filename).Shader);
                     break;
                 case "ds":
-                    SetShader(ShaderProgram.CreateShader<DomainShader>(filename).Shader);
+                    LinkShader(device.CreateShader<DomainShader>(filename).Shader);
                     break;
                 case "cs":
-                    SetShader(ShaderProgram.CreateShader<ComputeShader>(filename).Shader);
+                    LinkShader(device.CreateShader<ComputeShader>(filename).Shader);
                     break;
                 default:
                     throw new ShaderCompileException("Invalid Shader Filename");                    
             }
         }
 
-        public void SetVertexShader<TInput>(string filename)
-            where TInput :struct
+        public void LinkVertexShader<TInput>(string filename) where TInput :struct
         {
             if (filename.Length < 2) throw new ArgumentException();
-
+           
             string type = filename.Substring(filename.Length - 2, 2).ToLower();
             switch (type)
             {
                 case "vs":
-                    ShaderCompilationUnit<VertexShader> cunit = ShaderProgram.CreateShader<VertexShader>(filename);
-                    SetShader<TInput>(cunit);                    
+                    ShaderCompilationUnit<VertexShader> cunit = device.CreateShader<VertexShader>(filename);
+                    LinkShader<TInput>(cunit);                    
                     break;
                 case "ps":
-                    SetShader(ShaderProgram.CreateShader<PixelShader>(filename).Shader);
+                    LinkShader(device.CreateShader<PixelShader>(filename).Shader);
                     break;
                 case "gs":
-                    SetShader(ShaderProgram.CreateShader<GeometryShader>(filename).Shader);
+                    LinkShader(device.CreateShader<GeometryShader>(filename).Shader);
                     break;
                 case "hs":
-                    SetShader(ShaderProgram.CreateShader<HullShader>(filename).Shader);
+                    LinkShader(device.CreateShader<HullShader>(filename).Shader);
                     break;
                 case "ds":
-                    SetShader(ShaderProgram.CreateShader<DomainShader>(filename).Shader);
+                    LinkShader(device.CreateShader<DomainShader>(filename).Shader);
                     break;
                 case "cs":
-                    SetShader(ShaderProgram.CreateShader<ComputeShader>(filename).Shader);
+                    LinkShader(device.CreateShader<ComputeShader>(filename).Shader);
                     break;
                 default:
                     throw new ShaderCompileException("Invalid Shader Filename");
@@ -98,13 +104,6 @@ namespace Igneel.Graphics
         public T GetShader<T>() where T : Shader
         {
             return (T)shaderLookup[typeof(T)];
-        }
-
-        public ShaderHandler[] GetHandles()
-        {
-            return shaders.ToArray();
-        }
-       
-      
+        }      
     }
 }

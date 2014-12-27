@@ -67,13 +67,13 @@ namespace Igneel.Rendering
             var device = Engine.Graphics;
 
             device.IASetVertexBuffer(0, vb, 0);
-            device.PushGraphicState(rastState);
+            device.RasterizerStack.Push(rastState);
 
             map.Color = component.Color;            
 
             Bind(component);
 
-            device.PSStage.SetResource(0, component.Texture);
+            device.PS.SetResource(0, component.Texture);
 
             map.World = component.GetBillboardMatrix(Engine.Scene.ActiveCamera, Node.GlobalPosition, Node.LocalScale);
             map.WorldViewProj = map.World * Engine.Scene.ActiveCamera.ViewProj;
@@ -88,7 +88,7 @@ namespace Igneel.Rendering
             }
             effect.EndPasses();
 
-            device.PopGraphicState<RasterizerState>();       
+            device.RasterizerStack.Pop();       
 
             UnBind(component);
         }

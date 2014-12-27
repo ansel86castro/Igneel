@@ -25,13 +25,9 @@ namespace IgneelD3D10
 			void CloseCBuffers();
 
 		protected:		
-			OVERRIDE( DeviceInfo InitDevice(GraphicDeviceDesc^ desc));
-	
-			OVERRIDE( void SOSetTargetImpl(int slot, GraphicBuffer^ buffer, int offset));
+			OVERRIDE( DeviceInfo InitDevice(GraphicDeviceDesc^ desc));	
 
-			OVERRIDE(void OnDispose(bool));
-
-			OVERRIDE(SOInitialization GetSOInitialization() );
+			OVERRIDE(void OnDispose(bool));			
 
 		public:
 			void GraphicDevice10::CreateDepthStencil(ID3D10Device * device, IDXGISwapChain* swapChain , OUT ID3D10Texture2D** dephtTexture,  OUT ID3D10DepthStencilView** depthStencilView );
@@ -159,7 +155,7 @@ namespace IgneelD3D10
 		public:
 			OVERRIDE( ShaderProgram^ CreateProgram(ShaderProgramDesc^ desc) );
 
-			//OVERRIDE( ShaderBuffer^ CreateShaderBuffer(BufferDesc desc));
+			//OVERRIDE( ShaderBuffer^ CreateShaderBuffer(BufferDesc desc));			
 
 	};
 

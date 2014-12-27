@@ -44,8 +44,8 @@ namespace Igneel.Components
             var g = Engine.Graphics;
             Sprite sprite = Service.Require<Sprite>();
 
-            g.PSStage.SetResource(0, component.Texture);
-            g.PSStage.SetSampler(0, SamplerState.Linear);
+            g.PS.SetResource(0, component.Texture);
+            g.PS.SetSampler(0, SamplerState.Linear);
 
             sprite.Begin();
 

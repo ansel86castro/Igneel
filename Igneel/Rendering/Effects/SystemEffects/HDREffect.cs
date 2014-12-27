@@ -25,7 +25,7 @@ namespace Igneel.Rendering.Effects
 
         protected override TechniqueDesc[] GetTechniques()
         {
-            return Descriptions(
+            return new TechniqueDesc[]{
                 Tech("DownScale4x4").Pass<VertexPTxH>("RenderQuadVS",         "DownScale4x4PS"),
                 Tech("SampleLumInitial").Pass<VertexPTxH>("RenderQuadVS",     "SampleLumInitialPS"),
                 Tech("SampleLumIterative").Pass<VertexPTxH>("RenderQuadVS",   "SampleLumIterativePS"),
@@ -38,7 +38,7 @@ namespace Igneel.Rendering.Effects
                 Tech("GaussianBlur8").Pass<VertexPTxH>("RenderQuadVS",        "GaussianBlur8PS"),
                 Tech("MergeTexture").Pass<VertexPTxH>("RenderQuadVS",         "MergeTexturePS"),
                 Tech("FinalScenePass").Pass<VertexPTxH>("RenderQuadVS",       "FinalScenePassPS")
-            );
+            };
         }
     }
 }

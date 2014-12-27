@@ -20,7 +20,7 @@ namespace Igneel.Rendering.Bindings
             mapping.lightIntensity = obj.LuminanceIntensity;
             mapping.ViewProj = Engine.Scene.ActiveCamera.ViewProj;
 
-            Engine.Graphics.PSStage.SetResource(0, obj.Texture);         
+            Engine.Graphics.PS.SetResource(0, obj.Texture);         
         }
 
         public override void OnUnBind(SkyDome value)

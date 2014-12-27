@@ -16,14 +16,14 @@ namespace Igneel.Rendering.Bindings
 
         IEnvMap mapping;
         const int ReflectionSampler  = 4;
-        private ShaderStage stage;
+        private IShaderStage stage;
 
         protected override void OnEffectChanged(Effect effect)
         {
             base.OnEffectChanged(effect);
 
             mapping = effect.Map<IEnvMap>();
-            stage = Engine.Graphics.PSStage;
+            stage = Engine.Graphics.PS;
         }
 
         public override void OnBind(EnvironmentMapTechnique value)

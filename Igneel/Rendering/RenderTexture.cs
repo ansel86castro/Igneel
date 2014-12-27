@@ -76,7 +76,7 @@ namespace Igneel.Rendering
         {
             if (device == null) device = Engine.Graphics;
 
-            device.PSStage.SetResource(slot, texture);
+            device.PS.SetResource(slot, texture);
         }
 
         public MappedTexture2D Map()
@@ -170,7 +170,7 @@ namespace Igneel.Rendering
         {
             if (device == null) device = Engine.Graphics;
 
-            device.PSStage.SetResource(slot, texture);
+            device.PS.SetResource(slot, texture);
         }
     }
 

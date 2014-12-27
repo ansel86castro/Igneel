@@ -40,18 +40,18 @@ namespace Igneel.Rendering
             if (Engine.Scene.ActiveCamera == null)
                 return;
             var device = Engine.Graphics;
-            device.PushGraphicState(rasterizer);
+            device.RasterizerStack.Push(rasterizer);
             device.IAPrimitiveTopology = IAPrimitive.TriangleList;
 
             Bind(Engine.Scene.ActiveCamera);
 
-            effect.Constants.gId = (Vector4)color;
+            effect.U.gId = (Vector4)color;
             foreach (var shape in comp.Shapes)
             {               
                 DrawShape(shape, device);
             }
 
-            device.PopGraphicState<RasterizerState>();
+            device.RasterizerStack.Pop();            
         }
 
         private void DrawShape(ActorShape shape, GraphicDevice device)
@@ -61,27 +61,27 @@ namespace Igneel.Rendering
             {
                 BoxShape boxShape = (BoxShape)shape;
                 scale = Matrix.Scale(boxShape.Dimensions);
-                effect.Constants.World = scale * boxShape.GlobalPose;
+                effect.U.World = scale * boxShape.GlobalPose;
                 DrawMesh(box, device);      
             }
             else if (shape is SphereShape)
             {
                 SphereShape sphereShape = (SphereShape)shape;
                 scale = Matrix.Scale(new Vector3(sphereShape.Radius));
-                effect.Constants.World = scale * shape.GlobalPose;
+                effect.U.World = scale * shape.GlobalPose;
                 DrawMesh(sphere, device);      
             }
             else if (shape is PlaneShape)
             {
                 scale = Matrix.Scale(Engine.Scene.ActiveCamera.ZFar,0, Engine.Scene.ActiveCamera.ZFar);
-                effect.Constants.World = scale * shape.GlobalPose;
+                effect.U.World = scale * shape.GlobalPose;
                 DrawMesh(box, device);    
             }
             else if (shape is WheelShape)
             {
                 WheelShape wheel = (WheelShape)shape;
 
-                effect.Constants.World = Matrix.Scale(wheel.Radius, 0, wheel.Radius) *
+                effect.U.World = Matrix.Scale(wheel.Radius, 0, wheel.Radius) *
                                          Matrix.RotationZ(Numerics.PIover2) *
                                          Matrix.RotationY(wheel.SteerAngle) *
                                          shape.GlobalPose;
@@ -94,18 +94,18 @@ namespace Igneel.Rendering
                 CapsuleShape capsuleShape = (CapsuleShape)shape;
                 float radius = capsuleShape.Radius;
                 float height = capsuleShape.Height;
-                effect.Constants.World = Matrix.Translate(0, -0.5f, 0) *
+                effect.U.World = Matrix.Translate(0, -0.5f, 0) *
                                          Matrix.Scale(radius, radius, radius) *
                                          Matrix.Translate(0, height * 0.5f, 0) * shape.GlobalPose;
 
                 DrawMeshPart(capsule, capsule.Layers[0], device);                
 
-                effect.Constants.World =  Matrix.Translate(0, 0.5f, 0) *
+                effect.U.World =  Matrix.Translate(0, 0.5f, 0) *
                                           Matrix.Scale(radius, radius, radius) *
                                           Matrix.Translate(0, -(height * 0.5f), 0) * shape.GlobalPose;
                 DrawMeshPart(capsule, capsule.Layers[2], device);
 
-                effect.Constants.World =  Matrix.Scale(radius, height, radius) * shape.GlobalPose;
+                effect.U.World =  Matrix.Scale(radius, height, radius) * shape.GlobalPose;
                 DrawMeshPart(capsule, capsule.Layers[1], device);
             }
             else if (shape is TriangleMeshShape)
@@ -114,7 +114,7 @@ namespace Igneel.Rendering
                 var mesh = tmesh.GraphicMesh;
                 if (mesh != null)
                 {
-                    effect. Constants.World = shape.GlobalPose;
+                    effect. U.World = shape.GlobalPose;
 
                     DrawMesh(mesh, device);                    
 
@@ -177,13 +177,13 @@ namespace Igneel.Rendering
         public void DrawController(CharacterController characterController)
         {
             var device = Engine.Graphics;
-            device.PushGraphicState(rasterizer);
+            device.RasterizerStack.Push(rasterizer);
             device.IAPrimitiveTopology = IAPrimitive.TriangleList;
 
             if (characterController is BoxController)
             {
                 BoxController boxController = (BoxController)characterController;
-                effect.Constants.World = Matrix.Scale(boxController.Extents) * characterController.GlobalPose;
+                effect.U.World = Matrix.Scale(boxController.Extents) * characterController.GlobalPose;
                 DrawMesh(box, Engine.Graphics);      
             }
             else
@@ -191,22 +191,22 @@ namespace Igneel.Rendering
                 CapsuleController capsuleController = (CapsuleController)characterController;
                 float radius = capsuleController.Radius;
                 float height = capsuleController.Height;
-                effect.Constants.World = Matrix.Translate(0, -0.5f, 0) *
+                effect.U.World = Matrix.Translate(0, -0.5f, 0) *
                                          Matrix.Scale(radius, radius, radius) *
                                          Matrix.Translate(0, height * 0.5f, 0) * capsuleController.GlobalPose;
 
                 DrawMeshPart(capsule, capsule.Layers[0], Engine.Graphics);
 
-                effect.Constants.World = Matrix.Translate(0, 0.5f, 0) *
+                effect.U.World = Matrix.Translate(0, 0.5f, 0) *
                                           Matrix.Scale(radius, radius, radius) *
                                           Matrix.Translate(0, -(height * 0.5f), 0) * capsuleController.GlobalPose;
                 DrawMeshPart(capsule, capsule.Layers[2], Engine.Graphics);
 
-                effect.Constants.World = Matrix.Scale(radius, height, radius) * capsuleController.GlobalPose;
+                effect.U.World = Matrix.Scale(radius, height, radius) * capsuleController.GlobalPose;
                 DrawMeshPart(capsule, capsule.Layers[1], Engine.Graphics);
             }
 
-            device.PopGraphicState<RasterizerState>();
+            device.RasterizerStack.Pop();
         }
     }
 

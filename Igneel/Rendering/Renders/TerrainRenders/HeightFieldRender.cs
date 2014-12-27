@@ -79,12 +79,12 @@ namespace Igneel.Rendering
 
             for (int i = 0; i < layers.Length && i < 4; i++)
             {
-                Engine.Graphics.PSStage.SetResource(i, value.Layers[i]);
+                Engine.Graphics.PS.SetResource(i, value.Layers[i]);
             }
 
             if (value.BlendLayer != null)
             {
-                Engine.Graphics.PSStage.SetResource(4, value.BlendLayer);
+                Engine.Graphics.PS.SetResource(4, value.BlendLayer);
             }
         }
 

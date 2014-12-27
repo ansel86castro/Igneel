@@ -132,13 +132,13 @@ namespace D3D9Testing
             var device = Engine.Graphics;
             var effect = Service.Require<RenderMeshIdEffect>();
         
-            effect.Constants.World = Matrix.Translate(0, 0, 0.5f) * targetCamera.InvViewProjection;
-            effect.Constants.ViewProj = Engine.Scene.ActiveCamera.ViewProj;
-            effect.Constants.gId = new Vector4(1);
+            effect.U.World = Matrix.Translate(0, 0, 0.5f) * targetCamera.InvViewProjection;
+            effect.U.ViewProj = Engine.Scene.ActiveCamera.ViewProj;
+            effect.U.gId = new Vector4(1);
 
-            device.PushGraphicState<RasterizerState>(rastState);
+            device.RasterizerStack.Push(rastState);
             box.Draw(device, effect);
-            device.PopGraphicState<RasterizerState>();
+            device.RasterizerStack.Pop();
         }
     }
 

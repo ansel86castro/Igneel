@@ -36,13 +36,13 @@ namespace Igneel.Rendering.Bindings
 
                 if (value.UseReflection)
                 {
-                    Engine.Graphics.PSStage.SetResource(5, value.ReflectionTexture);
-                    Engine.Graphics.PSStage.SetSampler(5, SamplerState.Linear);
+                    Engine.Graphics.PS.SetResource(5, value.ReflectionTexture);
+                    Engine.Graphics.PS.SetSampler(5, SamplerState.Linear);
                 }
                 if (value.UseRefraction)
                 {
-                    Engine.Graphics.PSStage.SetResource(6, value.RefractionTexture);
-                    Engine.Graphics.PSStage.SetSampler(6, SamplerState.Linear);
+                    Engine.Graphics.PS.SetResource(6, value.RefractionTexture);
+                    Engine.Graphics.PS.SetSampler(6, SamplerState.Linear);
                 }
             }
         }
@@ -51,8 +51,8 @@ namespace Igneel.Rendering.Bindings
         {
             if (mapping != null && Engine.Lighting.Reflection.Enable)
             {
-                Engine.Graphics.PSStage.SetResource(5, null);
-                Engine.Graphics.PSStage.SetResource(6, null);
+                Engine.Graphics.PS.SetResource(5, null);
+                Engine.Graphics.PS.SetResource(6, null);
             }
         }
     }

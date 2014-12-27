@@ -190,7 +190,7 @@ namespace D3D9Testing
                 var effect = render.Effect;
 
                 //effect.Constants.gId = new Vector4(1, 1, 0, 0);
-                effect.Constants.World = Matrix.Identity;
+                effect.U.World = Matrix.Identity;
 
                 device.IAPrimitiveTopology = IAPrimitive.TriangleList;
                 device.IASetVertexBuffer(0, vb, 0);

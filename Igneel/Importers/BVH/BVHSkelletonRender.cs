@@ -20,9 +20,9 @@ namespace Igneel.Importers.BVH
         public override void Draw(BvhNode comp)
         {
             var scene = Engine.Scene;
-            effect.Constants.World = comp.GlobalTransform;
-            effect.Constants.ViewProj = scene.ActiveCamera.ViewProj;
-            effect.Constants.gId = new Vector4(0, 0, 0, 1);
+            effect.U.World = comp.GlobalTransform;
+            effect.U.ViewProj = scene.ActiveCamera.ViewProj;
+            effect.U.gId = new Vector4(0, 0, 0, 1);
 
             box.Draw(Engine.Graphics, effect);
 
