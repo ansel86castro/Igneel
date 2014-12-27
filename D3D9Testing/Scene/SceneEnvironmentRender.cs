@@ -42,8 +42,8 @@ namespace Igneel.Design
                     map = effect.Map<Map>();
                 map.World = Matrix.Identity;
 
-                device.IAPrimitiveTopology = IAPrimitive.LineList;
-                device.IASetVertexBuffer(0, vb, 0);
+                device.PrimitiveTopology = IAPrimitive.LineList;
+                device.SetVertexBuffer(0, vb, 0);
 
                 foreach (var pass in effect.Passes(0))
                 {

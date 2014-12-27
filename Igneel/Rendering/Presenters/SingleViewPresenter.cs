@@ -20,10 +20,10 @@ namespace Igneel.Rendering
         {
             var scene = Engine.Scene;
             var graphics = Engine.Graphics;
-            var backBuffer = graphics.OMBackBuffer;
+            var backBuffer = graphics.BackBuffer;
 
-            graphics.OMSetRenderTarget(backBuffer, graphics.OMBackDepthStencil);
-            graphics.RSViewPort = new ViewPort(0, 0, backBuffer.Width, backBuffer.Height);
+            graphics.SetRenderTarget(backBuffer, graphics.BackDepthBuffer);
+            graphics.ViewPort = new ViewPort(0, 0, backBuffer.Width, backBuffer.Height);
                                
             graphics.Clear(ClearFlags.Target | ClearFlags.ZBuffer| ClearFlags.Stencil, Engine.BackColor, 1, 0);
 

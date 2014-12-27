@@ -30,9 +30,9 @@ namespace Igneel.Rendering
            
             var device = Engine.Graphics;
 
-            device.IAPrimitiveTopology = IAPrimitive.TriangleList;
-            device.IASetVertexBuffer(0, mesh.VertexBuffer, 0);
-            device.IASetIndexBuffer(mesh.IndexBuffer, 0);
+            device.PrimitiveTopology = IAPrimitive.TriangleList;
+            device.SetVertexBuffer(0, mesh.VertexBuffer, 0);
+            device.SetIndexBuffer(mesh.IndexBuffer, 0);
 
             var materials = component.Materials;           
            

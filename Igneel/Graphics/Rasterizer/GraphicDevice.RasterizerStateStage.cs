@@ -18,7 +18,7 @@ namespace Igneel.Graphics
         private ViewPort _rsVewPort;
         private Rectangle _rsScissorRect;
 
-        public RasterizerState RSState
+        public RasterizerState Rasterizer
         {
             get { return _rsState; }
             set 
@@ -33,7 +33,7 @@ namespace Igneel.Graphics
             }
         }      
 
-        public ViewPort RSViewPort
+        public ViewPort ViewPort
         {
             get { return _rsVewPort; }
             set
@@ -44,7 +44,7 @@ namespace Igneel.Graphics
             }
         }
 
-        public Rectangle RSScissorRect
+        public Rectangle ScissorRect
         {
             get { return _rsScissorRect; }
             set

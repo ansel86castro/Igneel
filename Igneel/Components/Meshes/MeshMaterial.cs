@@ -265,10 +265,10 @@ namespace Igneel.Components
         {
             var device = Engine.Graphics;
            
-            var oldvp = device.RSViewPort;
-            device.RSViewPort = new ViewPort(0, 0, 1, 1);
+            var oldvp = device.ViewPort;
+            device.ViewPort = new ViewPort(0, 0, 1, 1);
 
-            device.OMSaveRenderTarget();
+            device.SaveRenderTarget();
             renderTexture.SetTarget();            
 
             device.PS.SetResource(0, texture);
@@ -283,8 +283,8 @@ namespace Igneel.Components
             
             sprite.End();            
 
-            device.OMRestoreRenderTarget();
-            device.RSViewPort = oldvp;
+            device.RestoreRenderTarget();
+            device.ViewPort = oldvp;
 
             var rec = renderTexture.Texture.Map(0, MapType.Read);
             var containsTransparency = Marshal.ReadByte(rec.DataPointer);

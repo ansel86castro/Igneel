@@ -57,8 +57,8 @@ namespace D3D9Testing.Techniques
                         effect.U.Color = new Vector4(1);
 
                         device.RasterizerStack.Push(rastState);
-                        device.IAPrimitiveTopology = IAPrimitive.TriangleList;
-                        device.IASetVertexBuffer(0, vb, 0);
+                        device.PrimitiveTopology = IAPrimitive.TriangleList;
+                        device.SetVertexBuffer(0, vb, 0);
                         var oldtech = effect.Technique;
                         foreach (var pass in effect.Passes(1))
                         {

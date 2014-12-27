@@ -34,21 +34,21 @@ namespace Igneel.Rendering.Bindings
 
             if (value == PixelClipping.Opaque)
             {
-                Engine.Graphics.OMDepthStencilState = depthStateNoWrite;
+                Engine.Graphics.DepthTest = depthStateNoWrite;
                 mapping.NoRenderOpaque = true;
                 mapping.fNoRenderTransparency = false;
 
             }
             else if (value == PixelClipping.Transparent)
             {
-                Engine.Graphics.OMDepthStencilState = SceneTechnique.DephtState;
+                Engine.Graphics.DepthTest = SceneTechnique.DephtState;
 
                 mapping.NoRenderOpaque = false;
                 mapping.fNoRenderTransparency = true;
             }
             else
             {
-                Engine.Graphics.OMDepthStencilState = SceneTechnique.DephtState;
+                Engine.Graphics.DepthTest = SceneTechnique.DephtState;
                 mapping.NoRenderOpaque = false;
                 mapping.fNoRenderTransparency = false;
             }
@@ -57,7 +57,7 @@ namespace Igneel.Rendering.Bindings
         public override void OnUnBind(PixelClipping value)
         {
             if (value == PixelClipping.Opaque)
-                Engine.Graphics.OMDepthStencilState = SceneTechnique.DephtState;
+                Engine.Graphics.DepthTest = SceneTechnique.DephtState;
         }
     }
 }

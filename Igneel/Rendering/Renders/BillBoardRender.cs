@@ -66,7 +66,7 @@ namespace Igneel.Rendering
         {
             var device = Engine.Graphics;
 
-            device.IASetVertexBuffer(0, vb, 0);
+            device.SetVertexBuffer(0, vb, 0);
             device.RasterizerStack.Push(rastState);
 
             map.Color = component.Color;            
@@ -79,7 +79,7 @@ namespace Igneel.Rendering
             map.WorldViewProj = map.World * Engine.Scene.ActiveCamera.ViewProj;
             map.ViewProj = Engine.Scene.ActiveCamera.ViewProj;
 
-            device.IAPrimitiveTopology = IAPrimitive.TriangleStrip;
+            device.PrimitiveTopology = IAPrimitive.TriangleStrip;
 
             foreach (var pass in effect.Passes())
             {

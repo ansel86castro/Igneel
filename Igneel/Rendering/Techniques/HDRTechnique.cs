@@ -107,7 +107,7 @@ namespace Igneel.Rendering
            CreateResources();
            ComputeSamples();
 
-           device.OMBackBuffer.Resized += OMBackBuffer_Resized;
+           device.BackBuffer.Resized += OMBackBuffer_Resized;
 
             pointSampler = Engine.Graphics.CreateSamplerState(new SamplerDesc(true) 
             {   AddressU = TextureAddressMode.Border,
@@ -163,13 +163,13 @@ namespace Igneel.Rendering
         private int CreateResources()
         {
             GraphicDevice device = Engine.Graphics;
-            var backBuffer = device.OMBackBuffer;
+            var backBuffer = device.BackBuffer;
             int width = backBuffer.Width;
             int height = backBuffer.Height;
 
             Format depthFormat = Format.UNKNOWN;
 
-            rtHDRScene = new RenderTexture2D(width, height, hdrFormat, device.OMBackDepthStencil.SurfaceFormat, backBuffer.Sampling);
+            rtHDRScene = new RenderTexture2D(width, height, hdrFormat, device.BackDepthBuffer.SurfaceFormat, backBuffer.Sampling);
             rtBrightPassFilter = new RenderTexture2D(width / 2, height / 2, Format.R8G8B8A8_UNORM, depthFormat);
             rtStartSource = new RenderTexture2D(width / 4, height / 4, Format.R8G8B8A8_UNORM, depthFormat);
             rtCurrentAdaptedLuminance = new RenderTexture2D(1, 1, luminanceFormat, depthFormat);
@@ -203,7 +203,7 @@ namespace Igneel.Rendering
                 ComputeSamples();
 
             var device = Engine.Graphics;
-            device.OMSaveRenderTarget();
+            device.SaveRenderTarget();
 
             RenderTexture2D dest;
             RenderTexture2D source;
@@ -335,7 +335,7 @@ namespace Igneel.Rendering
 
             effect.Technique = HDREffect.FinalScenePass;
 
-            device.OMRestoreRenderTarget();
+            device.RestoreRenderTarget();
 
             stage.SetSampler(0, pointSampler);
             stage.SetSampler(1, pointSampler);
@@ -772,7 +772,7 @@ namespace Igneel.Rendering
                 linearSampler.Dispose();
                 Service.Remove<HDRTechnique>();
 
-                Engine.Graphics.OMBackBuffer.Resized -= OMBackBuffer_Resized;
+                Engine.Graphics.BackBuffer.Resized -= OMBackBuffer_Resized;
             }
             base.OnDispose(d);
         }

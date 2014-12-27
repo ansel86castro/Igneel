@@ -33,7 +33,7 @@ namespace Igneel.Graphics
         protected InputLayout _iaInputLayout;
         protected IAPrimitive _iaPrimitiveType;
 
-        public InputLayout IAInputLayout
+        public InputLayout InputDefinition
         {
             get
             {
@@ -49,7 +49,7 @@ namespace Igneel.Graphics
             }
         }
 
-        public IAPrimitive IAPrimitiveTopology 
+        public IAPrimitive PrimitiveTopology 
         {
             get { return _iaPrimitiveType; }
             set
@@ -91,7 +91,7 @@ namespace Igneel.Graphics
         
         #endregion
 
-        public void IASetVertexBuffer(int slot, GraphicBuffer vertexBuffer, int offset = 0)
+        public void SetVertexBuffer(int slot, GraphicBuffer vertexBuffer, int offset = 0)
         {
             BufferBind bind;
             bind.buffer= vertexBuffer;
@@ -102,7 +102,7 @@ namespace Igneel.Graphics
             IASetVertexBufferImpl(slot, vertexBuffer, offset, vertexBuffer.Stride);
         }
 
-        public void IASetVertexBuffer(int slot, GraphicBuffer vertexBuffer, int offset, int stride)
+        public void SetVertexBuffer(int slot, GraphicBuffer vertexBuffer, int offset, int stride)
         {
             BufferBind bind;
             bind.buffer = vertexBuffer;
@@ -113,13 +113,7 @@ namespace Igneel.Graphics
             IASetVertexBufferImpl(slot, vertexBuffer, offset, stride);
         }
 
-        public GraphicBuffer IAGetVertexBuffer(int slot, out int offset)
-        {
-            offset = _iaVertexBufferBind[slot].offset;
-            return _iaVertexBufferBind[slot].buffer;
-        }       
-
-        public void IASetIndexBuffer(GraphicBuffer indexBuffer, int offset = 0)
+        public void SetIndexBuffer(GraphicBuffer indexBuffer, int offset = 0)
         {
             _iaIndexBufferBind.buffer = indexBuffer;
             _iaIndexBufferBind.offset = offset;
@@ -128,7 +122,13 @@ namespace Igneel.Graphics
             IASetIndexBufferImpl(indexBuffer, offset);
         }
 
-        public GraphicBuffer IAGetVertexBuffer(out int offset)
+        public GraphicBuffer GetVertexBuffer(int slot, out int offset)
+        {
+            offset = _iaVertexBufferBind[slot].offset;
+            return _iaVertexBufferBind[slot].buffer;
+        }             
+
+        public GraphicBuffer GetVertexBuffer(out int offset)
         {
             offset = _iaIndexBufferBind.offset;
             return _iaIndexBufferBind.buffer;

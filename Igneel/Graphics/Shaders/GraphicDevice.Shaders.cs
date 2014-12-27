@@ -46,7 +46,7 @@ namespace Igneel.Graphics
                 {
                     SetProgram(value);
                     program = value;
-                    IAInputLayout = value.InputDefinition;
+                    InputDefinition = value.InputDefinition;
                 }
             }
         }

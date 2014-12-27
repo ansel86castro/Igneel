@@ -126,7 +126,7 @@ namespace IgneelD3D10
 		vp.TopLeftY = 0;
 	   _device->RSSetViewports( 1, &vp );
 
-	   RSViewPort = *(ViewPort*)&vp;
+	   ViewPort = *(Graphics::ViewPort*)&vp;
 
 	   di.DisplayFormat = desc->BackBufferFormat;
 	   di.DisplayHeight = desc->BackBufferWidth;

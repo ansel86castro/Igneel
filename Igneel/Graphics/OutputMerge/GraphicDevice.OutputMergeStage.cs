@@ -46,11 +46,11 @@ namespace Igneel.Graphics
         protected SwapChain _swapChain0;
         int numRenderTargets;
 
-        public RenderTarget OMBackBuffer { get { return _omBackBuffer; } }
+        public RenderTarget BackBuffer { get { return _omBackBuffer; } }
 
-        public DepthStencil OMBackDepthStencil { get { return _omBackDepthStencil; } }
+        public DepthStencil BackDepthBuffer { get { return _omBackDepthStencil; } }
 
-        public BlendState OMBlendState
+        public BlendState Blend
         {
             get { return _omBlendState; }
             set
@@ -65,7 +65,7 @@ namespace Igneel.Graphics
             }
         }
 
-        public DepthStencilState OMDepthStencilState
+        public DepthStencilState DepthTest
         {
             get { return _omDepthStencilStage; }
             set
@@ -80,17 +80,9 @@ namespace Igneel.Graphics
             }
         }
 
-        public DepthStencil OMDepthStencil
+        public DepthStencil DepthBuffer
         {
-            get { return _omDepthStencil; }
-            //set
-            //{
-            //    if (_omDepthStencil != value)
-            //    {
-            //        OMSetDepthStencil(value);
-            //        _omDepthStencil = value;                    
-            //    }
-            //}
+            get { return _omDepthStencil; }          
         }
 
         public ReadOnlyCollection<SwapChain> SwapChains
@@ -168,12 +160,12 @@ namespace Igneel.Graphics
             return swapChain;
         }
 
-        public RenderTarget OMGetRenderTarget(int slot)
+        public RenderTarget GetRenderTarget(int slot)
         {
             return _omRenderTargets[slot];
         }
 
-        public void OMGetRenderTargets(int startSlot, RenderTarget[] targets)
+        public void GetRenderTargets(int startSlot, RenderTarget[] targets)
         {
             for (int i = 0 ; i < targets.Length; i++)
             {
@@ -181,7 +173,7 @@ namespace Igneel.Graphics
             }
         }
 
-        public void OMSetRenderTargets(int numTargets, RenderTarget[] renderTargets, DepthStencil dephtStencil)
+        public void SetRenderTargets(int numTargets, RenderTarget[] renderTargets, DepthStencil dephtStencil)
         {          
             OMSetRenderTargetsImp(numTargets, renderTargets, dephtStencil);
             if (renderTargets == null)
@@ -196,7 +188,7 @@ namespace Igneel.Graphics
             this._omDepthStencil = dephtStencil;
         }
 
-        public void OMSetRenderTargets(int numTargets, RenderTarget[] renderTargets)
+        public void SetRenderTargets(int numTargets, RenderTarget[] renderTargets)
         {           
             OMSetRenderTargetsImp(numTargets, renderTargets, _omDepthStencil);
 
@@ -210,7 +202,7 @@ namespace Igneel.Graphics
             }
         }
 
-        public void OMSetRenderTarget(RenderTarget renderTarget, DepthStencil dephtStencil)
+        public void SetRenderTarget(RenderTarget renderTarget, DepthStencil dephtStencil)
         {           
             OMSetRenderTargetImpl(renderTarget, dephtStencil);
 
@@ -218,7 +210,7 @@ namespace Igneel.Graphics
             _omDepthStencil = dephtStencil;
         }      
 
-        public void OMSetRenderTarget(RenderTarget renderTarget)
+        public void SetRenderTarget(RenderTarget renderTarget)
         {            
             OMSetRenderTargetImpl(renderTarget, _omDepthStencil);
             _omRenderTargets[0] = renderTarget;
@@ -254,7 +246,7 @@ namespace Igneel.Graphics
         //    OMSetRenderTarget(slot, v.target, v.dephBuffer);
         //}
 
-        public void OMSaveRenderTarget()
+        public void SaveRenderTarget()
         {
             var v = new RenderStackValue { target = _omRenderTargets[0], dephBuffer = _omDepthStencil };
             renderTargetStack.Push(v);
@@ -273,12 +265,12 @@ namespace Igneel.Graphics
         //    renderTargetsStack.Push(v);
         //}
 
-        public void OMRestoreRenderTarget()
+        public void RestoreRenderTarget()
         {
             if (renderTargetStack.Count > 0)
             {
                 var v = renderTargetStack.Pop();
-                OMSetRenderTarget(v.target, v.dephBuffer);
+                SetRenderTarget(v.target, v.dephBuffer);
             }
         }
 

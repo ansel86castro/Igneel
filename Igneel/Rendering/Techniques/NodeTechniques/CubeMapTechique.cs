@@ -112,7 +112,7 @@ namespace Igneel.Rendering
 
             if (renderTarget != null)
                 renderTarget.Dispose();
-            renderTarget = new RenderTextureCube(size, format, Engine.Graphics.OMBackDepthStencil.SurfaceFormat);
+            renderTarget = new RenderTextureCube(size, format, Engine.Graphics.BackDepthBuffer.SurfaceFormat);
             rendered = false;
             vp = new ViewPort(0, 0, size, size);
         }
@@ -122,10 +122,10 @@ namespace Igneel.Rendering
             if (!isDynamic && this.rendered) return;          
 
             var device = Engine.Graphics;
-            device.OMSaveRenderTarget();
-            var oldvp = device.RSViewPort;
+            device.SaveRenderTarget();
+            var oldvp = device.ViewPort;
 
-            device.RSViewPort = vp;
+            device.ViewPort = vp;
 
             var scene = Engine.Scene;
             var oldCamera = scene.ActiveCamera;
@@ -154,8 +154,8 @@ namespace Igneel.Rendering
             foreach (var item in nodes)
                 item.Visible = true;
 
-            device.RSViewPort = oldvp;
-            device.OMRestoreRenderTarget();
+            device.ViewPort = oldvp;
+            device.RestoreRenderTarget();
             scene.ActiveCamera = oldCamera;
 
             if (restore)

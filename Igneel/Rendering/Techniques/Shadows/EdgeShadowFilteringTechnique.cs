@@ -19,7 +19,7 @@ namespace Igneel.Rendering
         public EdgeShadowFilteringTechnique()
         {
             Initialize();
-            Engine.Graphics.OMBackBuffer.Resized += OMBackBuffer_Resized;
+            Engine.Graphics.BackBuffer.Resized += OMBackBuffer_Resized;
             effect = Effect.GetEffect<ShadowEdgeEffect>();
             sprite = Service.Get<Sprite>();
             input = effect.Map<Igneel.Rendering.Sprite.IShaderInput>();
@@ -46,7 +46,7 @@ namespace Igneel.Rendering
                     downSampled.Dispose();   
             }           
 
-            var bb =Engine.Graphics.OMBackBuffer;
+            var bb =Engine.Graphics.BackBuffer;
             var kernel = Engine.Shadow.ShadowMapping.PCFBlurSize;
             
             int w = bb.Width;
@@ -97,7 +97,7 @@ namespace Igneel.Rendering
             }
             sprite.End();  
             effect.Technique = 0;                  
-            graphic.OMRestoreRenderTarget();
+            graphic.RestoreRenderTarget();
 
             #endregion
 
@@ -181,7 +181,7 @@ namespace Igneel.Rendering
             public SillueteRender()
             {
                 Initialize();
-                Engine.Graphics.OMBackBuffer.Resized += OMBackBuffer_Resized;                
+                Engine.Graphics.BackBuffer.Resized += OMBackBuffer_Resized;                
 
             }
 
@@ -194,7 +194,7 @@ namespace Igneel.Rendering
             {
                 if (shadowRt != null)
                     shadowRt.Dispose();             
-                var bb = Engine.Graphics.OMBackBuffer;
+                var bb = Engine.Graphics.BackBuffer;
                 var kernel = Engine.Shadow.ShadowMapping.PCFBlurSize;
 
                 shadowRt = new RenderTexture2D(bb.Width, bb.Height, Format.R8G8B8A8_UNORM);
@@ -205,16 +205,16 @@ namespace Igneel.Rendering
             {
                 var graphic = Engine.Graphics;
 
-                graphic.OMSaveRenderTarget();
-                var oldvp = graphic.RSViewPort;
-                graphic.RSViewPort = vp;
+                graphic.SaveRenderTarget();
+                var oldvp = graphic.ViewPort;
+                graphic.ViewPort = vp;
 
                 shadowRt.SetTarget(graphic);
                 graphic.Clear(Graphics.ClearFlags.Target | Graphics.ClearFlags.ZBuffer, new Color4(0, 0, 0, 0), 1, 0);
                 base.Apply();             
 
-                graphic.OMSetRenderTarget(null);
-                graphic.RSViewPort = oldvp;
+                graphic.SetRenderTarget(null);
+                graphic.ViewPort = oldvp;
             }
         }
 

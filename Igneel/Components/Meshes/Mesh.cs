@@ -1091,9 +1091,9 @@ namespace Igneel.Components
 
         public void Draw(GraphicDevice device, Effect effect)
         {
-            device.IAPrimitiveTopology = IAPrimitive.TriangleList;
-            device.IASetVertexBuffer(0, vb, 0);
-            device.IASetIndexBuffer(ib);
+            device.PrimitiveTopology = IAPrimitive.TriangleList;
+            device.SetVertexBuffer(0, vb, 0);
+            device.SetIndexBuffer(ib);
 
             foreach (var pass in effect.Passes())
             {

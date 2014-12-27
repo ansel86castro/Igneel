@@ -66,18 +66,18 @@ namespace Igneel.Rendering
         {          
             if (rState != null)
             {
-                oldrsState = device.RSState;
-                device.RSState = rState;
+                oldrsState = device.Rasterizer;
+                device.Rasterizer = rState;
             }
             if (blendState != null)
             {
-                oldBlendState = device.OMBlendState;
-                device.OMBlendState = blendState;
+                oldBlendState = device.Blend;
+                device.Blend = blendState;
             }
             if (zBufferState != null)
             {
-                oldzBufferState = device.OMDepthStencilState;
-                device.OMDepthStencilState = zBufferState;
+                oldzBufferState = device.DepthTest;
+                device.DepthTest = zBufferState;
             }
 
             if (device.Program != program)
@@ -102,11 +102,11 @@ namespace Igneel.Rendering
         public void Clear(Effect effect, GraphicDevice device)
         {
             if (oldrsState != null)
-                device.RSState = oldrsState;
+                device.Rasterizer = oldrsState;
             if (oldBlendState != null)
-                device.OMBlendState = oldBlendState;
+                device.Blend = oldBlendState;
             if (oldzBufferState != null)
-                device.OMDepthStencilState = oldzBufferState;
+                device.DepthTest = oldzBufferState;
         }
 
         //internal void OnClear(int tech, int pass)

@@ -56,7 +56,7 @@ namespace Igneel.Rendering
 
         void Lighting_HDREnableChanged(object sender, EventArgs e)
         {
-            format = Engine.Graphics.OMBackBuffer.SurfaceFormat;
+            format = Engine.Graphics.BackBuffer.SurfaceFormat;
             if (Engine.Lighting.HDR.Enable)
             {
                 format = Engine.Lighting.HDR.Technique.HRDFormat;

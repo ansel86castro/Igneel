@@ -192,7 +192,7 @@ namespace Igneel
 
             OnUpdate();
 
-            graphics.OMSetRenderTarget(graphics.OMBackBuffer, graphics.OMBackDepthStencil);
+            graphics.SetRenderTarget(graphics.BackBuffer, graphics.BackDepthBuffer);
 
             if (scene != null)
             {                

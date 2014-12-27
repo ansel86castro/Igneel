@@ -233,7 +233,7 @@ namespace D3D9Testing.Techniques
 
                     var device = Engine.Graphics;
                     device.PS.SamplerStacks[0].Push(SamplerState.Linear);                    
-                    device.OMBlendState = SceneTechnique.NoBlend;
+                    device.Blend = SceneTechnique.NoBlend;
 
                     var texture = edgeTechnique.EdgeSrcTexture;
                     RenderTexture(device, texture, width: texture.Width, height: texture.Height);

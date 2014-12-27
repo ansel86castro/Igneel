@@ -35,7 +35,7 @@ namespace IgneelD3D10
 
 		D3D10_VIEWPORT vp;
 		_device->RSGetViewports(&n, &vp);
-		ini.Viewport = ViewPort(vp.TopLeftX, vp.TopLeftY, vp.Width, vp.Height);
+		ini.Viewport = Graphics::ViewPort(vp.TopLeftX, vp.TopLeftY, vp.Width, vp.Height);
 
 		return ini;
 	}	
@@ -46,7 +46,7 @@ namespace IgneelD3D10
 		_device->RSSetState(ras->_state);
 	}
 
-	void GraphicDevice10::RSSetViewPort(ViewPort vp)
+	void GraphicDevice10::RSSetViewPort(Graphics::ViewPort vp)
 	{
 		_device->RSSetViewports(1, (D3D10_VIEWPORT*)&vp);
 	}

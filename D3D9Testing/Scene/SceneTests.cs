@@ -134,7 +134,7 @@ namespace D3D9Testing
             var offset = 100;
             var fov = Numerics.PIover3;
             Vector3 pos = new Vector3(0, offset, -offset);
-            float aspect = (float)Engine.Graphics.OMBackBuffer.Width / (float)Engine.Graphics.OMBackBuffer.Height;
+            float aspect = (float)Engine.Graphics.BackBuffer.Width / (float)Engine.Graphics.BackBuffer.Height;
 
             var controller = new FPController()
                     {
@@ -192,9 +192,9 @@ namespace D3D9Testing
                 //effect.Constants.gId = new Vector4(1, 1, 0, 0);
                 effect.U.World = Matrix.Identity;
 
-                device.IAPrimitiveTopology = IAPrimitive.TriangleList;
-                device.IASetVertexBuffer(0, vb, 0);
-                device.IASetIndexBuffer(ib, 0);
+                device.PrimitiveTopology = IAPrimitive.TriangleList;
+                device.SetVertexBuffer(0, vb, 0);
+                device.SetIndexBuffer(ib, 0);
 
                 render.Bind(mat);
                 foreach (var pass in effect.Passes(0))

@@ -79,11 +79,11 @@ namespace D3D9Testing.Techniques
 
                     var sprite = Service.Require<Sprite>();
                     sprite.Begin();
-                    var width = device.OMGetRenderTarget(0).Width / 2;
-                    var height = device.OMGetRenderTarget(0).Height / 2;
+                    var width = device.GetRenderTarget(0).Width / 2;
+                    var height = device.GetRenderTarget(0).Height / 2;
 
                     device.PS.SamplerStacks[0].Push(SamplerState.Point);
-                    device.OMBlendState = SceneTechnique.NoBlend;
+                    device.Blend = SceneTechnique.NoBlend;
                     var textures = technique.Textures;
                     for (int i = 0; i < 2; i++)
                     {
@@ -96,7 +96,7 @@ namespace D3D9Testing.Techniques
                     }
                     sprite.End();
 
-                    device.PS.SamplerStacks[0].Pop();
+                    device.PS.SamplerStacks[0].Pop();                    
 
                     presenter.End();
                 };

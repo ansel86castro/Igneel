@@ -79,7 +79,7 @@ namespace Igneel.Rendering
             var scene = Engine.Scene;
             scene.UpdateRenderLists();
 
-            Engine.Graphics.OMDepthStencilState = depthStenciState;
+            Engine.Graphics.DepthTest = depthStenciState;
 
             RenderScene();
         }      
@@ -121,16 +121,16 @@ namespace Igneel.Rendering
             {
                 var enableAmbient = Engine.Lighting.EnableAmbient;
                 Engine.Lighting.EnableAmbient = false;
-                Engine.Graphics.OMBlendState = additive;
+                Engine.Graphics.Blend = additive;
 
                 for (int k = 1; k < nbLight; k++)
                 {                    
                     Light.Current = activeLights[k];
 
-                    Engine.Graphics.RSState = defaultCullingRState;
+                    Engine.Graphics.Rasterizer = defaultCullingRState;
                     RenderEntries(scene.RenderList, PixelClipping.Transparent);
 
-                    Engine.Graphics.RSState = noCullingRState;
+                    Engine.Graphics.Rasterizer = noCullingRState;
                     RenderEntries(scene.TransparentRenderList, PixelClipping.Opaque);
                 }
 
@@ -143,19 +143,19 @@ namespace Igneel.Rendering
             if (Engine.Lighting.TransparencyEnable)
             {
                 //render opaque objects and clip transparent objects
-                Engine.Graphics.OMBlendState = noTransparent;
-                Engine.Graphics.RSState = defaultCullingRState;
+                Engine.Graphics.Blend = noTransparent;
+                Engine.Graphics.Rasterizer = defaultCullingRState;
                 RenderEntries(scene.RenderList, PixelClipping.Transparent);
 
                 ////render transparent objects and clip opaque objects           
-                Engine.Graphics.OMBlendState = transparent;
-                Engine.Graphics.RSState = noCullingRState;
+                Engine.Graphics.Blend = transparent;
+                Engine.Graphics.Rasterizer = noCullingRState;
                 RenderEntries(scene.TransparentRenderList, PixelClipping.Opaque);
             }
             else
             {
-                Engine.Graphics.OMBlendState = noTransparent;
-                Engine.Graphics.RSState = defaultCullingRState;
+                Engine.Graphics.Blend = noTransparent;
+                Engine.Graphics.Rasterizer = defaultCullingRState;
                 RenderEntries(scene.RenderList, PixelClipping.None);
             }
         }
@@ -218,15 +218,15 @@ namespace Igneel.Rendering
         {
             if (Engine.Lighting.TransparencyEnable)
             {
-                Engine.Graphics.OMBlendState = transparent;
+                Engine.Graphics.Blend = transparent;
             }
             else
-                Engine.Graphics.OMBlendState = noTransparent;
+                Engine.Graphics.Blend = noTransparent;
         }
     
         public static void SetupAdditiveBlending()
         {
-            Engine.Graphics.OMBlendState = additive;
+            Engine.Graphics.Blend = additive;
         }
        
     }

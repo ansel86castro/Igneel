@@ -32,9 +32,9 @@ namespace Igneel.Rendering
         {
             var device = Engine.Graphics;                   
   
-            device.OMBackBuffer.Resized += OMBackBuffer_Resized;
+            device.BackBuffer.Resized += OMBackBuffer_Resized;
 
-            OMBackBuffer_Resized(device.OMBackBuffer);
+            OMBackBuffer_Resized(device.BackBuffer);
 
             render = new Render();            
         }
@@ -79,18 +79,18 @@ namespace Igneel.Rendering
 
             scene.UpdateRenderLists();            
 
-            device.OMSaveRenderTarget();           
-            device.OMSetRenderTargets(renderTargets.Length, renderTargets);
+            device.SaveRenderTarget();           
+            device.SetRenderTargets(renderTargets.Length, renderTargets);
             device.Clear(ClearFlags.Target, new Color4(), 1, 0);
 
-            device.OMDepthStencilState = SceneTechnique.DephtState;
+            device.DepthTest = SceneTechnique.DephtState;
             //render opaque objects and clip transparent objects
-            device.OMBlendState = SceneTechnique.NoBlend;
-            device.RSState = SceneTechnique.BackFaceCulling;
+            device.Blend = SceneTechnique.NoBlend;
+            device.Rasterizer = SceneTechnique.BackFaceCulling;
             RenderEntries(scene.RenderList, PixelClipping.Transparent);
 
-            device.OMSetRenderTargets(renderTargets.Length, null);
-            device.OMRestoreRenderTarget();                     
+            device.SetRenderTargets(renderTargets.Length, null);
+            device.RestoreRenderTarget();                     
 
             render.Draw(this);            
 
@@ -108,8 +108,8 @@ namespace Igneel.Rendering
                 if (nbLight > 0)
                     Light.Current = activeLights[0];
 
-                Engine.Graphics.OMBlendState = SceneTechnique.Transparent;
-                Engine.Graphics.RSState = SceneTechnique.NoCulling;
+                Engine.Graphics.Blend = SceneTechnique.Transparent;
+                Engine.Graphics.Rasterizer = SceneTechnique.NoCulling;
                 for (int i = 0; i < transparents.Count; i++)
                 {
                     transparents[i] = transparents[i].UpdateRender();
@@ -120,7 +120,7 @@ namespace Igneel.Rendering
                 if (nbLight > 1)
                 {
                     Engine.Lighting.EnableAmbient = false;
-                    Engine.Graphics.OMBlendState = SceneTechnique.Additive;
+                    Engine.Graphics.Blend = SceneTechnique.Additive;
 
                     for (int k = 1; k < nbLight; k++)
                     {
@@ -183,7 +183,7 @@ namespace Igneel.Rendering
                 if (nbLight > 1)
                 {
                     Engine.Lighting.EnableAmbient = false;
-                    Engine.Graphics.OMBlendState = SceneTechnique.Additive;
+                    Engine.Graphics.Blend = SceneTechnique.Additive;
 
                     for (int k = 1; k < nbLight; k++)
                     {                        

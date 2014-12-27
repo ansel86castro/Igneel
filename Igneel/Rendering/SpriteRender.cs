@@ -29,7 +29,7 @@ namespace Igneel.Rendering
         public Sprite(RectangleF rect)
         {
             var device = Engine.Graphics;
-            var viewport = device.RSViewPort;          
+            var viewport = device.ViewPort;          
 
             var vertexes = new VertexPTxH[4];
 
@@ -58,23 +58,23 @@ namespace Igneel.Rendering
         {
             var device = Engine.Graphics;
 
-            oldState = device.OMDepthStencilState;
+            oldState = device.DepthTest;
 
             if (!depthWrite)
             {              
-                device.OMDepthStencilState = state;
+                device.DepthTest = state;
             }
             
-            device.IAPrimitiveTopology = IAPrimitive.TriangleStrip;
-            var rt = device.OMGetRenderTarget(0);
+            device.PrimitiveTopology = IAPrimitive.TriangleStrip;
+            var rt = device.GetRenderTarget(0);
             vp = new ViewPort(0, 0, rt.Width, rt.Height);
 
-            device.IASetVertexBuffer(0, vb, 0);            
+            device.SetVertexBuffer(0, vb, 0);            
         }
 
         public void SetTrasform(IShaderInput input, Rectangle rec , Matrix textureTransform)
         {
-            var rt = Engine.Graphics.OMGetRenderTarget(0);
+            var rt = Engine.Graphics.GetRenderTarget(0);
 
             var transform = new Matrix(rec.Width, 0, 0, 0,
                                     0, rec.Height, 0, 0,
@@ -92,7 +92,7 @@ namespace Igneel.Rendering
 
         public void SetTrasform(Effect effect, Rectangle rec, Matrix textureTransform)
         {
-            var rt = Engine.Graphics.OMGetRenderTarget(0);
+            var rt = Engine.Graphics.GetRenderTarget(0);
 
             var transform = new Matrix(rec.Width, 0, 0, 0,
                                     0, rec.Height, 0, 0,
@@ -142,14 +142,14 @@ namespace Igneel.Rendering
         public void DrawQuad(Effect effect = null)
         {
             var device = Engine.Graphics;
-            var rt = device.OMGetRenderTarget(0);
-            var oldvp = device.RSViewPort;
+            var rt = device.GetRenderTarget(0);
+            var oldvp = device.ViewPort;
 
             vp.TopLeftX = 0;
             vp.TopLeftY = 0;
             vp.Width = rt.Width;
             vp.Height = rt.Height;
-            device.RSViewPort = vp;
+            device.ViewPort = vp;
 
             if (effect != null)
             {
@@ -166,19 +166,19 @@ namespace Igneel.Rendering
                 device.Draw(4, 0);
             }
 
-            device.RSViewPort = oldvp;
+            device.ViewPort = oldvp;
         }
 
         public void DrawQuad(int x, int y, int width, int height, Effect effect = null)
         {
             var device = Engine.Graphics;            
-            var oldvp = device.RSViewPort;
+            var oldvp = device.ViewPort;
 
             vp.TopLeftX = x;
             vp.TopLeftY = y;
             vp.Width = width;
             vp.Height = height;
-            device.RSViewPort = vp;
+            device.ViewPort = vp;
 
             if (effect != null)
             {
@@ -195,12 +195,12 @@ namespace Igneel.Rendering
                 device.Draw(4, 0);
             }
 
-            device.RSViewPort = oldvp;
+            device.ViewPort = oldvp;
         }        
 
         public void End()
         {
-            Engine.Graphics.OMDepthStencilState = oldState;
+            Engine.Graphics.DepthTest = oldState;
         }
 
     }

@@ -81,9 +81,9 @@ namespace Igneel.Rendering
             var graphics = Engine.Graphics;
             var scene = Engine.Scene;
 
-            graphics.OMSetRenderTarget(swapChain.BackBuffer, depthBuffer);
+            graphics.SetRenderTarget(swapChain.BackBuffer, depthBuffer);
 
-            graphics.RSViewPort = viewport;                        
+            graphics.ViewPort = viewport;                        
             graphics.Clear(ClearFlags.Target | ClearFlags.ZBuffer, Engine.BackColor, 1, 0);
 
             OnRenderBegin();
@@ -99,9 +99,9 @@ namespace Igneel.Rendering
         {
             var graphics = Engine.Graphics;
 
-            graphics.OMSetRenderTarget(swapChain.BackBuffer, depthBuffer);            
+            graphics.SetRenderTarget(swapChain.BackBuffer, depthBuffer);            
 
-            graphics.RSViewPort = viewport;            
+            graphics.ViewPort = viewport;            
             graphics.Clear(ClearFlags.Target | ClearFlags.ZBuffer, backColor, 1, 0);
         }
 

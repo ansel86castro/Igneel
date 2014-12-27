@@ -41,7 +41,7 @@ namespace Igneel.Rendering
                 return;
             var device = Engine.Graphics;
             device.RasterizerStack.Push(rasterizer);
-            device.IAPrimitiveTopology = IAPrimitive.TriangleList;
+            device.PrimitiveTopology = IAPrimitive.TriangleList;
 
             Bind(Engine.Scene.ActiveCamera);
 
@@ -124,8 +124,8 @@ namespace Igneel.Rendering
 
         private void DrawMesh(Mesh mesh, GraphicDevice device)
         {
-            device.IASetVertexBuffer(0, mesh.VertexBuffer, 0);
-            device.IASetIndexBuffer(mesh.IndexBuffer);
+            device.SetVertexBuffer(0, mesh.VertexBuffer, 0);
+            device.SetIndexBuffer(mesh.IndexBuffer);
 
             foreach (var pass in effect.Passes())
             {
@@ -136,8 +136,8 @@ namespace Igneel.Rendering
 
         private void DrawMeshPart(Mesh mesh, MeshPart part ,GraphicDevice device)
         {
-            device.IASetVertexBuffer(0, mesh.VertexBuffer, 0);
-            device.IASetIndexBuffer(mesh.IndexBuffer);
+            device.SetVertexBuffer(0, mesh.VertexBuffer, 0);
+            device.SetIndexBuffer(mesh.IndexBuffer);
 
             foreach (var pass in effect.Passes())
             {
@@ -178,7 +178,7 @@ namespace Igneel.Rendering
         {
             var device = Engine.Graphics;
             device.RasterizerStack.Push(rasterizer);
-            device.IAPrimitiveTopology = IAPrimitive.TriangleList;
+            device.PrimitiveTopology = IAPrimitive.TriangleList;
 
             if (characterController is BoxController)
             {

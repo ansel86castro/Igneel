@@ -41,7 +41,7 @@ namespace Igneel.Rendering
                 useReflection = value;
                 if (useReflection && _rtReflection == null)
                 {
-                    _rtReflection = new RenderTexture2D(_width, _height, _rtFormat, Format.D16_UNORM, Engine.Graphics.OMBackBuffer.Sampling);
+                    _rtReflection = new RenderTexture2D(_width, _height, _rtFormat, Format.D16_UNORM, Engine.Graphics.BackBuffer.Sampling);
                 }
                 else if (!useReflection && _rtReflection != null)
                 {
@@ -59,7 +59,7 @@ namespace Igneel.Rendering
                 useRefraction = value;
                 if (useRefraction && _rtRefraction == null)
                 {
-                    _rtRefraction = new RenderTexture2D(_width, _height, _rtFormat, sampling: Engine.Graphics.OMBackDepthStencil.Sampling);
+                    _rtRefraction = new RenderTexture2D(_width, _height, _rtFormat, sampling: Engine.Graphics.BackDepthBuffer.Sampling);
                 }
                 else if (!useRefraction && _rtRefraction != null)
                 {
@@ -115,7 +115,7 @@ namespace Igneel.Rendering
             if (Engine.Lighting.Reflection.Enable)
             {
                 var graphic = Engine.Graphics;
-                graphic.OMSaveRenderTarget();
+                graphic.SaveRenderTarget();
 
                 foreach (var item in nodes)
                     item.Visible = false;
@@ -181,7 +181,7 @@ namespace Igneel.Rendering
                 foreach (var item in nodes)
                     item.Visible = true;
 
-                graphic.OMRestoreRenderTarget();               
+                graphic.RestoreRenderTarget();               
             }
         }
 

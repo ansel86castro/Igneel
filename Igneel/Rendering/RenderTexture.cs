@@ -67,9 +67,9 @@ namespace Igneel.Rendering
             if (device == null) device = Engine.Graphics;
 
             if (depthStencil != null)
-                device.OMSetRenderTarget(target, depthStencil);
+                device.SetRenderTarget(target, depthStencil);
             else
-                device.OMSetRenderTarget(target);
+                device.SetRenderTarget(target);
         }
 
         public void SetTexture(int slot = 0, GraphicDevice device = null)
@@ -161,9 +161,9 @@ namespace Igneel.Rendering
             if (device == null) device = Engine.Graphics;
 
             if (depthStencil != null)
-                device.OMSetRenderTarget(targets[face], depthStencil);
+                device.SetRenderTarget(targets[face], depthStencil);
             else
-                device.OMSetRenderTarget(targets[face]);
+                device.SetRenderTarget(targets[face]);
         }
 
         public void SetTexture(int slot = 0, GraphicDevice device = null)

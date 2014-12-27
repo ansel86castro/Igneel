@@ -121,13 +121,13 @@ namespace Igneel.Rendering
             var graphics = Engine.Graphics;                    
             var lighting = Engine.Lighting;            
           
-            var oldvp = graphics.RSViewPort;
-            graphics.RSViewPort = vp;
+            var oldvp = graphics.ViewPort;
+            graphics.ViewPort = vp;
 
             graphics.RasterizerStack.Push(rast);
             graphics.BlendStack.Push(blend);            
 
-            graphics.OMSaveRenderTarget();
+            graphics.SaveRenderTarget();
 
             rtx.SetTarget(graphics);            
             
@@ -147,11 +147,11 @@ namespace Igneel.Rendering
              
             }
 
-            graphics.OMRestoreRenderTarget();
+            graphics.RestoreRenderTarget();
             graphics.BlendStack.Pop();
             graphics.RasterizerStack.Pop();            
                        
-            graphics.RSViewPort = oldvp;
+            graphics.ViewPort = oldvp;
             lighting.TransparencyEnable = transp;          
         }
 

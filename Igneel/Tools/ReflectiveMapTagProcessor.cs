@@ -32,8 +32,8 @@ namespace Igneel.TagProcesors
             if (!mesh.IsPlane(out plane))
                 return null;
 
-            float aspect = (float)Engine.Graphics.OMBackBuffer.Width/(float)Engine.Graphics.OMBackBuffer.Height;
-            int width = Engine.Graphics.OMBackBuffer.Width;
+            float aspect = (float)Engine.Graphics.BackBuffer.Width/(float)Engine.Graphics.BackBuffer.Height;
+            int width = Engine.Graphics.BackBuffer.Width;
              if (match.Groups["S"].Success)
                  width = int.Parse(match.Groups["S"].Value);
             int height = (int)((float)width / aspect);

@@ -182,27 +182,27 @@ namespace Igneel.Rendering
             {                
                 var device = Engine.Graphics;
                 Scene scene = Engine.Scene;
-                var oldvp = device.RSViewPort;
+                var oldvp = device.ViewPort;
 
-                device.RSViewPort = vp;
-                device.OMSaveRenderTarget();
+                device.ViewPort = vp;
+                device.SaveRenderTarget();
 
                 shadowMap.SetTarget(device);                
                 device.Clear(ClearFlags.Target | ClearFlags.ZBuffer, Color4.White, 1, 0);               
                 
                 var oldCamera = scene.ActiveCamera;
-                device.RSState = rasterizer;
-                device.OMBlendState = blendState;
-                device.OMDepthStencilState = detpthStencil;
+                device.Rasterizer = rasterizer;
+                device.Blend = blendState;
+                device.DepthTest = detpthStencil;
 
                 scene.ActiveCamera = camera;                
                 Engine.ApplyTechnique<DepthSceneRender>();                
 
                 scene.ActiveCamera = oldCamera;
 
-                device.OMRestoreRenderTarget();
+                device.RestoreRenderTarget();
 
-                device.RSViewPort = oldvp;
+                device.ViewPort = oldvp;
                 rendered = true;               
             }
         }

@@ -36,7 +36,7 @@ namespace Igneel.Graphics
 
         protected override void Set(RasterizerState state)
         {
-            device.RSState = state;
+            device.Rasterizer = state;
         }
     }
 
@@ -49,7 +49,7 @@ namespace Igneel.Graphics
 
         protected override void Set(DepthStencilState state)
         {
-            device.OMDepthStencilState = state;
+            device.DepthTest = state;
         }
     }
 
@@ -62,7 +62,7 @@ namespace Igneel.Graphics
 
           protected override void Set(BlendState state)
         {
-            device.OMBlendState = state;
+            device.Blend = state;
         }
     }
 

@@ -136,7 +136,7 @@ namespace IgneelD3D10
 
 			OVERRIDE( void RSSetState(RasterizerState^ value) );
 
-			OVERRIDE( void RSSetViewPort(ViewPort vp) );
+			OVERRIDE( void RSSetViewPort(Graphics::ViewPort vp) );
 
 			OVERRIDE( void RSSetScissorRects(Igneel::Rectangle rec) );
 
