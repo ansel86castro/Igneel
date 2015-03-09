@@ -8,13 +8,9 @@ using System.Threading.Tasks;
 
 namespace Igneel.Rendering.Bindings
 {    
-    public class SkinBinding : RenderBinding<SkinInstance, SkinBinding.ISkinBinding>, IRenderBinding<MeshPart>
+    public class SkinBinding : RenderBinding<SkinInstance, ISkinMap>, IRenderBinding<MeshPart>
     {
-        public interface ISkinBinding
-        {
-            SArray<Matrix> WorldArray { get; set; }
-        }
-
+       
         private const int maxPaletteMatrices = 32;      
         private const int nbBones = 4;
         Matrix[] boneMatrices = new Matrix[maxPaletteMatrices];

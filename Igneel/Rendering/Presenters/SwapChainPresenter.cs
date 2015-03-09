@@ -16,40 +16,24 @@ namespace Igneel.Rendering
         private bool disposed;
         Format backBufferFormat;
         Format depthStencilFormat;
-        Multisampling msaa;
-        IntPtr outputWindow;
+        Multisampling msaa;        
 
-        public SwapChainPresenter(int width ,
-                                int height,
-                                Format backBufferFormat,
-                                Format depthStencilFormat, 
-                                Multisampling msaa, 
-                                IntPtr outputWindow)
+        public SwapChainPresenter(IGraphicContext context)
         {
             if (msaa.Count == 0)
                 msaa.Count = 1;
 
-            displaySize = new Size(width, height);
-            this.backBufferFormat = backBufferFormat;
-            this.depthStencilFormat = depthStencilFormat;
-            this.msaa = msaa;
-            this.outputWindow = outputWindow;          
-
-            SwapChainDesc chainDesc = new SwapChainDesc
-            {
-                BackBufferFormat = backBufferFormat,
-                BackBufferHeight = height,
-                BackBufferWidth = width,
-                Sampling = msaa,
-                OutputWindow = outputWindow
-            };
-
-            viewport = new ViewPort(0, 0, width, height);
-            swapChain = Engine.Graphics.CreateSwapChain(chainDesc);
+            displaySize = new Size(context.BackBufferWidth, context.BackBufferHeight);
+            this.backBufferFormat = context.BackBufferFormat;
+            this.depthStencilFormat = context.DepthStencilFormat;
+            this.msaa =  context.Sampling;
+           
+            viewport = new ViewPort(0, 0, displaySize.Width, displaySize.Height);
+            swapChain = Engine.Graphics.CreateSwapChain(context);
 
             depthBuffer = Engine.Graphics.CreateDepthStencil(
-                chainDesc.BackBufferWidth,
-                chainDesc.BackBufferHeight,
+                context.BackBufferWidth,
+                context.BackBufferHeight,
                 depthStencilFormat,
                 msaa);                        
         }
@@ -81,8 +65,9 @@ namespace Igneel.Rendering
             var graphics = Engine.Graphics;
             var scene = Engine.Scene;
 
-            graphics.SetRenderTarget(swapChain.BackBuffer, depthBuffer);
+            //swapChain.MakeCurrent();
 
+            graphics.SetRenderTarget(swapChain.BackBuffer, depthBuffer);
             graphics.ViewPort = viewport;                        
             graphics.Clear(ClearFlags.Target | ClearFlags.ZBuffer, Engine.BackColor, 1, 0);
 

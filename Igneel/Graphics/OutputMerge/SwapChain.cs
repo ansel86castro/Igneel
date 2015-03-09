@@ -16,27 +16,22 @@ namespace Igneel.Graphics
         int RefreshRate;
         Format Format;
     }
-
-    [Serializable]
-    [StructLayout(LayoutKind.Sequential)]
-    public struct SwapChainDesc
-    {
-        public int BackBufferWidth;
-        public int BackBufferHeight;
-        public Format BackBufferFormat;        
-        public Multisampling Sampling;
-        public IntPtr OutputWindow;
-        public PresentionInterval Presentation;
-
-    }
+   
     public abstract class SwapChain:ResourceAllocator
     {
-        protected RenderTarget _backBuffers;        
-        protected SwapChainDesc _desc;
+        protected RenderTarget _backBuffers;
+        protected IGraphicContext context;
+
+        public SwapChain(IGraphicContext context)
+        {
+            this.context = context;
+        }
 
         public RenderTarget BackBuffer { get { return _backBuffers; } }
 
-        public SwapChainDesc Desc { get { return _desc; } protected set { _desc = value; } }       
+        public IGraphicContext Context { get { return context; } }
+
+        public GraphicDevice Device { get; set; }
 
         protected override void OnDispose(bool disposing)
         {
@@ -48,10 +43,10 @@ namespace Igneel.Graphics
             }
         }
 
+        //public abstract void MakeCurrent();
+
         public abstract void Present();
 
-        public abstract void ResizeBackBuffer(int width, int height);
-
-        internal GraphicDevice Device { get; set; }
+        public abstract void ResizeBackBuffer(int width, int height);        
     }
 }

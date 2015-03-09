@@ -7,20 +7,14 @@ using System.Threading.Tasks;
 
 namespace Igneel.Rendering.Bindings
 {    
-    class SkyDomeBinding:RenderBinding<SkyDome, SkyDomeBinding.ISkyDomeMap>
-    {
-        public interface ISkyDomeMap
-        {
-            Matrix ViewProj { get; set; }
-            float lightIntensity { get; set; }
-        }
+    class SkyDomeBinding:RenderBinding<SkyDome, ISkyDomeMap>
+    {       
           
         public override void OnBind(SkyDome obj)
         {
-            mapping.lightIntensity = obj.LuminanceIntensity;
+            mapping.LightIntensity = obj.LuminanceIntensity;
             mapping.ViewProj = Engine.Scene.ActiveCamera.ViewProj;
-
-            Engine.Graphics.PS.SetResource(0, obj.Texture);         
+            mapping.DiffuseMap = obj.Texture.ToSampler();            
         }
 
         public override void OnUnBind(SkyDome value)

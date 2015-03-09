@@ -9,12 +9,12 @@ struct PS_RenderQuadInput
 
 // The per-color weighting to be used for luminance calculations in RGB order.
 static const float3 LUMINANCE_VECTOR  = float3(0.2125f, 0.7154f, 0.0721f);
-// The per-color weighting to be used for blue shift under low light.
+// The per-color weighting to be used for blue shift under low Light.
 static const float3 BLUE_SHIFT_VECTOR = float3(1.05f, 0.97f, 1.27f); 
 
 static const float MIN_FLOAT = -1e10;
 
-cbuffer globals
+cbuffer cbGlobals
 {
 	float  MIDDLE_GRAY;	
 	float  BRIGHT_PASS_THRESHOLD;	
@@ -25,7 +25,7 @@ cbuffer globals
 	float  GaussianScalar;
 }
 
-cbuffer samples
+cbuffer cbSamples
 {
 	float4 SampleWeights[16];
 	float4 SampleOffsets[8];	

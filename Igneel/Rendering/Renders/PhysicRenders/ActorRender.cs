@@ -18,7 +18,7 @@ namespace Igneel.Rendering
         Mesh capsule;
         Mesh cylindre;                                   
         private RasterizerState rasterizer;
-        Color4 color = System.Drawing.Color.Green;
+        Color4 color = new Color4(0, 1, 0);
 
         public ActorRender()
         {

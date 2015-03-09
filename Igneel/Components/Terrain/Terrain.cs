@@ -8,9 +8,9 @@ using System.Xml.Linq;
 using System.Reflection;
  
 using System.ComponentModel;
-using Igneel.Design.UITypeEditors;
-using System.Drawing.Design;
-using Igneel.Design;
+
+
+
 
 namespace Igneel.Components
 {
@@ -46,7 +46,7 @@ namespace Igneel.Components
 
     //    public bool Valid { get { return valid; } set { valid = value; } }
 
-    //    [TypeConverter(typeof(DesignTypeConverter))]
+    //   
     //    [Editor(typeof(UITextureArrayTypeEditor), typeof(UITypeEditor))]
     //    public TextureHandle<Texture>[] Layers
     //    {
@@ -54,7 +54,7 @@ namespace Igneel.Components
     //        set { layers = value; }
     //    }
 
-    //    [TypeConverter(typeof(DesignTypeConverter))]
+    //   
     //    [Editor(typeof(UITextureArrayTypeEditor), typeof(UITypeEditor))]
     //    public TextureHandle<Texture>[] BlendLayers
     //    {
@@ -75,14 +75,14 @@ namespace Igneel.Components
     //        set { isAccelerated = value; }
     //    }
      
-    //    [Browsable(false)]
+    //   
     //    public VertexDescriptor VertexDescriptor
     //    {
     //        get { return vd; }
     //    }            
 
      
-    //    [Browsable(false)]
+    //   
     //    public Matrix InvWolrdMatrix { get { return invWorldMtx; } }           
              
     //    #endregion      

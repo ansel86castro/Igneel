@@ -127,8 +127,7 @@ namespace Igneel.Graphics
 
     [Flags]
     public enum BindFlags
-    {
-        ConstantBuffer = 4,
+    {        
         DepthStencil = 0x40,
         IndexBuffer = 2,
         None = 0,

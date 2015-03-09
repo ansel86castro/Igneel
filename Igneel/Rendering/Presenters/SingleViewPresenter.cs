@@ -20,7 +20,9 @@ namespace Igneel.Rendering
         {
             var scene = Engine.Scene;
             var graphics = Engine.Graphics;
-            var backBuffer = graphics.BackBuffer;
+            var backBuffer = swapChaing.BackBuffer;            
+
+            //swapChaing.MakeCurrent();
 
             graphics.SetRenderTarget(backBuffer, graphics.BackDepthBuffer);
             graphics.ViewPort = new ViewPort(0, 0, backBuffer.Width, backBuffer.Height);

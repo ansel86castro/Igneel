@@ -32,9 +32,9 @@ namespace Igneel.Graphics
 
         public SamplerDesc(bool setDefaults)
         {
-            AddressU = TextureAddressMode.Clamp;
-            AddressV = TextureAddressMode.Clamp;
-            AddressW = TextureAddressMode.Clamp;
+            AddressU = TextureAddressMode.Wrap;
+            AddressV = TextureAddressMode.Wrap;
+            AddressW = TextureAddressMode.Wrap;
             BorderColor = new Color4(0);
             Filter = Graphics.Filter.MinMagMipLinear;
             MipLODBias = 0;
@@ -86,6 +86,9 @@ namespace Igneel.Graphics
                 {
                     var desc = new SamplerDesc(true);
                     desc.Filter = Filter.MinPointMagMipLinear;
+                    desc.AddressU = TextureAddressMode.Wrap;
+                    desc.AddressV = TextureAddressMode.Wrap;
+                     desc.AddressW = TextureAddressMode.Wrap;
                     linearSample = Engine.Graphics.CreateSamplerState(desc);
                 }
 

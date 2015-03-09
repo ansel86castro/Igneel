@@ -18,9 +18,9 @@ namespace IgneelD3D10{
 
         OVERRIDE( bool IsUniformDefined(String^ name));
        
-        OVERRIDE( array<UniformDesc^>^ GetUniformDescriptions() );
+        OVERRIDE( array<ShaderReflectionVariable^>^ GetUniformDescriptions() );
 
-        OVERRIDE( UniformDesc^ GetUniformDescription(String^ name));
+        OVERRIDE( ShaderReflectionVariable^ GetUniformDescription(String^ name));
        
 		void SetShaders(ID3D10Device* device);
 	};

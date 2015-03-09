@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Igneel.Rendering;
-using Igneel.Design;
+
 using Igneel.Collections;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -12,8 +12,8 @@ using Igneel.Controllers;
 using Igneel.Physics;
 using System.Text.RegularExpressions;
 using Igneel.Services;
-using Igneel.Design.UITypeEditors;
-using System.Drawing.Design;
+
+
 using Igneel.Graphics;
 
 namespace Igneel.Components
@@ -43,8 +43,7 @@ namespace Igneel.Components
     /// </remarks>
     /// </summary>
     //[OnComplete("RegisterForCulling")]
-    [ProviderActivator(typeof(SceneNode.Activator))]
-    [TypeConverter(typeof(DesignTypeConverter))]
+    [ProviderActivator(typeof(SceneNode.Activator))]    
     public sealed class SceneNode : ResourceAllocator, IBoundable, ITransformable,  INameable, IAffectable, IAffector, IAssetProvider,ISceneElement,IShadingInput, IIdentificable
     {
         static Regex nodeMetaRegex = new Regex(@"\w+__a(_(?<TYPE>(d)))?(_b_(?<BINDING>\w+))?(?<KEEP>_k)?__");
@@ -124,8 +123,7 @@ namespace Igneel.Components
         #region Properties                                                        
 
         public bool IsGPUSync { get { return isSync; } set { isSync = value; } }
-
-        [Category("Properties")]
+        
         [AssetMember]
         public string Name
         {
@@ -138,18 +136,14 @@ namespace Igneel.Components
             }
         }
 
-        [Category("Properties")]
         public int Id { get { return id; } }      
 
-        [Category("Properties")]
-        [Browsable(false)]
         [AssetMember(typeof(CollectionStoreConverter<SceneNode>))]
         public ObservedDictionary<string, SceneNode> Childrens { get { return nodes; } }
-
-        [Category("Properties")]
+       
         public SceneNode Parent { get { return parent; } }
 
-        [Category("Properties")]
+        
         [AssetMember]
         public bool Visible
         {
@@ -164,16 +158,15 @@ namespace Igneel.Components
             }
         }
 
-        [Category("Properties")]
+        
         [AssetMember]
         public NodeType Type { get { return nodeType; } set { nodeType = value; } }
 
-        [Category("Properties")]
+        
         [AssetMember]
         public string Tag { get { return tag; } set { tag = value; } }
 
-       [Category("Properties")]
-        [DynamicEditableAttribute]
+               
         [AssetMember(storeAs: StoreType.Reference)]
         public NodeTechnique Technique
         {
@@ -196,8 +189,8 @@ namespace Igneel.Components
             }
         }
 
-        [Category("Properties")]
-        [TypeConverter(typeof(DesignTypeConverter))]
+        
+       
         [AssetMember(storeAs: StoreType.Reference)]
         public IAffector Affector 
        { 
@@ -209,10 +202,10 @@ namespace Igneel.Components
            } 
        }
 
-        [Category("Properties")]        
+                
         public IAffectable Affectable { get { return affectable; } set { affectable = value; } }
 
-        [Category("Properties")]
+        
         [AssetMember]
         public bool IsDynamic
         {
@@ -238,7 +231,7 @@ namespace Igneel.Components
             }
         }
 
-        [Category("Properties")]
+        
         public INodeObject NodeObject
         {
             get { return nodeObject; }
@@ -268,38 +261,20 @@ namespace Igneel.Components
                         ComponentChanged(this);
                 }
             }
-        }
+        }       
 
-        //[Category("Properties")]
-        //[AssetMember(storeAs: StoreType.Reference)]
-        //public NodeController Controller
-        //{
-        //    get { return controller; }
-        //    set
-        //    {
-        //        controller = value;
-        //        if (controller != null)
-        //            controller.Initialize(this);
-        //    }
-        //}
-
-        [Category("Properties")]
+        
         public bool IsCulledByProvider
         {
             get { return culledByProvider; }
         }
 
-        [Category("Object")]
+        
         [AssetMember]
         public object UserData { get { return userData; } set { userData = value; } }
 
         #region Translation 
-        
-        [Browsable(true)]
-        [Editor(typeof(UIVector3TypeEditor), typeof(UITypeEditor))]        
-        [Category("Transforms")]
-        [Deferred]
-        [LockOnSet]
+                     
         public Vector3 LocalPosition
         {
             get 
@@ -318,7 +293,7 @@ namespace Igneel.Components
             }
         }
 
-        [Browsable(false)]
+       
         public float Tx
         {
             get { return localPose.M41; }
@@ -328,7 +303,7 @@ namespace Igneel.Components
             }
         }
 
-        [Browsable(false)]
+       
         public float Ty
         {
             get { return localPose.M42; }
@@ -338,7 +313,7 @@ namespace Igneel.Components
             }
         }
 
-        [Browsable(false)]
+       
         public float Tz
         {
             get { return localPose.M43; }
@@ -348,8 +323,8 @@ namespace Igneel.Components
             }
         }
 
-        [ReadOnly(true)]
-        [Category("Transforms")]
+        
+        
         public Vector3 GlobalPosition
         {
             get { return globalSphere.Center; }
@@ -358,11 +333,6 @@ namespace Igneel.Components
         #endregion
 
         #region Scale
-
-        [Editor(typeof(UIVector3TypeEditor), typeof(UITypeEditor))]        
-        [Category("Transforms")]        
-        [Deferred]
-        [LockOnSet]
         public Vector3 LocalScale
         {
             get { return scale; }
@@ -375,7 +345,7 @@ namespace Igneel.Components
             }
         }
 
-        [Browsable(false)]
+       
         public float Sx
         {
             get { return scale.X; }
@@ -386,7 +356,7 @@ namespace Igneel.Components
             }
         }
 
-        [Browsable(false)]
+       
         public float Sy
         {
             get { return scale.Y; }
@@ -397,7 +367,7 @@ namespace Igneel.Components
             }
         }
 
-        [Browsable(false)]
+       
         public float Sz
         {
             get { return scale.Z; }
@@ -412,10 +382,6 @@ namespace Igneel.Components
 
         #region Rotation
 
-        [Category("Transforms")]
-        [Deferred]        
-        [EditorAttribute(typeof(UIRotationMatrixEditor), typeof(UITypeEditor))]        
-        [Browsable(false)]
         public Matrix LocalRotation
         {
             get { return rotationMtx; }
@@ -429,18 +395,15 @@ namespace Igneel.Components
             }
         }
 
-        [Browsable(false)]
+       
         public Vector3 Right { get { return rotationMtx.Right; } set { rotationMtx.Right =value; } }
 
-        [Browsable(false)]
+       
         public Vector3 Up { get { return rotationMtx.Up; } set { rotationMtx.Up= value; } }
 
-        [Browsable(false)]
+       
         public Vector3 Front { get { return rotationMtx.Front; } set { rotationMtx.Front = value; } }        
 
-        [Deferred]
-        [LockOnSet]
-        [Category("Transforms")]
         public Euler LocalRotationEuler
         {
             get { return Euler.FromMatrix(rotationMtx); }
@@ -450,7 +413,7 @@ namespace Igneel.Components
             }
         }
 
-        [Browsable(false)]
+       
         public Quaternion LocalRotationQuat
         {
             get { return rotationQuat; }
@@ -461,7 +424,7 @@ namespace Igneel.Components
             }
         }      
 
-        [Browsable(false)]
+       
         public float Heading
         {
             get { return LocalRotationEuler.Heading; }
@@ -474,7 +437,7 @@ namespace Igneel.Components
             }
         }
 
-        [Browsable(false)]
+       
         public float Pitch
         {
             get { return LocalRotationEuler.Pitch; }
@@ -488,7 +451,7 @@ namespace Igneel.Components
             }
         }
 
-        [Browsable(false)]
+       
         public float Roll
         {
             get { return LocalRotationEuler.Roll; }
@@ -510,7 +473,7 @@ namespace Igneel.Components
         /// Local space tranform of the node
         /// </summary>        
         [AssetMember]
-        [Category("Pose")]
+        
         public Matrix LocalPose
         {
             get { return localPose; }
@@ -526,14 +489,14 @@ namespace Igneel.Components
         /// <summary>
         /// World space tranform
         /// </summary>        
-        [Category("Pose")]
+        
         public Matrix GlobalPose { get { return globalPose; } }
 
         /// <summary>
         /// Allows to transform the node whe the parent is transformed
         /// </summary>        
         [AssetMember]
-        [Category("Pose")]
+        
         public Matrix BindHeirarchyPose { get { return bindParentMtx; } set { bindParentMtx = value; } }
 
         /// <summary>
@@ -541,37 +504,33 @@ namespace Igneel.Components
         /// It's updates automaticaly when you tranform the node, or set it to invert of the actor`s global pose.
         /// </summary>        
         [AssetMember]
-        [Category("Pose")]
+        
         public Matrix BindAffectorPose { get { return bindAffectorMtx; } set { bindAffectorMtx = value; } }
 
         #endregion     
 
         #region Culling
 
-        [Category("Culling")]
+        
         [AssetMember]
         public Sphere LocalSphere { get { return localSphere; } set { localSphere = value; } }
         
-        [Browsable(false)]
+       
         public float LocalRadius { get { return localSphere.Radius; } set { localSphere.Radius = value; } }
 
-        [Browsable(false)]
+       
         public Vector3 LocalCenter { get { return localSphere.Center; } set { localSphere.Center = value; } }
 
         [AssetMember]
-        [Category("Culling")]
+        
         public Sphere BoundingSphere { get { return globalSphere; } set { globalSphere = value; } }
 
-        [Browsable(false)]
+       
         public float GlobalRadius { get { return globalSphere.Radius; } set { globalSphere.Radius = value; } }
 
-        [AssetMember]
-        [Category("Culling")]
+        [AssetMember]        
         public OrientedBox BoundingBox { get { return globalBox; } set { globalBox = value; } }       
-
-        [ReadOnly(true)]
-        [Category("Culling")]
-        [Description("Distance from the Active Camera")]
+                     
         [AssetMember]
         public float Range { get { return range; } set { range = value; } }  
 

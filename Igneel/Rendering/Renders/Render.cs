@@ -56,7 +56,7 @@ namespace Igneel.Rendering
         public Action<Render> UpdateConstantsCallback { get; set; }
 
         [Category("RenderTechnique")]
-        [Browsable(true)]
+       
         public bool Enable
         {
             get
@@ -70,7 +70,7 @@ namespace Igneel.Rendering
         }
 
         [Category("ShaderTechnique")]
-        [Browsable(false)]
+       
         public Effect Effect
         {
             get
@@ -101,7 +101,7 @@ namespace Igneel.Rendering
 
         public Render BindWith<T>(Action<T> bind, Action<T> unbind = null)
         {
-            BindWith(new GenericRenderBinding<T>(this, bind, unbind));
+            BindWith(new CallbackRenderBinding<T>(this, bind, unbind));
             return this;
         }      
         

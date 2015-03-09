@@ -9,19 +9,14 @@ using System.Threading.Tasks;
 namespace Igneel.Rendering.Bindings
 {        
     public class SceneNodeBinding : RenderBinding<SceneNode>
-    {
-        public interface IWorldMapping
-        {
-            Matrix World { get; set; }           
-        }
-
-        IWorldMapping mapping;         
+    {      
+        IWorldMap mapping;         
 
         protected override void OnEffectChanged(Effect effect)
         {
             base.OnEffectChanged(effect);
 
-          mapping = effect.Map<IWorldMapping>();        
+            mapping = effect.Map<IWorldMap>();        
         }
         
         public override void OnBind(SceneNode obj)
@@ -34,10 +29,10 @@ namespace Igneel.Rendering.Bindings
 
         public override void OnUnBind(SceneNode value)
         {
-            if (mapping != null)
-            {
-                mapping.World = Matrix.Identity;
-            }
+            //if (mapping != null)
+            //{
+            //    mapping.World = Matrix.Identity;
+            //}
         }
     }
 

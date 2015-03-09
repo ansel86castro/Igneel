@@ -6,23 +6,23 @@ struct VSOut
 	float4 PositionL :TEXCOORD0;
 };
 
-Texture2D t7	: register(t7);
-SamplerState s7 : register(s7);
+Texture2D ShadowMap;
+SamplerState sShadowMap;
 
 float4 main(VSOut input) :SV_TARGET
 {
-	//clip(dot(float4(input.PositionW, 1), clipPlane));	
+	//clip(dot(float4(input.PositionW, 1), ClipPlane));	
 	gPositionL	 = input.PositionL;			
 	ComputeShadowTexCoord();
 	
-	float inShadow = (float)(t7.SampleLevel(s7, gShadowTexCoord.xy, 0). r > gShadowTexCoord.z);	
+	float inShadow = (float)(ShadowMap.SampleLevel(sShadowMap, gShadowTexCoord.xy, 0). r > gShadowTexCoord.z);	
 	
 	return float4(inShadow,inShadow,inShadow,1);	
 }
 
 //float4 main(VSOut input) :SV_TARGET
 //{
-//	//clip(dot(float4(input.PositionW, 1), clipPlane));	
+//	//clip(dot(float4(input.PositionW, 1), ClipPlane));	
 //	gPositionL	 = input.PositionL;		
 //	float2 gradient;
 //	ComputeShadowTexCoord();

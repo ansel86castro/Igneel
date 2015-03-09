@@ -51,9 +51,14 @@
     <Compile Include="IgneelFormsApp.cs" />
     <Compile Include="Native.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TargaImage.cs" />
     <Service Include="{94E38DFF-614B-4cbd-B67C-F211BB35CE8B}" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Igneel.Windows\Igneel.Windows.csproj">
+      <Project>{8b1a1553-d47c-4a98-ad2c-11f3b38bc74a}</Project>
+      <Name>Igneel.Windows</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Igneel\Igneel.csproj">
       <Project>{daf07c37-563a-4be2-bb47-32147dfe12dc}</Project>
       <Name>Igneel</Name>

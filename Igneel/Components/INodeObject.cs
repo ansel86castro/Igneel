@@ -1,5 +1,5 @@
 ﻿using Igneel.Assets;
-using Igneel.Design;
+
 using Igneel.Graphics;
 using System;
 using System.Collections.Generic;
@@ -17,7 +17,7 @@ namespace Igneel.Components
         void OnAddToScene(Scene scene);
     }
 
-    [TypeConverter(typeof(DesignTypeConverter))]   
+      
     public interface INodeComponent
     {     
         void OnNodeAttach(SceneNode node);
@@ -45,7 +45,7 @@ namespace Igneel.Components
         SceneNode Node { get; }
     }
 
-    [TypeConverter(typeof(DesignTypeConverter))]   
+      
     public abstract class NodeObject :ResourceAllocator, INodeObject
     {            
         protected Sphere sphere;
@@ -120,7 +120,7 @@ namespace Igneel.Components
         }        
     }
 
-    [TypeConverter(typeof(DesignTypeConverter))]   
+      
     public abstract class ExclusiveNodeObject : NodeObject
     {
         SceneNode node;         

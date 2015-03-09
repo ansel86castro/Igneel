@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Collections.ObjectModel;
 
 namespace Igneel.Collections
 {
@@ -146,5 +147,15 @@ namespace Igneel.Collections
             lookup.Add(newName, index);
         }
       
+    }
+
+    public class NamedCollection<T> : KeyedCollection<string, T>
+        where T:INameable
+    {
+        
+        protected override string GetKeyForItem(T item)
+        {
+            return item.Name;
+        }
     }
 }

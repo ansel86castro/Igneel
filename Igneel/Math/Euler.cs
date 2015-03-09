@@ -1,10 +1,10 @@
-﻿using Igneel.Design;
-using Igneel.Design.UITypeEditors;
+﻿
+
 
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Drawing.Design;
+
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,9 +15,7 @@ namespace Igneel
     /// Euler angles holder
     /// </summary>
     [Serializable]
-    [System.Runtime.InteropServices.StructLayout(System.Runtime.InteropServices.LayoutKind.Sequential)]
-    [TypeConverter(typeof(DesignTypeConverter))]
-    [Editor(typeof(UIAttitudeTypeEditor), typeof(UITypeEditor))]
+    [System.Runtime.InteropServices.StructLayout(System.Runtime.InteropServices.LayoutKind.Sequential)]      
     public struct Euler : IEquatable<Euler>
     {
 
@@ -34,21 +32,21 @@ namespace Igneel
         /// Rotatio around the Y-iniertial axis or Heading in radians.
         /// </summary>
         /// 
-        [Browsable(false)]
+       
         public float Heading;
 
         /// <summary>
         /// Rotation around the X- Object axis in radians.
         /// </summary>
         /// 
-        [Browsable(false)]
+       
         public float Pitch;
 
         /// <summary>
         /// Rotation around the Z -Object axis in radians.
         /// </summary>
         /// 
-        [Browsable(false)]
+       
         public float Roll;
 
         const float Epsilon = 0.000005f;
@@ -327,7 +325,7 @@ namespace Igneel
         /// </summary>
         /// 
         //[Editor(typeof(UIAngleTypeEditor),typeof(UITypeEditor))]
-        [Editor(typeof(UIInmediateNumericEditor), typeof(UITypeEditor))]
+        
         public float HeadingAngle
         {
             get { return 360 * (Heading / TwoPI); }
@@ -340,7 +338,7 @@ namespace Igneel
         /// <summary>
         /// Pitch in grades
         /// </summary>
-        [Editor(typeof(UIInmediateNumericEditor), typeof(UITypeEditor))]
+        
         public float PitchAngle
         {
             get
@@ -353,7 +351,7 @@ namespace Igneel
             }
         }
 
-        [Editor(typeof(UIInmediateNumericEditor), typeof(UITypeEditor))]
+        
         public float RollAngle
         {
             get

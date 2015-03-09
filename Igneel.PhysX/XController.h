@@ -11,7 +11,7 @@
 
 using namespace System::ComponentModel;
 using namespace System;
-using namespace Igneel::Design;
+
 using namespace Igneel::Physics;
 
 #define EXTOVECTOR3(v) Vector3((float)v.x, (float)v.y, (float)v.z)

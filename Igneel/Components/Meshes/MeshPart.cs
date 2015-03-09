@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.ComponentModel;
-using Igneel.Design;
+
 
 namespace Igneel.Components
 {
     [Serializable]
-    [TypeConverter(typeof(DesignTypeConverter))]
+   
     public class MeshPart
     {
         internal int materialIndex = -1;

@@ -1,5 +1,5 @@
 ﻿using Igneel.Components;
-using Igneel.Design;
+
 using Igneel.Graphics;
 using Igneel.Rendering.Effects;
 using System;
@@ -28,7 +28,7 @@ namespace Igneel.Rendering
 
     }
 
-    [TypeConverter(typeof(DesignTypeConverter))]  
+     
     public abstract class RenderBinding<T> : IRenderBinding<T>
     {
         protected Effect effect;       
@@ -107,18 +107,32 @@ namespace Igneel.Rendering
         }
     }
 
-    public class GenericRenderBinding<T> : RenderBinding<T>
+    public class CallbackRenderBinding<T> : RenderBinding<T>
     {       
         private Action<T> bind;
         private Action<T> unBind;
 
-        public GenericRenderBinding(Render render,
+        public CallbackRenderBinding()
+        {
+
+        }
+
+        public CallbackRenderBinding(Action<T> binding)
+        {
+            this.bind = binding;
+        }
+
+        public CallbackRenderBinding(Render render,
             Action<T> bindCallback, 
             Action<T> unbindCallback):base(render)
         {          
             this.bind = bindCallback;
             this.unBind = unbindCallback;
         }
+
+        public Action<T> BindCallback { get { return bind; } set { bind = value; } }
+
+        public Action<T> UnBindCallback { get { return unBind; } set { unBind = value; } }
 
         public override void OnBind(T value)
         {
@@ -132,6 +146,54 @@ namespace Igneel.Rendering
                 unBind(value);            
         }
 
+    }
+
+    public struct CallbackBindEventArg<TItem, TMap>
+    {
+        public TItem Value;
+        public TMap Map;
+
+        public CallbackBindEventArg(TItem value, TMap map)
+        {          
+            this.Value = value;
+            this.Map = map;
+        }
+    }
+
+    public class CallbackRenderBinding<TItem, TMap> : RenderBinding<TItem>
+        where TMap:class
+    {
+        TMap map;
+
+        public CallbackRenderBinding()
+        {
+
+        }
+
+        public bool EnableFullMap { get; set; }
+
+        public TMap Map { get { return map; } }
+
+        public event EventHandler<CallbackBindEventArg<TItem, TMap>> BindCallback;
+
+        public event EventHandler<CallbackBindEventArg<TItem, TMap>> UnBindCallback;
+
+        protected override void OnEffectChanged(Effect effect)
+        {
+            base.OnEffectChanged(effect);
+
+            map = effect.Map<TMap>(EnableFullMap);
+        }
+
+        public override void OnBind(TItem value)
+        {
+            BindCallback(this, new CallbackBindEventArg<TItem, TMap>(value, map));
+        }
+
+        public override void OnUnBind(TItem value)
+        {
+            UnBindCallback(this, new CallbackBindEventArg<TItem, TMap>(value, map));
+        }
     }
 
     static class Binding<TBind, TShader>

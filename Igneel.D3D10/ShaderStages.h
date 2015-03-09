@@ -25,13 +25,15 @@ namespace IgneelD3D10
 		}
 	};
 
-	public ref class ShaderStage10 abstract :ShaderStage 
+	generic<typename T>
+	public ref class ShaderStage10 abstract :ShaderStage<T> 
 	{
 	protected:
 		ID3D10Device* _device;	
 		StageHolder _holder;
+		String^ _profile;
 	public:
-		ShaderStage10(ID3D10Device* device);
+		ShaderStage10(ID3D10Device* device, String^ profile);
 		!ShaderStage10();	
 
 	protected:
@@ -49,18 +51,22 @@ namespace IgneelD3D10
 
 		OVERRIDE(void OnSetResource(int index, ShaderResource^ resource));
 
-		OVERRIDE(void OnSetResources(int index, int nbResources, array<ShaderResource^,1>^ resources));
+		OVERRIDE(void OnSetResources(int index, int nbResources, array<ShaderResource^,1>^ resources));					
 
 		virtual void SetSamplers(int slot, int num , ID3D10SamplerState** samplers) = 0;
 
-		virtual void SetResources(int index, int num, ID3D10ShaderResourceView** resources) = 0;
-		
+		virtual void SetResources(int index, int num, ID3D10ShaderResourceView** resources) = 0;	
+
+	public:
+		OVERRIDE( ShaderCode^ CompileFromMemory(String^ shaderCode, String^ functionName , array<ShaderMacro>^ defines));
+
+		OVERRIDE(ShaderCode^ CompileFromFile(String^ filename, String^ functionName, array<ShaderMacro>^ defines));
 	};
 
-	public ref class VSStage10 :  ShaderStage10 ,IVertexShaderStage
+	public ref class VSStage10 :  ShaderStage10<VertexShader^> ,IVertexShaderStage
 	{
 	public:
-		VSStage10(ID3D10Device* device) : ShaderStage10(device){ } 
+		VSStage10(ID3D10Device* device) : ShaderStage10(device, L"vs_"){ } 
 	
 	protected:
 		OVERRIDE(void SetSamplers(int slot, int num , ID3D10SamplerState** samplers));
@@ -68,17 +74,13 @@ namespace IgneelD3D10
 		OVERRIDE(void SetResources(int index, int num, ID3D10ShaderResourceView** resources));
 
 	public:
-		virtual VertexShader^ CreateShader(ShaderCode^ bytecode);
-
-		virtual ShaderCode^ CompileFromMemory(String^ shaderCode, String^ functionName , array<ShaderMacro>^ defines);
-
-		virtual ShaderCode^ CompileFromFile(String^ filename, String^ functionName, array<ShaderMacro>^ defines);
+		virtual VertexShader^ CreateShader(ShaderCode^ bytecode) override ;		
 	};
 
-	public ref class PSStage10 : public ShaderStage10 , IPixelShaderStage
+	public ref class PSStage10 : public ShaderStage10<PixelShader^> , IPixelShaderStage
 	{
 	public:
-		PSStage10(ID3D10Device* device) : ShaderStage10(device){ } 
+		PSStage10(ID3D10Device* device) : ShaderStage10(device,L"ps_"){ } 
 	
 	protected:
 		OVERRIDE(void SetSamplers(int slot, int num , ID3D10SamplerState** samplers));
@@ -86,20 +88,16 @@ namespace IgneelD3D10
 		OVERRIDE(void SetResources(int index, int num, ID3D10ShaderResourceView** resources));
 
 	public:
-		virtual PixelShader^ CreateShader(ShaderCode^ bytecode);
-
-		virtual ShaderCode^ CompileFromMemory(String^ shaderCode, String^ functionName , array<ShaderMacro>^ defines);
-
-		virtual ShaderCode^ CompileFromFile(String^ filename, String^ functionName, array<ShaderMacro>^ defines);
+		virtual PixelShader^ CreateShader(ShaderCode^ bytecode)override;	
 
 	};
 
-	public ref class GSStage10 : public ShaderStage10 ,IGeometryShaderStage
+	public ref class GSStage10 : public ShaderStage10<GeometryShader^> ,IGeometryShaderStage
 	{
 		 array<GraphicBuffer^>^ _soTargetBind;
          array<int>^ _soTargetOffets;
 	public:
-		GSStage10(ID3D10Device* device) : ShaderStage10(device)
+		GSStage10(ID3D10Device* device) : ShaderStage10(device, L"gs_")
 		{ 
 			_soTargetBind = gcnew array<GraphicBuffer^>(4);
 			_soTargetOffets = gcnew array<int>(4);
@@ -111,13 +109,9 @@ namespace IgneelD3D10
 		OVERRIDE(void SetResources(int index, int num, ID3D10ShaderResourceView** resources));
 
 	public:
-		virtual GeometryShader^ CreateShader(ShaderCode^ bytecode);
+		virtual GeometryShader^ CreateShader(ShaderCode^ bytecode)override;
 
-		virtual GeometryShader^ CreateShaderWithStreamOut(ShaderCode^ bytecode, array<StreamOutDeclaration>^ declaration);
-
-		virtual ShaderCode^ CompileFromMemory(String^ shaderCode, String^ functionName , array<ShaderMacro>^ defines);
-
-		virtual ShaderCode^ CompileFromFile(String^ filename, String^ functionName, array<ShaderMacro>^ defines);
+		virtual GeometryShader^ CreateShaderWithSO(ShaderCode^ bytecode, array<StreamOutDeclaration>^ declaration ,array<int>^ bufferStrides, bool rasterizedStream0);	
 
 		virtual property int NumberOfSOBuffers;
 

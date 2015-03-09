@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Runtime.Serialization;
 using System.ComponentModel;
-using Igneel.Design;
+
 using Igneel.Assets;
 using Igneel.Graphics;
 using Igneel.Components;
@@ -38,7 +38,7 @@ namespace Igneel.Rendering
             cameras = new Camera[6];                               
         }
 
-        [Browsable(false)]
+       
         public Texture2D Texture { get { return renderTarget.Texture; } }        
 
         public Vector3 PositionOffset
@@ -47,8 +47,8 @@ namespace Igneel.Rendering
             set { positionOffset = value; }
         }
               
-        [Deferred]
-        [LockOnSet]
+        
+        
         public int Size
         {
             get { return size; }
@@ -59,22 +59,22 @@ namespace Igneel.Rendering
             }
         }
 
-        [Deferred]
-        [LockOnSet]
+        
+        
         public float NearClipPlane { get { return zn; } set { if (value <= 0)throw new ArgumentOutOfRangeException("value"); zn = value; } }
 
-        [Deferred]
-        [LockOnSet]
+        
+        
         public float FarClipPlane { get { return zf; } set { if (value <= 0)throw new ArgumentOutOfRangeException("value"); zf = value; } }
       
         public bool IsDynamic { get { return isDynamic; } set { isDynamic = value; } }
 
         [Browsable(true), ReadOnly(true)]
-        [Deferred]
-        [LockOnSet]
+        
+        
         public Format Format { get { return format; } set { if (value == Format.UNKNOWN) throw new ArgumentException("value"); format = value; } }
 
-        [Browsable(false)]
+       
         public Camera[] Cameras { get { return cameras; } }
 
         public override void UpdatePose(Matrix affectorPose)

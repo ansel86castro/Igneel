@@ -8,21 +8,21 @@ using System.Threading.Tasks;
 
 namespace Igneel.Rendering.Bindings
 {
-    public class IdBinding : RenderBinding<SceneNode>
+    public class IdBinding : RenderBinding<SceneNode, IdBinding.IIdBindingMapping>
     {
-        public interface IWorldMapping
+        public interface IIdBindingMapping : IWorldMap, IIdMap
         {
             Matrix World { get; set; }
-            int gId { get; set; }
+            int Id { get; set; }
         }
 
-        IWorldMapping mapping;
+        IIdBindingMapping mapping;
         
         protected override void OnEffectChanged(Effect effect)
         {         
             base.OnEffectChanged(effect);
 
-            mapping = effect.Map<IWorldMapping>();
+            mapping = effect.Map<IIdBindingMapping>();
         }
 
         public override void OnBind(SceneNode obj)
@@ -30,7 +30,7 @@ namespace Igneel.Rendering.Bindings
             if (mapping != null)
             {
                 mapping.World = obj.GlobalPose;
-                mapping.gId = obj.Id;
+                mapping.Id = obj.Id;
             }
         }
 

@@ -14,6 +14,7 @@ namespace IgneelD3D10 {
 		ID3D10ShaderReflection* ShaderReflection;
 		array<CBufferShaderBinding>^ ConstantBuffers;
 		ID3D10DeviceChild* shader;
+		Igneel::Graphics::ShaderReflection^ ASTReflection;
 
 		D3D10Shader(ID3D10Device * device,ID3D10DeviceChild* Shader, ShaderCode^ bytecode);
 		

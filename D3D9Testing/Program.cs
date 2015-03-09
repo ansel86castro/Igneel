@@ -3,7 +3,6 @@ using Igneel.Graphics;
 using Igneel.Input;
 using Igneel.Physics;
 using Igneel.Windows.Forms;
-using IgneelOpenGL;
 using System;
 using System.Collections.Generic;
 using System.Linq;

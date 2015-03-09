@@ -43,6 +43,15 @@ namespace IgneelD3D10{
 		void* GetBuffer();		
 	};
 
+	public value struct  CResourceBinding
+	{
+		RegisterSet Register;
+		int BindPoint;
+		int BindPointSampler;
+		int BindCount;
+		IShaderStage^ Stage;
+	};
+
 
 	public ref class ConstantBufferCache
 	{	

@@ -6,7 +6,7 @@ using Igneel.Services;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Drawing.Design;
+
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -38,13 +38,10 @@ namespace Igneel.Components
 
         public bool IsActive { get { return isActive; } internal set { isActive = value; } }
       
-        [AssetMember]
-        [TypeConverter(typeof(Igneel.Design.DesignTypeConverter))]
-        [Editor(typeof(Igneel.Design.UITypeEditors.UIDirectionEditor),typeof(UITypeEditor))]
+        [AssetMember]                
         public Vector3 LocalDirection { get { return localDirection; } set { localDirection = value; isSync = false; } }
 
-        [AssetMember]
-        [Editor(typeof(Igneel.Design.UITypeEditors.UIVector3TypeEditor), typeof(UITypeEditor))]
+        [AssetMember]        
         public Vector3 LocalPosition { get { return localPosition; } set { localPosition = value; isSync = false; } }
 
         public Vector3 GlobalDirection { get { return globalDirection; } }

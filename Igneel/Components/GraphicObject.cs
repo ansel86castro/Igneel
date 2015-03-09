@@ -1,5 +1,5 @@
 ﻿using Igneel.Assets;
-using Igneel.Design;
+
 using Igneel.Graphics;
 using Igneel.Rendering;
 using Igneel.Rendering.Effects;
@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 namespace Igneel.Components
 {      
 
-    [TypeConverter(typeof(DesignTypeConverter))]
+   
     public class GraphicObject<T> : NodeObject, IGraphicObject 
         where T:class ,IGraphicObject
     {                
@@ -24,14 +24,11 @@ namespace Igneel.Components
         private bool castReflection;
         private bool castRefraction;
         private RenderBinder renderParam;
-        static bool isRegister;
-        T instance;
+        static bool isRegister;        
 
         public GraphicObject()            
         {
-            RegisterRenders();
-
-            instance = (T)(object)this;
+            RegisterRenders();            
         }      
 
         private static void RegisterRenders()
@@ -125,8 +122,8 @@ namespace Igneel.Components
         {
             if (render != null)
             {
-                var graphicRender = (GraphicObjectRender<T>)render;
-                graphicRender.Draw(node, instance, clipping);
+                var graphicRender = ClrRuntime.Runtime.StaticCast<GraphicObjectRender<T>>(render);
+                graphicRender.Draw(node, ClrRuntime.Runtime.StaticCast<T>(this), clipping);
             }
         }
 
@@ -179,7 +176,7 @@ namespace Igneel.Components
         }
     }
 
-    [TypeConverter(typeof(DesignTypeConverter))]
+   
     public class ExclusiveGraphicObject<T> : ExclusiveNodeObject, IGraphicObject
         where T : class ,IGraphicObject
     {
@@ -189,13 +186,11 @@ namespace Igneel.Components
         private bool castReflection;
         private bool castRefraction;
         private RenderBinder renderParam;
-        static bool isRegister;
-        private T instance;
+        static bool isRegister;       
 
         protected ExclusiveGraphicObject()
         {
-            RegisterRenders();
-            instance = (T)(object)this;
+            RegisterRenders();          
         }
 
         public static void RegisterRenders()
@@ -289,8 +284,8 @@ namespace Igneel.Components
         {
             if (render != null)
             {
-                var graphicRender = (GraphicObjectRender<T>)render;
-                graphicRender.Draw(node, instance, clipping);
+                var graphicRender = ClrRuntime.Runtime.StaticCast<GraphicObjectRender<T>>(render);
+                graphicRender.Draw(node, ClrRuntime.Runtime.StaticCast<T>(this), clipping);
             }
         }
 

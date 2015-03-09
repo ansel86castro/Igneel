@@ -20,8 +20,7 @@ namespace Igneel.Graphics
         void SetSamplers(int index, int numSamplers, SamplerState[] states);
     }
 
-    public interface IShaderStage<T> :IShaderStage, IShaderFactory<T>
-        where T:Shader
+    public interface IShaderStage<T> :IShaderStage, IShaderFactory<T>      
     {
 
     }
@@ -35,21 +34,13 @@ namespace Igneel.Graphics
     {
 
     }
-
-    public struct StreamOutDeclaration
-    {
-        public IASemantic Semantic;
-        public int SemanticIndex;
-        public byte StartComponent;
-        public byte ComponentCount;
-        public byte OutputSlot;
-    }
+   
 
     public interface IGeometryShaderStage : IShaderStage<GeometryShader>
     {
         int NumberOfSOBuffers { get; }
 
-        GeometryShader CreateShaderWithStreamOut(ShaderCode bytecode, StreamOutDeclaration[] declaration);
+        GeometryShader CreateShaderWithSO(ShaderCode bytecode, StreamOutDeclaration[] declaration, int[] bufferStrides, bool rasterizedStream0 = false);
 
         void SetSOBuffer(GraphicBuffer buffer, int offset = 0);
 

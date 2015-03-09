@@ -1,10 +1,10 @@
-﻿using Igneel.Design.UITypeEditors;
+﻿
 using Igneel.Graphics;
 using Igneel.Services;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Drawing.Design;
+
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -41,10 +41,10 @@ namespace Igneel.Components
             set { texture = value; }
         }
 
-        [Editor(typeof(UIInmediateNumericEditor), typeof(UITypeEditor))]
+        
         public float Width { get { return width; } set { width = value; } }
 
-        [Editor(typeof(UIInmediateNumericEditor), typeof(UITypeEditor))]
+        
         public float Height { get { return height; } set { height = value; } }
 
         public Vector4 Color { get { return color; } set { color = value; } }

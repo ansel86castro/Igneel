@@ -1,0 +1,22 @@
+directive
+	: '#'(
+	include_directive
+	|(IFDEF | IFNDEF) ID directive 
+		('#'ELIF ID directive)*
+		('#'ELSE directive)? 
+		 '#'ENDIF
+	| DEFINE ID define_value
+	| IF ID	(EQUAL| NEQUAL) define_value  directive
+	       ('#'ELIF ID (EQUAL| NEQUAL) define_value directive)*
+	       ('#'ELSE directive)? 
+	  '#'ENDIF
+	)	
+	;
+
+define_value
+	:ID
+	|INT_CONSTANT
+	|FLOAT_CONSTANT
+	|BOOL_CONSTANT
+	|STRING_LITERAL
+	;

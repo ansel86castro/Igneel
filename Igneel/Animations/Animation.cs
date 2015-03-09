@@ -17,7 +17,7 @@ namespace Igneel.Animations
         Playing = 1,
     };    
 
-    [TypeConverter(typeof(Igneel.Design.DesignTypeConverter))]
+    
     [ProviderActivator(typeof(Animation.Activator))]
     public partial class Animation : INameable, IAssetProvider,ISceneElement
     {       

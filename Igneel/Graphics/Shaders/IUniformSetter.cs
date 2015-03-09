@@ -30,7 +30,27 @@ namespace Igneel.Graphics
         unsafe void SetMatrixArray(Matrix* value, int count);
 
         unsafe void SetVectorArray(Vector4* value, int count);
+
+        void SetResource(ShaderResource resource);
+
+        void SetResource(ShaderResource[] resources, int numResources);
+
+        void SetSampler(SamplerState sampler);
+
+        void SetSampler(SamplerState[] samplers, int numSamplers);
     }
+
+    //public interface IResourceSetter : IUniformSetter
+    //{
+    //    void SetResource(ShaderResource resource);
+
+    //    void SetResource(ShaderResource[] resources, int numResources);
+
+    //    void SetSampler(SamplerState sampler);
+
+    //    void SetSampler(SamplerState[] samplers, int numSamplers);
+    //}
+    
 
     /// <summary>
     /// Each uniform in a effect belongs to several programs 

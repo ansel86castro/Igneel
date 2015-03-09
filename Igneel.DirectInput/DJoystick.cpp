@@ -3,7 +3,8 @@
 
 namespace IgneelDirectInput {
 
-	DJoystick::DJoystick(LPDIRECTINPUT8 input,  IntPtr hwnd)
+	DJoystick::DJoystick(LPDIRECTINPUT8 input,  WindowContext^ context)
+		:Joystick(context)
 	{
 		LPDIRECTINPUTDEVICE8 device;
 		SAFECALL( input->CreateDevice(GUID_SysMouse ,&device, NULL) ); 

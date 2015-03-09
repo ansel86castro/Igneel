@@ -6,14 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Igneel.Rendering.Bindings
-{   
-    public interface ICameraMap
-    {
-        Matrix View { get; set; }
-        Matrix Projection { get; set; }
-        Matrix ViewProj { get; set; }
-        Vector3 eyePos { get; set; }
-    }
+{     
 
     public sealed class CameraBinding: RenderBinding<Camera>
     {
@@ -30,9 +23,7 @@ namespace Igneel.Rendering.Bindings
         {
             if (map != null)
             {
-                map.eyePos = obj.Position;
-                map.Projection = obj.Projection;
-                map.View = obj.View;
+                map.EyePos = obj.Position;           
                 map.ViewProj = obj.ViewProj;                
             }            
         }

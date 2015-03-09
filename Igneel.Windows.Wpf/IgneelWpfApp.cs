@@ -48,18 +48,20 @@ namespace Igneel.Windows.Wpf
                 int width = double.IsNaN(canvas.Width) ? 100:(int)canvas.Width;
                 int height = double.IsNaN(canvas.Height) ? 100 : (int)canvas.Height;
 
-                Engine.InitializeEngine(interopHelper.Handle, new GraphicDeviceDesc
+                Engine.InitializeEngine(new WindowContext(interopHelper.Handle), new GraphicDeviceDesc
                 {
                     Adapter = 0,
-                    BackBufferWidth = width,
-                    BackBufferHeight = height,
-                    BackBufferFormat = Format.R8G8B8A8_UNORM_SRGB,
-                    DepthStencilFormat = Format.D24_UNORM_S8_UINT,
                     DriverType = GraphicDeviceType.Hardware,
-                    FullScreen = false,
-                    MSAA = new Multisampling(1, 0),
-                    WindowsHandle = canvas.Handle,
-                    Interval = PresentionInterval.Default
+                    Context = new WindowContext(canvas.Handle)
+                    {
+                        BackBufferWidth = width,
+                        BackBufferHeight = height,
+                        BackBufferFormat = Format.R8G8B8A8_UNORM_SRGB,
+                        DepthStencilFormat = Format.D24_UNORM_S8_UINT,                        
+                        FullScreen = false,
+                        Sampling = new Multisampling(1, 0),                        
+                        Presentation = PresentionInterval.Default
+                    }                      
                 });
 
 

@@ -7,14 +7,9 @@ using System.Threading.Tasks;
 
 namespace Igneel.Rendering.Bindings
 {
-    public class PixelClippingBinding : RenderBinding<PixelClipping, PixelClippingBinding.PixelClippingMap>
+    public class PixelClippingBinding : RenderBinding<PixelClipping, PixelClippingMap>
     {
-        public interface PixelClippingMap
-        {
-            bool fNoRenderTransparency { get; set; }
-            bool NoRenderOpaque { get; set; }
-        }
-
+       
         public static DepthStencilState depthStateNoWrite;      
 
         public PixelClippingBinding()
@@ -36,7 +31,7 @@ namespace Igneel.Rendering.Bindings
             {
                 Engine.Graphics.DepthTest = depthStateNoWrite;
                 mapping.NoRenderOpaque = true;
-                mapping.fNoRenderTransparency = false;
+                mapping.NoRenderTransparency = false;
 
             }
             else if (value == PixelClipping.Transparent)
@@ -44,13 +39,13 @@ namespace Igneel.Rendering.Bindings
                 Engine.Graphics.DepthTest = SceneTechnique.DephtState;
 
                 mapping.NoRenderOpaque = false;
-                mapping.fNoRenderTransparency = true;
+                mapping.NoRenderTransparency = true;
             }
             else
             {
                 Engine.Graphics.DepthTest = SceneTechnique.DephtState;
                 mapping.NoRenderOpaque = false;
-                mapping.fNoRenderTransparency = false;
+                mapping.NoRenderTransparency = false;
             }
         }
 

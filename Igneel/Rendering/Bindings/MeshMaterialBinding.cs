@@ -8,65 +8,29 @@ using System.Threading.Tasks;
 
 namespace Igneel.Rendering.Bindings
 {
-    public class MeshMaterialBinding:RenderBinding<MeshMaterial, MeshMaterialBinding.IMaterialFlagsBinding>
+    public class MeshMaterialBinding:RenderBinding<MeshMaterial, IMeshMaterialMap>
     {      
-        public interface IMaterialFlagsBinding
-        {
-            bool USE_DIFFUSE_MAP { get; set; }
-            bool USE_SPECULAR_MAP { get; set; }                                         
-            LayerSurface surface { get; set; }
-        }
-
-        public const int DiffuseSampler = 0;
-        public const int SpecularSampler = 1;    
-        public const int NormalSampler = 3;
-        public const int ReflectionSampler = 5;
-        public const int RefractionSampler = 6;
-
-        IShaderStage stage;
-        public bool UseNormalMap;
-            
-        public MeshMaterialBinding() 
-        {
-            stage = Engine.Graphics.PS;
-        }
-                 
+                   
+        public bool UseNormalMap;            
+      
         public sealed override void OnBind(MeshMaterial value)
         {
             if (mapping == null) return;
-            UseNormalMap = false;
 
-            var graphic = Engine.Graphics;
-            for (int i = 0; i < 4; i++)
-            {
-                stage.SetSampler(i, SamplerState.Linear);
-            }
-            
-        
-            var device = Engine.Graphics;
-        
-            mapping.surface = value.Surface;            
-
+            UseNormalMap = false;                                 
             var diffuse = value.DiffuseMap;
             var specular = value.SpecularMap;           
             var normal = value.NormalMap;
-          
-            mapping.USE_DIFFUSE_MAP = false;                         
-            mapping.USE_SPECULAR_MAP = false;
 
-            stage.SetResource(DiffuseSampler, diffuse);
+            UseNormalMap = normal != null;
+
+            mapping.Surface = value.Surface;
             mapping.USE_DIFFUSE_MAP = diffuse != null;
+            mapping.USE_SPECULAR_MAP = specular != null;          
 
-            stage.SetResource(SpecularSampler, specular);
-            mapping.USE_SPECULAR_MAP = specular != null;
-
-            if (normal != null)
-            {
-                stage.SetResource(NormalSampler, normal);
-                UseNormalMap = true;
-            }
-            else
-                UseNormalMap  = false;            
+            mapping.DiffuseMap = diffuse.ToSampler();
+            mapping.SpecularMap = specular.ToSampler();
+            mapping.NormalMap = normal.ToSampler();              
                                                     
         }
 

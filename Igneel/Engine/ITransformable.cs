@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.ComponentModel;
 
-using System.Drawing.Design;
-using Igneel.Design;
-using Igneel.Design.UITypeEditors;
+
+
+
 
 namespace Igneel
 {  
@@ -14,8 +14,8 @@ namespace Igneel
     public interface ITranslatable : IDeferreable
     {        
 
-        [TypeConverter(typeof(DesignTypeConverter))]
-        [Editor(typeof(UIVector3TypeEditor), typeof(UITypeEditor))]
+       
+        
         Vector3 LocalPosition { get; set; }
     }
 
@@ -24,22 +24,22 @@ namespace Igneel
         /// <summary>
         /// Get or set the global position
         /// </summary>
-        [TypeConverter(typeof(DesignTypeConverter))]
-        [Editor(typeof(UIVector3TypeEditor), typeof(UITypeEditor))]
+       
+        
         Vector3 GlobalPosition { get; }
     }
 
     public interface IScalable : IDeferreable
     {
-        [TypeConverter(typeof(DesignTypeConverter))]
-        [Editor(typeof(UIVector3TypeEditor), typeof(UITypeEditor))]
+       
+        
         Vector3 LocalScale { get; set; }
     }
 
     public interface IRotable : IDeferreable
     {      
-        [TypeConverter(typeof(DesignTypeConverter))]
-        [EditorAttribute(typeof(UIRotationMatrixEditor), typeof(UITypeEditor))]
+       
+        
         Matrix LocalRotation { get; set; }
 
     }    

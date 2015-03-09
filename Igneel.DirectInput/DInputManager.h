@@ -4,6 +4,8 @@
 using namespace System;
 using namespace System::Collections::Generic;
 using namespace System::Threading;
+using namespace Igneel::Windows;
+
 namespace IgneelDirectInput {
 
 	public ref class DInputManager: public InputManager
@@ -19,11 +21,11 @@ namespace IgneelDirectInput {
 
 		HANDLE EnsureHanlesCapasity(int capasity);
 
-		virtual Keyboard^ CreateKeyboard(IntPtr hwnd) override; 
+		virtual Keyboard^ CreateKeyboard(IInputContext^ context) override; 
 
-		virtual Mouse^ CreateMouse(IntPtr hwnd) override;
+		virtual Mouse^ CreateMouse(IInputContext^ context) override;
 
-		virtual array<Joystick^>^ CreateJoysticks(IntPtr hwnd) override;
+		virtual array<Joystick^>^ CreateJoysticks(IInputContext^context) override;
 
 		virtual bool CheckInputStates() override;
 

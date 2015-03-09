@@ -29,7 +29,7 @@ namespace Igneel.Animations
 
         public void SetOutput(IntPtr value, IAnimContext context)
         {
-            IAnimContext<T> cursor =  (IAnimContext<T>)context;
+            IAnimContext<T> cursor =  ClrRuntime.Runtime.StaticCast<IAnimContext<T>>(context);
             while (cursor != null)
             {
                 action(cursor.Data, value);

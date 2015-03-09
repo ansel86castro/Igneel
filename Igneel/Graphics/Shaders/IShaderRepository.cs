@@ -24,11 +24,14 @@ namespace Igneel.Graphics
         /// Shader model used
         /// </summary>
         string ShaderModel { get; }
+
+        string[] ShaderIncludePaths { get; set; }
     }
 
     public class ShaderRepository:IShaderRepository
     {
         string rootDirectory;
+        string[] includePaths;
         ShaderFlags compilerFlags;
         string shaderModel;
 
@@ -37,6 +40,13 @@ namespace Igneel.Graphics
             rootDirectory = directory;
             this.compilerFlags = compilerFlags;
             this.shaderModel = shaderModel;
+        }
+
+
+        public string[] ShaderIncludePaths
+        {
+            get { return includePaths; }
+            set { includePaths = value; }
         }
 
         public string Locate(string shaderFilename)
@@ -78,11 +88,39 @@ namespace Igneel.Graphics
             Service.Set<IShaderRepository>(rep);
             return rep;
         }
+      
         public static IShaderRepository SetupD3D9_SM30(string dir = "../../../Shaders/SM30/")
         {
             var rep = new ShaderRepository(dir, ShaderFlags.PackMatrixRowMajor|ShaderFlags.OptimizationLevel3, "3_0");
             Service.Set<IShaderRepository>(rep);
             return rep;
         }
+
+        public void AddIncludeFiles(string directory = null)
+        {
+            if (directory == null)
+                directory = rootDirectory;
+            List<string> includePaths = new List<string>(10);
+            DirectoryInfo di = new DirectoryInfo(directory);
+            GenerateIncludeFiles(di, includePaths);
+            this.includePaths = includePaths.ToArray();
+        }
+
+        private void GenerateIncludeFiles(DirectoryInfo di, List<string> includePaths)
+        {
+            if (ContainsShaderCodes(di))
+                includePaths.Add(di.FullName);
+
+            foreach (var item in di.EnumerateDirectories())
+            {            
+                GenerateIncludeFiles(item, includePaths);
+            }
+        }
+
+        private bool ContainsShaderCodes(DirectoryInfo di)
+        {
+            return di.EnumerateFiles().Count(x => x.Extension == ".hlsli" || x.Extension == ".hlsl") > 0;
+        }
+        
     }    
 }

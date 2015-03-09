@@ -6,9 +6,9 @@ struct VSOut
 	float4 Color	:COLOR0;
 };
 
-cbuffer c0
+cbuffer cbID
 {
-	float4 gId;
+	float4 Id;
 }
 
 
@@ -23,6 +23,6 @@ VSOut main(float4 position : POSITION,
     
 	VSOut v;
 	v.Position = gPositionH;
-	v.Color = gId;
+	v.Color = Id;
 	return v;	
 }

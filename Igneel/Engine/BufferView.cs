@@ -94,7 +94,7 @@ namespace Igneel
         {
             this.pter = (byte*)addr;
             this.count = count;
-            stride = Marshal.SizeOf(typeof(T));
+            stride = ClrRuntime.Runtime.SizeOf<T>();
         }
 
         public BufferView(IntPtr baseAddr, int stride, int count)
@@ -116,11 +116,11 @@ namespace Igneel
             get
             {
 
-                return ClrPlatform.Crl.GetValue<T>(pter + index * stride);
+                return ClrRuntime.Runtime.GetValue<T>(pter + index * stride);
             }
             set
             {
-                ClrPlatform.Crl.SetValue(pter + index * stride, value);
+                ClrRuntime.Runtime.SetValue(value, pter + index * stride);
             }
 
         }
@@ -138,12 +138,12 @@ namespace Igneel
 
         public void GetValue(int index ,out T value)
         {
-            value = ClrPlatform.Crl.GetValue<T>(pter + index * stride);
+            value = ClrRuntime.Runtime.GetValue<T>(pter + index * stride);
         }
 
         public void SetValue(int index, ref T value)
         {
-            ClrPlatform.Crl.SetValue(pter + index * stride, value);
+            ClrRuntime.Runtime.SetValue(value, pter + index * stride);
         }
 
         #region IEnumerable<T> Members
@@ -260,14 +260,14 @@ namespace Igneel
                 index = istride == 2 ? (int)(*(ushort*)(indicesPter + index * istride)) :
                                         *(int*)(indicesPter + index * istride);
 
-                return ClrPlatform.Crl.GetValue<T>(vertexPter + index * vstride);
+                return ClrRuntime.Runtime.GetValue<T>(vertexPter + index * vstride);
             }
             set
             {
                 index = istride == 2 ? (int)(*(ushort*)(indicesPter + index * istride)) :
                                         *(int*)(indicesPter + index * istride);
 
-                ClrPlatform.Crl.SetValue(vertexPter + index * vstride, value);
+                ClrRuntime.Runtime.SetValue(value, vertexPter + index * vstride);
             }
         }
       
@@ -284,7 +284,7 @@ namespace Igneel
             index = istride == 2 ? (int)(*(ushort*)(indicesPter + index * istride)) :
                                       *(int*)(indicesPter + index * istride);
 
-            value = ClrPlatform.Crl.GetValue<T>(vertexPter + index * vstride);
+            value = ClrRuntime.Runtime.GetValue<T>(vertexPter + index * vstride);
         }
 
         public void SetValue(int index, ref T value)
@@ -292,7 +292,8 @@ namespace Igneel
             index = istride == 2 ? (int)(*(ushort*)(indicesPter + index * istride)) :
                                         *(int*)(indicesPter + index * istride);
 
-            ClrPlatform.Crl.SetValue(vertexPter + index * vstride, value);
+            ClrRuntime.Runtime.SetValue(value, vertexPter + index * vstride);
+            
         }
 
         #region IEnumerable<T> Members

@@ -6,12 +6,12 @@ using Igneel.Graphics;
 using System.Runtime.Serialization;
 using Igneel.Assets;
 using System.ComponentModel;
-using Igneel.Design;
+
 using Igneel.Components;
 
 namespace Igneel.Rendering
 {
-    [TypeConverter(typeof(DesignTypeConverter))]
+   
     [ProviderActivator(typeof(EnvironmentMapTechnique.Activator))]
     public class EnvironmentMapTechnique : CubeMapTechique
     {        

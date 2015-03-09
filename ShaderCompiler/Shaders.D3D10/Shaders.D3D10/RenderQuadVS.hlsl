@@ -10,7 +10,7 @@ struct PS_RenderQuadInput
     float2 texCoord : TEXCOORD0; 
 };
 
-cbuffer cb0
+cbuffer cbTransforms
 {
 	float4x4 Transform;
 	float4x4 TexTransform;

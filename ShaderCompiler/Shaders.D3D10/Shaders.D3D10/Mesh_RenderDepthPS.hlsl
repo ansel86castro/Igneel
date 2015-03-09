@@ -9,7 +9,7 @@ struct PSIn
 
 float4 main(PSIn input) : SV_TARGET0
 {
-	float alpha = USE_DIFFUSE_MAP ? t0.Sample(s0, input.texCoord).a * surface.Diffuse.a : surface.Diffuse.a;	
+	float alpha = USE_DIFFUSE_MAP ? DiffuseMap.Sample(sDiffuseMap, input.texCoord).a * Surface.Diffuse.a : Surface.Diffuse.a;	
 	if(alpha == 0)
 		discard;	
 			

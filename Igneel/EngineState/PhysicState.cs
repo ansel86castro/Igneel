@@ -1,11 +1,10 @@
-﻿using Igneel.Design;
-using Igneel.Design.UITypeEditors;
-using Igneel.Physics;
+﻿
 
+using Igneel.Graphics;
+using Igneel.Physics;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Drawing.Design;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,7 +15,7 @@ namespace Igneel
     {      
         public PhysicsState()
         {
-            Color = (Vector3)System.Drawing.Color.LightGreen;
+            Color = (Vector3)new Color4(0, 0, 1);
             Alpha = 1.0f;           
         }       
        
@@ -24,10 +23,10 @@ namespace Igneel
 
          
 
-        [Editor(typeof(UIColorTypeEditor), typeof(UITypeEditor))]
+        
         public Vector3 Color { get; set; }
 
-        [Editor(typeof(UIInmediateNumericEditor), typeof(UITypeEditor))]   
+           
         public float Alpha { get; set; }
     }
 }

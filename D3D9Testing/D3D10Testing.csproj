@@ -127,10 +127,6 @@
       <Project>{a362aec8-e216-43bf-93e6-538803922f97}</Project>
       <Name>Igneel.DirectInput</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Igneel.OpenGL\Igneel.OpenGL.vcxproj">
-      <Project>{4e59376e-e539-4a8b-9909-4be68d405a74}</Project>
-      <Name>Igneel.OpenGL</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Igneel.PhysX\Igneel.PhysX.vcxproj">
       <Project>{e5bba35a-934c-4eee-9661-1856d75bd17e}</Project>
       <Name>Igneel.PhysX</Name>

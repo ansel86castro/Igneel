@@ -1,6 +1,7 @@
 ﻿using D3D9Testing.Import;
 using Igneel;
 using Igneel.Components;
+using Igneel.Graphics;
 using Igneel.Importers;
 using System;
 using System.Collections.Generic;
@@ -19,7 +20,7 @@ namespace D3D9Testing.Techniques
         public void ShowImage()
         {
             SceneTests.InitializeScene();
-            Engine.BackColor = Color.Yellow;
+            Engine.BackColor = new Color4(Color.Yellow.ToArgb());
 
             ScreenDecal decal = new ScreenDecal(null);
             decal.Texture = Engine.Graphics.CreateTexture2DFromFile( @"F:\Pictures\Yo\DSC03854.JPG" );

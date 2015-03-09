@@ -11,37 +11,7 @@ using System.Threading.Tasks;
 
 namespace Igneel.Rendering
 {
-    [Serializable]
-    [StructLayout(LayoutKind.Sequential)]
-    public struct SArray<T>
-        where T : struct
-    {
-        public T[] Array;
-        public int Offset;
-        public int Count;
-
-        public SArray(T[] array, int offset, int count)
-        {
-            this.Array = array;
-            this.Offset = offset;
-            this.Count = count;
-        }
-
-        public SArray(T[] array, int count)
-        {
-            this.Array = array;
-            this.Offset = 0;
-            this.Count = count;
-        }
-
-        public SArray(T[] array)
-        {
-            this.Array = array;
-            this.Offset = 0;
-            this.Count = array.Length;
-        }
-    }
-
+   
     class DynamicMapper
     {
         class VarInfo
@@ -51,7 +21,7 @@ namespace Igneel.Rendering
             public Type NetType;
             public PropertyInfo NetProp;
             public List<PassInfo> Passes = new List<PassInfo>();
-            public UniformDesc Desc;
+            public ShaderReflectionVariable Desc;
             public override string ToString()
             {
                 return Name;
@@ -73,7 +43,9 @@ namespace Igneel.Rendering
         internal static ModuleBuilder mb;
         internal static AssemblyBuilder assembly;
         static string _namespace;
-        internal static int id;       
+        internal static int id;
+        static FieldInfo binderField;
+        static MethodInfo setValueMethod;
 
         static DynamicMapper()
         {
@@ -91,9 +63,13 @@ namespace Igneel.Rendering
             if (mb == null)
             {
                 AppDomain myDomain = Thread.GetDomain();               
-                assembly = myDomain.DefineDynamicAssembly(aName, AssemblyBuilderAccess.RunAndSave);                
-                mb = assembly.DefineDynamicModule("DynamicModule", "DynamicModule.dll");
+                assembly = myDomain.DefineDynamicAssembly(aName, AssemblyBuilderAccess.Run);
+                mb = assembly.DefineDynamicModule("Igneel.Rendering");
+                //mb = assembly.DefineDynamicModule("Igneel.Rendering", "Igneel.Rendering.dll");
             }
+
+            binderField = typeof(ShaderVariable).GetField("binder", BindingFlags.NonPublic | BindingFlags.Instance);
+            setValueMethod = typeof(ShaderVariable).GetMethod("SetValue");
         }
 
         public Effect effect;
@@ -155,7 +131,7 @@ namespace Igneel.Rendering
                 }
                 else if (baseType != null)
                 {
-                    var prop = baseType.GetProperty(v.Key);
+                    var prop = v.Value.NetProp ?? baseType.GetProperty(v.Key);
                     var tField = tb.DefineField(v.Key + "bakingField", prop.PropertyType, FieldAttributes.Static | FieldAttributes.Public | FieldAttributes.SpecialName);
 
                     #region Getter
@@ -210,17 +186,27 @@ namespace Igneel.Rendering
                                      MethodAttributes.Public | MethodAttributes.HideBySig | MethodAttributes.SpecialName;
 
              MethodBuilder setter = tb.DefineMethod("set_" + pi.Name, attr, typeof(void), new Type[] { pi.PropertyType });
-
+             
              // field.Value = value                
              var il = setter.GetILGenerator();
+             Label gotoRet = il.DefineLabel();
+
              il.Emit(OpCodes.Ldsfld, tField);
              il.Emit(OpCodes.Ldarg_1);
              il.Emit(OpCodes.Stfld, tField.FieldType.GetField("Value"));
 
              // field.Commit();
              il.Emit(OpCodes.Ldsfld, tField);
-             il.EmitCall(OpCodes.Call, commit, null);
+             //il.EmitCall(OpCodes.Call, commit, null);
+             il.Emit(OpCodes.Ldfld, tField.FieldType.GetField("binder"));
+             il.Emit(OpCodes.Brfalse, gotoRet);
+
+             il.Emit(OpCodes.Ldsfld, tField);
+             il.EmitCall(OpCodes.Call, tField.FieldType.GetMethod("SetValue"), null);
+
+             il.MarkLabel(gotoRet);
              il.Emit(OpCodes.Ret);
+             
 
              if (prop != null)
              {
@@ -255,59 +241,89 @@ namespace Igneel.Rendering
                 tb.DefineMethodOverride(getter, baseType.GetMethod(getter.Name));
         }
 
-        private ShaderVariable CreateVariable(Type type, UniformDesc desc)
+        private ShaderVariable CreateVariable(Type type, ShaderReflectionVariable desc)
         {
+            var shaderType = desc.Type;
             if (type.IsArray)
             {
-                if (desc.Elements == 0)
-                    throw new InvalidOperationException("The constant "+ desc.Name +"is not an array");
-                
+                if (shaderType.Elements == 0)
+                    throw new InvalidOperationException("The constant " + desc.Name + "is not an array");
                 var e = type.GetElementType();
                 if (e == typeof(int))
-                    return new IntArrayVariable() {  Elements = desc.Elements };
+                    return new IntArrayVariable() { Elements = shaderType.Elements };
                 else if (e == typeof(bool))
-                    return new BoolArrayVariable() { Elements = desc.Elements };
+                    return new BoolArrayVariable() { Elements = shaderType.Elements };
                 else if (e == typeof(float))
-                    return new FloatArrayVariable() { Elements = desc.Elements };
+                    return new FloatArrayVariable() { Elements = shaderType.Elements };
                 else if (e == typeof(Matrix))
-                    return new MatrixArrayVariable() { Elements = desc.Elements };
+                    return new MatrixArrayVariable() { Elements = shaderType.Elements };
                 else if (e == typeof(Vector4))
-                    return new Vector4ArrayVariable() { Elements = desc.Elements };
-                else
+                    return new Vector4ArrayVariable() { Elements = shaderType.Elements };
+                else if (e == typeof(SamplerState))
+                    return new SamplerStateVariableArray() { Elements = shaderType.Elements };
+                else if (e.GetInterface(typeof(ShaderResource).Name) != null)
+                    return new ResourceVariableArray { Elements = shaderType.Elements };
+                else if (e.IsValueType)
                 {
                     var insType = typeof(ShaderVariableArray<>).MakeGenericType(e);
                     var inst = (ShaderVariableArray)Activator.CreateInstance(insType);
-                    inst.Elements = desc.Elements;
+                    inst.Elements = shaderType.Elements;
                     return inst;
                 }
-            }
-            else if (type == typeof(int))
-                return new IntVariable();
-            else if (type == typeof(bool))
-                return new BoolVariable();
-            else if (type == typeof(float))
-                return new FloatVariable();
-            else if (type == typeof(Matrix))
-                return new MatrixVariable();
-            else if (type == typeof(Vector4))
-                return new Vector4Variable();
-            else if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(SArray<>))
-            {
-                var args = type.GetGenericArguments();
-                var insType = typeof(RangeVariable<>).MakeGenericType(args);
-                return (ShaderVariable)Activator.CreateInstance(insType);
+                else
+                    throw new InvalidOperationException("The type \"" + e.Name + "\" is not supported");
             }
             else
             {
-                var insType = typeof(ShaderVariable<>).MakeGenericType(type);
-                return (ShaderVariable)Activator.CreateInstance(insType);
+                if (type == typeof(int))
+                    return new IntVariable();
+                else if (type == typeof(bool))
+                    return new BoolVariable();
+                else if (type == typeof(float))
+                    return new FloatVariable();
+                else if (type == typeof(Matrix))
+                    return new MatrixVariable();
+                else if (type == typeof(Vector4))
+                    return new Vector4Variable();
+                else if (type.IsGenericType)
+                {
+                    var genDef = type.GetGenericTypeDefinition();
+                    if (genDef == typeof(SArray<>))
+                    {
+                        var args = type.GetGenericArguments();
+                        var insType = typeof(RangeVariable<>).MakeGenericType(args);
+                        return (ShaderVariable)Activator.CreateInstance(insType);
+                    }
+                    else if (genDef == typeof(Sampler<>))
+                    {
+                        var args = type.GetGenericArguments();
+                        var insType = typeof(SamplerVariable<>).MakeGenericType(args);
+                        return (ShaderVariable)Activator.CreateInstance(insType);
+                    }
+                    else if (genDef == typeof(SamplerArray<>))
+                    {
+                        var args = type.GetGenericArguments();
+                        var insType = typeof(SamplerVariableArray<>).MakeGenericType(args);
+                        return (ShaderVariable)Activator.CreateInstance(insType);
+                    }
+                    else
+                        throw new InvalidOperationException("The type \"" + type.Name + "\" is not supported");
+                }
+                else if (type == typeof(SamplerState))
+                    return new SamplerStateVariable();
+                else if (type.GetInterface(typeof(ShaderResource).Name) != null)
+                    return new ResourceVariable();
+                else if (type.IsValueType)
+                {
+                    var insType = typeof(ShaderVariable<>).MakeGenericType(type);
+                    return (ShaderVariable)Activator.CreateInstance(insType);
+                }
+                else
+                    throw new InvalidOperationException("The type \"" + type.Name + "\" is not supported");
             }
         }
 
-        private string GetName(UniformDesc desc)
-        {
-            return desc.Elements > 0 ? desc.Name + desc.Elements : desc.Name;        
-        }
+    
 
         void CreateEffectVariables()
         {           
@@ -377,7 +393,7 @@ namespace Igneel.Rendering
                             v.Passes.Add(new PassInfo { Technique = i, Pass = j });
                         }
                         else if(effectVariable is ShaderVariableArray && 
-                            ((ShaderVariableArray)effectVariable).Elements != cd.Elements)
+                            ((ShaderVariableArray)effectVariable).Elements != cd.Type.Elements)
                         {
                             throw new InvalidOperationException("There are two array with the same name \""+cd.Name+"\" but diferent dimensions in the effect");
                         }
@@ -388,51 +404,75 @@ namespace Igneel.Rendering
        
         }
 
-        private Type ResolveType(UniformDesc cd)
+        private Type ResolveType(ShaderReflectionVariable cd)
         {
             var type = _ResolveType(cd);            
 
-            if (type !=null && cd.Elements > 1)
+            if (type !=null && cd.Type.Elements > 1)
                 return type.MakeArrayType();            
 
             return type;
         }
 
-        private Type _ResolveType(UniformDesc cd)
+        private Type _ResolveType(ShaderReflectionVariable cd)
         {
-            switch (cd.Class)
+            var type = cd.Type;
+            switch (type.Class)
             {
-                case ParameterClass.SCALAR:
+                case TypeClass.Scalar:
                     {
-                        switch (cd.Type)
+                        switch (type.Type)
                         {
-                            case ParameterType.VOID: throw new InvalidOperationException();                                
-                            case ParameterType.BOOL: return typeof(bool);
-                            case ParameterType.INT: return typeof(int);
-                            case ParameterType.FLOAT: return typeof(float);                            
+                            case ShaderType.UserDefined: throw new InvalidOperationException();                                
+                            case ShaderType.Bool: return typeof(bool);
+                            case ShaderType.Int: return typeof(int);
+                            case ShaderType.Float: return typeof(float);                            
                         }
                     }
                     break;
-                case ParameterClass.VECTOR:
-                    if(cd.Columns == 2)
+                case TypeClass.Vector:
+                    if (type.Columns == 2)
                         return typeof(Vector2);
-                    else if(cd.Columns == 3)
+                    else if (type.Columns == 3)
                         return typeof(Vector3);
-                    else if(cd.Type == ParameterType.INT)
+                    else if (type.Type == ShaderType.Int)
                         return typeof(Int4);
                     else return typeof(Vector4);                
-                case ParameterClass.MATRIX: return typeof(Matrix);
-                case ParameterClass.OBJECT: return null;
-                case ParameterClass.STRUCT: return  CreateStruct(cd);                                                                                           
+                case TypeClass.Matrix: return typeof(Matrix);
+                case TypeClass.Object:
+                    {
+                        switch (type.Type)
+                        {                         
+                            case ShaderType.Texture:
+                                return typeof(Texture);                                
+                            case ShaderType.Texture1D:
+                                return typeof(Texture1D);
+                            case ShaderType.Texture2D:
+                                return typeof(Texture2D);
+                            case ShaderType.Texture3D:
+                                return typeof(Texture3D);
+                            case ShaderType.TextureCube:
+                                return typeof(Texture2D);
+                            case ShaderType.Sampler:                              
+                            case ShaderType.Sampler1D:                                
+                            case ShaderType.Sampler2D:                                
+                            case ShaderType.Sampler3D:                                
+                            case ShaderType.SamplerCube:
+                                return typeof(SamplerState);                                                                 
+                        }
+                        throw new InvalidOperationException("Type " + type.Name + " not Supported");
+                    }                    
+                case TypeClass.Struct: return  CreateStruct(cd);
             }
             return null;
         }
 
-        private Type CreateStruct(UniformDesc cd)
+        private Type CreateStruct(ShaderReflectionVariable cd)
         {
-            var shaderType = ShaderType.GetShaderType(cd);
-            if (shaderType != null)
-                return shaderType.NetType;
+            //TODO:
+            //var shaderType = ShaderTypeMapper.GetShaderType(cd);
+            //if (shaderType != null)
+            //    return shaderType.NetType;
             return null;           
         }            
 
@@ -484,34 +524,28 @@ namespace Igneel.Rendering
                 {
                     for (int j = 0; j < techniques[i].Length; j++)
                     {
-                        try
+
+                        VarInfo v;
+                        ShaderReflectionVariable ud = techniques[i][j].Program.GetUniformDescription(p.Name);
+
+                        if (!varlookup.TryGetValue(p.Name, out v))
                         {
-                            VarInfo v;
-                            UniformDesc ud = techniques[i][j].Program.GetUniformDescription(p.Name);
-
-                            if (!varlookup.TryGetValue(p.Name, out v))
+                            v = new VarInfo()
                             {
-                                v = new VarInfo()
-                                {
-                                    Name = p.Name,                                    
-                                    NetProp = p,
-                                };
-                                varlookup.Add(v.Name, v);
-                            }
-                            if (v.Desc == null)
-                            {
-                                //Check is v.Desc is equal ud
-                                v.Desc = ud;
-                                v.NetType = ud != null ? p.PropertyType : null;
-                            }
-
-                            if (ud != null && !techniques[i][j].ContainsVariable(v.Name))
-                                v.Passes.Add(new PassInfo { Technique = i, Pass = j });
+                                Name = p.Name,
+                                NetProp = p,
+                            };
+                            varlookup.Add(v.Name, v);
                         }
-                        catch (NullReferenceException e)
+                        if (v.Desc == null)
                         {
-
+                            //Check is v.Desc is equal ud
+                            v.Desc = ud;
+                            v.NetType = ud != null ? p.PropertyType : null;
                         }
+
+                        if (ud != null && !techniques[i][j].ContainsVariable(v.Name))
+                            v.Passes.Add(new PassInfo { Technique = i, Pass = j });
                     }
                 }
             }                        

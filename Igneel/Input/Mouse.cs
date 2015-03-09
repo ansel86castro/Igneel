@@ -8,6 +8,14 @@ namespace Igneel.Input
 {
     public abstract class Mouse: ResourceAllocator
     {
+        private IInputContext context;
+
+        protected Mouse(IInputContext context)
+        {
+            this.context = context;
+        }
+        public IInputContext Context { get { return context; } }
+
         public abstract int X { get; }
 
         public abstract int Y { get; }

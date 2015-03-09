@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.ComponentModel;
 
-using Igneel.Design;
+
 
 namespace Igneel
 {

@@ -4,10 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Runtime.Serialization;
 using System.ComponentModel;
-using System.Data;
 using Igneel.Assets;
 using Igneel.Rendering;
-using Igneel.Design;
+
 using Igneel.Graphics;
 using System.Runtime.InteropServices;
 using Igneel.Physics;
@@ -20,7 +19,7 @@ namespace Igneel.Components
         None, Spherical, Cylindrical
     }
    
-    [TypeConverter(typeof(DesignTypeConverter))]
+   
     [ProviderActivator(typeof(MeshAct))]
     [Asset(Assets.AssetType.Mesh, ".mesh")]
     public class Mesh : ResourceAllocator, IAssetProvider, INameable, IBoundable
@@ -77,21 +76,21 @@ namespace Igneel.Components
             }
         }
 
-        [Browsable(false)]
+       
         [AssetMember(typeof(MeshVbSt))]
         public GraphicBuffer VertexBuffer { get { return vb; } }
 
-        [Browsable(false)]
+       
         [AssetMember(typeof(MeshIbSt))]
         public GraphicBuffer IndexBuffer { get { return ib; } }
 
         public bool Is16BitIndices { get { return is16BitIndices; } }
 
-        [Browsable(false)]
+       
         [AssetMember]
         public int[] Adjacency { get { return adjacency; } set { adjacency = value; } }
 
-        [Browsable(false)]
+       
         public VertexDescriptor VertexDescriptor
         {
             get { return vd; }
@@ -160,7 +159,7 @@ namespace Igneel.Components
             if (vb != null)
                 vb.Dispose();
 
-            int size = Marshal.SizeOf(typeof(T));
+            int size = ClrRuntime.Runtime.SizeOf<T>();
             vertexCount = (vertexes.Length * size) / vd.Size;
 
             vb = Engine.Graphics.CreateVertexBuffer<T>(vd.Size, usage, cpuAccess, data: vertexes);
@@ -176,9 +175,10 @@ namespace Igneel.Components
         }      
 
         public void CreateIndexBuffer<T>(T[] indices, ResourceUsage usage = ResourceUsage.Default, CpuAccessFlags cpuAccess = CpuAccessFlags.ReadWrite)
+            where T : struct
         {
             faceCount = indices.Length / 3;
-            is16BitIndices = Marshal.SizeOf(typeof(T)) == 2;
+            is16BitIndices = ClrRuntime.Runtime.SizeOf<T>() == 2;
             if (ib != null)
                 ib.Dispose();
 
@@ -234,7 +234,7 @@ namespace Igneel.Components
         {
             if (vbStream == IntPtr.Zero)
                 vbStream = vb.Map(MapType.ReadWrite);
-            return new BufferView<T>(vbStream + offset, Marshal.SizeOf(typeof(T)), vertexCount);
+            return new BufferView<T>(vbStream + offset, ClrRuntime.Runtime.SizeOf<T>(), vertexCount);
         }
 
         public IndexBufferView GetIndexBufferView()

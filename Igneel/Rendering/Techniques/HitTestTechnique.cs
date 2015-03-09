@@ -110,7 +110,7 @@ namespace Igneel.Rendering
 
         public bool SelectMultiple { get { return selectMultiple; } set { selectMultiple = value; } }
 
-        public Point Location { get; set; }
+        public Vector2 Location { get; set; }
 
         public Rectangle Rectangle { get; set; }
 
@@ -186,8 +186,8 @@ namespace Igneel.Rendering
             if (!selectMultiple)
             {
                 var point = Location;
-                int x = point.X;
-                int y = point.Y;
+                int x = (int)point.X;
+                int y = (int)point.Y;
 
                 try
                 {

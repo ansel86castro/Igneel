@@ -15,7 +15,7 @@ namespace Igneel
         /// Tells if the object have been disposed
         /// </summary>
         /// 
-        [Browsable(false)]
+       
         [NonSerializedPropAttribute]
         bool Disposed { get; }
     }  
@@ -52,7 +52,7 @@ namespace Igneel
             OnDispose(false);
         }
 
-        [Browsable(false)]
+       
         [NonSerializedPropAttribute]
         public bool Disposed
         {

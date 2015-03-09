@@ -184,6 +184,8 @@
     <FxCompile Include="ShadowEdgeDetectPS.hlsl">
       <Filter>System\Mesh\PreFilterShadow</Filter>
     </FxCompile>
+    <FxCompile Include="PixelShader.hlsl" />
+    <FxCompile Include="VertexShader.hlsl" />
   </ItemGroup>
   <ItemGroup>
     <None Include="SkinnedShadowed.hlsli">

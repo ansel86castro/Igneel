@@ -10,7 +10,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Forms;
+
 
 namespace Igneel.Services
 {    
@@ -88,7 +88,7 @@ namespace Igneel.Services
             container.Scene = scene;
             technique.PickContainer = container;
             technique.SelectMultiple = false;
-            technique.Location = new System.Drawing.Point(screenX, screenY);
+            technique.Location = new Vector2(screenX, screenY);
             Engine.ApplyTechnique(technique);          
 
             scene.ActiveCamera = camera;

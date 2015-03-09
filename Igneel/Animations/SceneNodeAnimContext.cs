@@ -128,7 +128,7 @@ namespace Igneel.Animations
         }
     }       
 
-    [TypeConverter(typeof(Igneel.Design.DesignTypeConverter))]
+    
     [ProviderActivator(typeof(SceneNodeAnimContext.Activator))]
     public class SceneNodeAnimContext : IAnimContext<SceneNodeTransforms>, ITargetNamedContext
     {

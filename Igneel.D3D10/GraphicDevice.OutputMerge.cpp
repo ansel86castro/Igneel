@@ -9,6 +9,7 @@
 #include "Texture2D10.h"
 #include "Texture3D10.h"
 
+using namespace Igneel::Windows;
 
 namespace IgneelD3D10
 {
@@ -88,15 +89,15 @@ namespace IgneelD3D10
 			_swapChain->GetDesc(&swapDesc);
 
 			//initialize default swapChain 
-			SwapChainDesc swapDesc10 = SwapChainDesc();
+			/*SwapChainDesc swapDesc10 = SwapChainDesc();
 			swapDesc10.BackBufferWidth = swapDesc.BufferDesc.Width;
 			swapDesc10.BackBufferHeight = swapDesc.BufferDesc.Height;
 			swapDesc10.BackBufferFormat = (Format)swapDesc.BufferDesc.Format;
 			swapDesc10.OutputWindow = IntPtr(swapDesc.OutputWindow);
 			swapDesc10.Sampling.Count = swapDesc.SampleDesc.Count;
 			swapDesc10.Sampling.Quality = swapDesc.SampleDesc.Quality;
-			swapDesc10.Presentation = _desc->Interval;
-			ini.SwapChain = gcnew SwapChain10(_device, _swapChain, swapDesc10);		
+			swapDesc10.Presentation = _desc->Interval;*/
+			ini.SwapChain = gcnew SwapChain10(_device, _swapChain, (WindowContext^)Description->Context);
 		}
 
 		return ini;
@@ -113,20 +114,22 @@ namespace IgneelD3D10
 		_device->OMSetDepthStencilState(static_cast<DepthStencilState10^>(state)->_pstate, state->State.StencilRef);		
 	}
 	
-	SwapChain^ GraphicDevice10::CreateSwapChainImp(SwapChainDesc desc)
+	SwapChain^ GraphicDevice10::CreateSwapChainImp(IGraphicContext^ context)
 	{		
-		DXGI_SWAP_CHAIN_DESC d;		
+		WindowContext^ wcontext =  reinterpret_cast<WindowContext^>(context);
+		DXGI_SWAP_CHAIN_DESC d;			
+
 		ZeroMemory( &d, sizeof(DXGI_SWAP_CHAIN_DESC) );
 		d.BufferCount = 1;
-		d.BufferDesc.Format  =  static_cast<DXGI_FORMAT>(desc.BackBufferFormat);
-		d.BufferDesc.Width = desc.BackBufferWidth;
-		d.BufferDesc.Height = desc.BackBufferHeight;
+		d.BufferDesc.Format  =  static_cast<DXGI_FORMAT>(context->BackBufferFormat);
+		d.BufferDesc.Width = context->BackBufferWidth;
+		d.BufferDesc.Height = context->BackBufferHeight;
 		d.BufferDesc.RefreshRate.Denominator = 1;
 		d.BufferDesc.RefreshRate.Numerator = 60;
 		d.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;		
-		d.OutputWindow = (HWND) desc.OutputWindow.ToPointer();	
-		d.SampleDesc.Count = desc.Sampling.Count;
-		d.SampleDesc.Quality = desc.Sampling.Quality;
+		d.OutputWindow = (HWND) wcontext->WindowHandle.ToPointer();	
+		d.SampleDesc.Count = context->Sampling.Count;
+		d.SampleDesc.Quality = context->Sampling.Quality;
 		d.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;		
 		d.Windowed = TRUE;
 
@@ -134,7 +137,7 @@ namespace IgneelD3D10
 	   GraphicManager10^ manager = static_cast<GraphicManager10^>(GraphicDeviceFactory::Instance);
 	   SAFECALL( manager->_factory->CreateSwapChain(_device, &d, &swapChain) );
 
-	   return gcnew SwapChain10(_device, swapChain, desc);
+	   return gcnew SwapChain10(_device, swapChain, wcontext);
 	}
 
 	RenderTarget^ GraphicDevice10::CreateRenderTarget(Texture2D^ texture, int subResource , int count)

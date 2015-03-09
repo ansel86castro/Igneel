@@ -5,9 +5,9 @@ using System.Text;
 using System.Runtime.Serialization;
 using System.Xml.Linq;
 using System.ComponentModel;
-using Igneel.Design;
-using Igneel.Design.UITypeEditors;
-using System.Drawing.Design;
+
+
+
 using Igneel.Assets;
 using Igneel.Services;
 
@@ -15,7 +15,7 @@ namespace Igneel.Components
 {
     public enum ProjectionType { Perspective, Orthographic }
 
-    [TypeConverter(typeof(DesignTypeConverter))] 
+    
     [ProviderActivator(typeof(Camera.Activator))]
     public class Camera : ExclusiveNodeObject, INameable, IDeferreable, IShadingInput
     {
@@ -121,7 +121,7 @@ namespace Igneel.Components
         //    }
         //}
          
-        [Browsable(false)]
+       
         [AssetMember]
         public Matrix View
         {
@@ -142,7 +142,7 @@ namespace Igneel.Components
             }
         }
 
-        [Browsable(false)]
+       
         [AssetMember]
         public Matrix Projection 
         {
@@ -153,7 +153,7 @@ namespace Igneel.Components
             }
         }
 
-        [Browsable(false)]        
+               
         public Matrix ViewProj
         {
             get
@@ -162,10 +162,10 @@ namespace Igneel.Components
             }
         }
 
-        [Browsable(false)]
+       
         public Matrix InvViewProjection { get { return invViewProj; } }
 
-        [Browsable(false)]
+       
         public Vector3 Right
         {
             get { return right; }
@@ -178,7 +178,7 @@ namespace Igneel.Components
             }
         }
 
-        [Browsable(false)]
+       
         public Vector3 Front
         { 
             get { return front; } 
@@ -191,7 +191,7 @@ namespace Igneel.Components
             } 
         }
 
-        [Browsable(false)]
+       
         public Vector3 Up 
         {
             get { return up; } 
@@ -204,8 +204,8 @@ namespace Igneel.Components
             } 
         }
 
-        [Deferred]
-        [Editor(typeof(UIVector3TypeEditor), typeof(UITypeEditor))]
+        
+        
         [AssetMember]
         public Vector3 Position
         {
@@ -222,8 +222,8 @@ namespace Igneel.Components
             }
         }
 
-        [Deferred]
-        [Editor(typeof(UIInmediateNumericEditor), typeof(UITypeEditor))]
+        
+        
         [AssetMember]
         public float ZNear 
         { 
@@ -236,8 +236,8 @@ namespace Igneel.Components
         }
 
         [AssetMember]
-        [Deferred]
-        [Editor(typeof(UIInmediateNumericEditor), typeof(UITypeEditor))]
+        
+        
         public float ZFar 
          { 
              get { return zf; } set 
@@ -247,10 +247,10 @@ namespace Igneel.Components
              } 
          }
 
-        [Browsable(false)]
+       
         public Frustum ViewFrustum { get { return frustum; } }        
 
-        [Deferred]
+        
         [Category("Camera")]
         [AssetMember]
         public ProjectionType Type
@@ -263,7 +263,7 @@ namespace Igneel.Components
             }
         }
 
-        [Deferred]
+        
         [Category("Camera")]
         [AssetMember]
         public float FieldOfView
@@ -280,7 +280,7 @@ namespace Igneel.Components
             }
         }
 
-        [Deferred]
+        
         [Category("Camera")]
         [AssetMember]
         public float AspectRatio
@@ -297,7 +297,7 @@ namespace Igneel.Components
             }
         }
 
-        [Deferred]
+        
         [Category("Camera")]
         [AssetMember]
         public float OrthoWidth
@@ -314,7 +314,7 @@ namespace Igneel.Components
             }
         }
 
-        [Deferred]
+        
         [Category("Camera")]
         [AssetMember]
         public float OrthoHeight

@@ -1,12 +1,12 @@
 ﻿using Igneel.Assets;
-using Igneel.Design;
-using Igneel.Design.UITypeEditors;
+
+
 using Igneel.Graphics;
 using Igneel.Services;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Drawing.Design;
+
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -17,19 +17,18 @@ namespace Igneel.Components
     public enum LightType { None = 0, Directional = 1, Point = 2, Spot = 3 }
    
     //[SceneComponent(Name = "Light", Descrption = "Scene light")]
-    [TypeConverter(typeof(DesignTypeConverter))]
+   
     public class Light : IAssetProvider, IEnabletable, INameable, IShadingInput
     {
         static int counter = 0;
         string name = "Light" + counter++;
-        Vector3 diffuse = new Vector3(1);
-        Vector3 specular = new Vector3(1);      
+        Color3 diffuse = new Color3(1);
+        Color3 specular = new Color3(1);      
         bool enable;
         float intensity = 1f;
         float spotPower;
         float att0 = 1, att1, att2;
-        private LightType type = LightType.Directional;
-        int register;
+        private LightType type = LightType.Directional;    
         float effectiveRange = float.MaxValue;
         GlobalLigth ambient;
         bool isSync;
@@ -60,31 +59,31 @@ namespace Igneel.Components
         [AssetMember]
         public string Name { get { return name; } set { name = value; } }
 
-        [Category("Light")]
-        [Editor(typeof(UIInmediateNumericEditor), typeof(UITypeEditor))]
+    
+        
         [AssetMember]
         public float Intensity { get { return intensity; } set { intensity = value; isSync = false; } }       
 
-        [Category("Light")]
-        [TypeConverter(typeof(DesignTypeConverter))]
-        [Editor(typeof(UIColorTypeEditor), typeof(UITypeEditor))]
-        public Vector3 Diffuse
+    
+
+
+        public Color3 Diffuse
         {
             get { return diffuse; }
             set { diffuse = value; isSync = false; }
         }
 
-        [Category("Light")]
-        [TypeConverter(typeof(DesignTypeConverter))]
-        [Editor(typeof(UIColorTypeEditor), typeof(UITypeEditor))]
+    
+       
+        
         [AssetMember]
-        public Vector3 Specular
+        public Color3 Specular
         {
             get { return specular; }
             set { specular = value; isSync = false; }
         }
 
-        [Category("Light")]
+    
         [AssetMember]
         public bool Enable
         {
@@ -101,7 +100,7 @@ namespace Igneel.Components
             }
         }
 
-        [Category("Light")]
+    
         [AssetMember]
         public LightType Type
         {
@@ -113,8 +112,8 @@ namespace Igneel.Components
             }
         }
 
-        [Category("Light")]
-        [Editor(typeof(UIInmediateNumericEditor), typeof(UITypeEditor))]
+    
+        
         [AssetMember]
         public float SpotPower
         {
@@ -128,8 +127,8 @@ namespace Igneel.Components
         /// used to calculate the total attenuation of this light given a distance. The equation used is
         /// att = constant_attenuation + ( Dist * linear_attenuation ) + (( Dist^2 ) * quadratic_attenuation)
         /// </summary>
-        [Category("Light")]
-        [Editor(typeof(UIInmediateNumericEditor), typeof(UITypeEditor))]
+    
+        
         [AssetMember]
         public float Attenuation0
         {
@@ -143,8 +142,8 @@ namespace Igneel.Components
         /// used to calculate the total attenuation of this light given a distance. The equation used is
         /// att = constant_attenuation + ( Dist * linear_attenuation ) + (( Dist^2 ) * quadratic_attenuation)
         /// </summary>
-        [Category("Light")]
-        [Editor(typeof(UIInmediateNumericEditor), typeof(UITypeEditor))]
+    
+        
         [AssetMember]
         public float Attenuation1
         {
@@ -158,8 +157,8 @@ namespace Igneel.Components
         /// used to calculate the total attenuation of this light given a distance. The equation used is
         /// att = constant_attenuation + ( Dist * linear_attenuation ) + (( Dist^2 ) * quadratic_attenuation)
         /// </summary>
-        [Category("Light")]
-        [Editor(typeof(UIInmediateNumericEditor), typeof(UITypeEditor))]
+    
+        
         [AssetMember]
         public float Attenuation2
         {
@@ -167,8 +166,8 @@ namespace Igneel.Components
             set { att2 = value; isSync = false; }
         }
 
-        [Category("Light")]
-        [Editor(typeof(UIInmediateNumericEditor), typeof(UITypeEditor))]
+    
+        
         [AssetMember]
         public float EffectiveRange
         {

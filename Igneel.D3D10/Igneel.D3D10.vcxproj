@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
@@ -27,7 +27,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v110</PlatformToolset>
+    <PlatformToolset>v120</PlatformToolset>
     <CLRSupport>true</CLRSupport>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
@@ -143,6 +143,12 @@
     <Image Include="app.ico" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\HLSLCompiler\Ignee.Compiling.csproj">
+      <Project>{cab901c0-7a4e-4f0f-b27d-2b5e73548329}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\Igneel.Windows\Igneel.Windows.csproj">
+      <Project>{8b1a1553-d47c-4a98-ad2c-11f3b38bc74a}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\Igneel\Igneel.csproj">
       <Project>{daf07c37-563a-4be2-bb47-32147dfe12dc}</Project>
     </ProjectReference>

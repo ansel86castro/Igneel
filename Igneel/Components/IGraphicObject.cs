@@ -1,4 +1,4 @@
-﻿using Igneel.Design;
+﻿
 using Igneel.Graphics;
 using Igneel.Rendering;
 using System;
@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Igneel.Components
 {
-    [TypeConverter(typeof(DesignTypeConverter))]   
+      
     public interface IGraphicObject: IRenderable
     {
         bool IsTransparent { get; }

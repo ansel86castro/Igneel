@@ -220,21 +220,15 @@ namespace Igneel.Rendering
     public abstract class BindedSceneNodeTechnique<T> : NodeTechnique
         where T:NodeTechnique
     {
-        T bindValue;
-
-        protected BindedSceneNodeTechnique()
-        {
-            bindValue = (T)(object)this;
-        }
-
+             
         public override void Bind(Render render)
         {
-            render.Bind(bindValue);
+            render.Bind(ClrRuntime.Runtime.StaticCast<T>(this));
         }
 
         public override void UnBind(Render render)
         {
-            render.UnBind(bindValue);
+            render.UnBind(ClrRuntime.Runtime.StaticCast<T>(this));
         }
     }
 }

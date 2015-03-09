@@ -2,14 +2,16 @@
 #include "SwapChain.h"
 #include "RenderTarget.h"
 
+using namespace Igneel::Windows;
+
 namespace IgneelD3D10
 {
-	SwapChain10::SwapChain10(ID3D10Device* device, IDXGISwapChain* swapChain, SwapChainDesc swapChainDesc)
+	SwapChain10::SwapChain10(ID3D10Device* device, IDXGISwapChain* swapChain,  WindowContext^ wcontext)
+		:SwapChain(wcontext)
 	{
 		_device = device;
-		_swapChain = swapChain;
-		_desc = swapChainDesc;
-		_presentInterval = (int)swapChainDesc.Presentation;
+		_swapChain = swapChain;		
+		_presentInterval = (int)wcontext->Presentation;
 		ID3D10Texture2D *pBackBuffer;
 		SAFECALL(swapChain->GetBuffer( 0, __uuidof( ID3D10Texture2D ), (LPVOID*)&pBackBuffer ));
 		_pBackBuffer = pBackBuffer;
@@ -42,8 +44,7 @@ namespace IgneelD3D10
 
 	void SwapChain10::Present()
 	{
-		SAFECALL(_swapChain->Present(_presentInterval, 0));
-		//SAFECALL(_swapChain->Present(DXGI_SWAP_EFFECT_DISCARD, 0));
+		SAFECALL(_swapChain->Present(_presentInterval, 0));		
 	}
 
 	void SwapChain10::ResizeBackBuffer(int width, int height)

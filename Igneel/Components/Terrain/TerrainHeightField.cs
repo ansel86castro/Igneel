@@ -5,11 +5,11 @@ using System.Text;
 using Igneel.Graphics;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
-using Igneel.Design;
+
 using System.ComponentModel;
 using Igneel.Assets;
-using Igneel.Design.UITypeEditors;
-using System.Drawing.Design;
+
+
 using System.Drawing;
 
 namespace Igneel.Components
@@ -390,7 +390,7 @@ namespace Igneel.Components
                 }
 
                 Convolve2D(src, new Size(sd.Width, sd.Height), kernel, new Size(kernelSize, kernelSize),
-                new Point(kernelSize / 2, kernelSize / 2), output);                
+                new Vector2(kernelSize / 2, kernelSize / 2), output);
             }
             
 
@@ -474,10 +474,10 @@ namespace Igneel.Components
             return kernel;
         }
 
-        private static void Convolve2D(float[] input, Size inputSize, float[] kernel, Size kernelSize, Point kPivot, float[] output)
+        private static void Convolve2D(float[] input, Size inputSize, float[] kernel, Size kernelSize, Vector2 kPivot, float[] output)
         {
-            int pivotX = kPivot.X;
-            int pivotY = kPivot.Y;
+            int pivotX = (int)kPivot.X;
+            int pivotY = (int)kPivot.Y;
 
             for (int i = 0; i < inputSize.Height; i++)
             {
@@ -562,7 +562,7 @@ namespace Igneel.Components
 
         public Texture2D BlendLayer { get { return blendLayer; } set { blendLayer = value; } }
      
-        [Category("Material")]
+        
         public string Name
         {
             get { return name; }
@@ -726,7 +726,7 @@ namespace Igneel.Components
     //        }
     //    }
 
-    //    [Browsable(false)]
+    //   
     //    public float XSize
     //    {
     //        get { return xSize; }
@@ -737,14 +737,14 @@ namespace Igneel.Components
     //        }
     //    }
 
-    //    [Browsable(false)]
+    //   
     //    public float ZSize
     //    {
     //        get { return zSize; }
     //        set { if (value <= 0) throw new ArgumentOutOfRangeException("Depth must be greather than 0"); zSize = value; }
     //    }
 
-    //    [Browsable(false)]
+    //   
     //    public float MinHeight
     //    {
     //        get { return minHeight; }
@@ -755,7 +755,7 @@ namespace Igneel.Components
     //        }
     //    }
 
-    //    [Browsable(false)]
+    //   
     //    public float MaxHeight
     //    {
     //        get { return maxHeight; }

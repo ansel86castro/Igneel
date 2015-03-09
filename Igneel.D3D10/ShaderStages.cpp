@@ -9,6 +9,8 @@
 #include "Shaders.h"
 #include "Utils.h"
 
+using namespace Igneel::Compiling;
+
 namespace IgneelD3D10
 {
 	ShaderCode^ _CompileFromMemory(String^ shaderCode,												 
@@ -105,17 +107,19 @@ namespace IgneelD3D10
 
 		return code;
 	}
-
+	
 	//**** Shader Stage 10
 
-	ShaderStage10::ShaderStage10(ID3D10Device* device)
+	generic<typename T>
+	ShaderStage10<T>::ShaderStage10(ID3D10Device* device, String^ profile)
 	{
 		_device = device;
-		_holder.Init();
-		//_device->VSSetShaderResources(0, 128, _holder._pResouces);
+		_profile = profile;
+		_holder.Init();		
 	}
 
-	void ShaderStage10::OnSetSampler(int slot, SamplerState^ state)
+	generic<typename T>
+	void ShaderStage10<T>::OnSetSampler(int slot, SamplerState^ state)
 	{
 		ID3D10SamplerState* buff[1] = { NULL };		
 		if(state == nullptr)		
@@ -128,7 +132,8 @@ namespace IgneelD3D10
 		}
 	}
 
-	void ShaderStage10::OnSetSamplers(int slot, int numSamplers, array<SamplerState^,1>^ states)
+	generic<typename T>
+	void ShaderStage10<T>::OnSetSamplers(int slot, int numSamplers, array<SamplerState^,1>^ states)
 	{		
 		if(states == nullptr)
 		{
@@ -151,7 +156,8 @@ namespace IgneelD3D10
 		SetSamplers(slot,  numSamplers, _holder._pSamplers);			
 	}
 
-	void ShaderStage10::OnSetResource(int index , ShaderResource^ resource)
+	generic<typename T>
+	void ShaderStage10<T>::OnSetResource(int index , ShaderResource^ resource)
 	{
 		ID3D10ShaderResourceView* views[1] = { NULL };
 		if(resource != nullptr)		
@@ -180,7 +186,8 @@ namespace IgneelD3D10
 		SetResources(index, 1, views);		
 	}
 
-	void ShaderStage10::OnSetResources(int index, int nbResources, array<ShaderResource^,1>^ resources)
+	generic<typename T>
+	void ShaderStage10<T>::OnSetResources(int index, int nbResources, array<ShaderResource^,1>^ resources)
 	{		
 		if(resources!=nullptr)
 		{
@@ -222,11 +229,39 @@ namespace IgneelD3D10
 	
 	}
 
-	ShaderStage10::!ShaderStage10()
+	generic<typename T>
+	ShaderStage10<T>::!ShaderStage10()
 	{
 		_holder.Destroy();
 	}
 
+	generic<typename T>
+	ShaderCode^ ShaderStage10<T>::CompileFromMemory(String^ shaderCode, String^ functionName , array<ShaderMacro>^ defines)
+	{
+		auto locator = Service::Get<IShaderRepository^>();
+
+		auto compiler = HLSLCompiler::CreateASTFromString(shaderCode, defines);
+		compiler->EntryPoint = functionName;
+		auto source = compiler->GenerateCode();
+
+		auto code = _CompileFromMemory(source, nullptr, functionName, _profile+locator->ShaderModel, locator->CompilerFlags);
+		code->Reflection = compiler->GetShaderReflection();
+		return code;
+	}
+
+	generic<typename T>
+	ShaderCode^ ShaderStage10<T>::CompileFromFile(String^ filename, String^ functionName, array<ShaderMacro>^ defines)
+	{
+		auto locator = Service::Get<IShaderRepository^>();
+
+		auto compiler = HLSLCompiler::CreateASTFromFile(filename, defines);
+		compiler->EntryPoint = functionName;
+		auto source = compiler->GenerateCode();
+
+		auto code = _CompileFromMemory(source, nullptr, functionName, _profile+locator->ShaderModel, locator->CompilerFlags);
+		code->Reflection = compiler->GetShaderReflection();
+		return code;
+	}
 
 	//********* Vertex Shader Stage*************************
 
@@ -250,19 +285,7 @@ namespace IgneelD3D10
 	   SAFECALL( _device->CreateVertexShader(pterCode, code->Length ,&vs) );
 
 		return gcnew D3DVertexShader(_device, vs, bytecode);
-	}
-
-	ShaderCode^ VSStage10::CompileFromMemory(String^ shaderCode, String^ functionName , array<ShaderMacro>^ defines)
-	{
-		auto locator = Service::Get<IShaderRepository^>();
-		return _CompileFromMemory(shaderCode, defines, functionName, L"vs_"+locator->ShaderModel, locator->CompilerFlags);
-	}
-
-	ShaderCode^ VSStage10::CompileFromFile(String^ filename, String^ functionName, array<ShaderMacro>^ defines)
-	{
-		auto locator = Service::Get<IShaderRepository^>();
-		return _CompileFromFile(filename, defines, functionName, L"vs_"+locator->ShaderModel, locator->CompilerFlags);
-	}
+	}	
 
 
 	//********** PIXEL SHADER STAGE *****************************
@@ -276,19 +299,7 @@ namespace IgneelD3D10
 	{
 		_device->PSSetShaderResources(index, num, resources);
 	}
-
-	ShaderCode^ PSStage10::CompileFromMemory(String^ shaderCode, String^ functionName , array<ShaderMacro>^ defines)
-	{
-		auto locator = Service::Get<IShaderRepository^>();
-		return _CompileFromMemory(shaderCode, defines, functionName, L"ps_"+locator->ShaderModel, locator->CompilerFlags);
-	}
-
-	ShaderCode^ PSStage10::CompileFromFile(String^ filename, String^ functionName, array<ShaderMacro>^ defines)
-	{
-		auto locator = Service::Get<IShaderRepository^>();
-		return _CompileFromFile(filename, defines, functionName, L"ps_"+locator->ShaderModel, locator->CompilerFlags);
-	}
-
+	
 	PixelShader^ PSStage10::CreateShader(ShaderCode^ bytecode)
 	{
 		ID3D10PixelShader * shader;
@@ -323,7 +334,7 @@ namespace IgneelD3D10
 		return gcnew D3DGeometryShader(_device, shader, bytecode);
 	}
 
-	GeometryShader^ GSStage10::CreateShaderWithStreamOut(ShaderCode^ bytecode, array<StreamOutDeclaration>^ declaration)
+	GeometryShader^ GSStage10::CreateShaderWithSO(ShaderCode^ bytecode, array<StreamOutDeclaration>^ declaration ,array<int>^ bufferStrides, bool rasterizedStream0)
 	{
 		ID3D10GeometryShader * shader;
 		auto code = bytecode->Code;
@@ -341,9 +352,9 @@ namespace IgneelD3D10
 			e[i].StartComponent = declaration[i].StartComponent;			
 		}
 
-		try{
-
-			SAFECALL( _device->CreateGeometryShaderWithStreamOutput(pterCode, code->Length ,e, declaration->Length, sizeof(D3D10_SO_DECLARATION_ENTRY) ,&shader) );
+		try{			
+			
+			SAFECALL( _device->CreateGeometryShaderWithStreamOutput(pterCode, code->Length ,e, declaration->Length, bufferStrides[0] ,&shader) );
 			delete[] e;
 		}
 		catch(Exception^ ex)
@@ -353,19 +364,7 @@ namespace IgneelD3D10
 		}		
 
 		return gcnew D3DGeometryShader(_device, shader, bytecode);
-	}
-
-	ShaderCode^ GSStage10::CompileFromMemory(String^ shaderCode, String^ functionName , array<ShaderMacro>^ defines)
-	{
-		auto locator = Service::Get<IShaderRepository^>();
-		return _CompileFromMemory(shaderCode, defines,  functionName, L"gs_"+locator->ShaderModel, locator->CompilerFlags);
-	}
-
-	ShaderCode^ GSStage10::CompileFromFile(String^ filename, String^ functionName, array<ShaderMacro>^ defines)
-	{
-		auto locator = Service::Get<IShaderRepository^>();
-		return _CompileFromFile(filename, defines, functionName, L"gs_"+locator->ShaderModel, locator->CompilerFlags);
-	}		
+	}	
 
 	void GSStage10::SetSOBuffer(GraphicBuffer^ buffer, int offset)
 	{

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ClrRuntime;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -90,41 +91,45 @@ namespace Igneel.Graphics
         /// <param name="data">array</param>
         /// <param name="offset">Offset in bytes to start writing</param>
         public static void Write<T>(this GraphicBuffer buffer, T[] data, int offset = 0, bool discard = true)
+            where T:struct
         {
-            GCHandle handle = GCHandle.Alloc(data, GCHandleType.Pinned);
-            IntPtr ptr = Marshal.UnsafeAddrOfPinnedArrayElement(data, 0);
-
-            try
+            unsafe
             {
-                unsafe
+                GCHandle handle = GCHandle.Alloc(data, GCHandleType.Pinned);
+                var ptr = ClrRuntime.Runtime.GetPointer(data, 0);
+
+                try
                 {
-                    buffer.Write(ptr.ToPointer(), offset, Marshal.SizeOf(typeof(T)) * data.Length, discard);
-                }
-            }
 
-            finally
-            {
-                handle.Free();
+                    buffer.Write(ptr, offset, ClrRuntime.Runtime.SizeOf<T>() * data.Length, discard);
+                }
+
+                finally
+                {
+                    handle.Free();
+                }
             }
 
         }
 
-        public static void Write(this GraphicBuffer buffer,byte[] data, int offset, int bytes, bool discard = true)
+        public static void Write(this GraphicBuffer buffer, byte[] data, int offset, int bytes, bool discard = true)
         {
             GCHandle handle = GCHandle.Alloc(data, GCHandleType.Pinned);
-            IntPtr ptr = Marshal.UnsafeAddrOfPinnedArrayElement(data, 0);
 
-            try
+            unsafe
             {
-                unsafe
+                var ptr = ClrRuntime.Runtime.GetPointer(data, 0);
+                try
                 {
-                   buffer. Write(ptr.ToPointer(), offset, bytes, discard);
-                }
-            }
 
-            finally
-            {
-                handle.Free();
+                    buffer.Write(ptr, offset, bytes, discard);
+
+                }
+
+                finally
+                {
+                    handle.Free();
+                }
             }
         }
 
@@ -135,41 +140,46 @@ namespace Igneel.Graphics
         /// <param name="data">array</param>
         /// <param name="offset">Offset in bytes to start reading</param>
         public static void Read<T>(this GraphicBuffer buffer, T[] data, int offset = 0)
+            where T :struct
         {
-            GCHandle handle = GCHandle.Alloc(data, GCHandleType.Pinned);
-            IntPtr ptr = Marshal.UnsafeAddrOfPinnedArrayElement(data, 0);
-
-            try
+            unsafe
             {
-                unsafe
+                GCHandle handle = GCHandle.Alloc(data, GCHandleType.Pinned);
+                var ptr = ClrRuntime.Runtime.GetPointer(data, 0);
+
+                try
                 {
-                    buffer.Read(ptr.ToPointer(), offset, Marshal.SizeOf(typeof(T)) * data.Length);
+                   
+                        buffer.Read(ptr, offset, ClrRuntime.Runtime.SizeOf<T>() * data.Length);
+                   
                 }
-            }
 
-            finally
-            {
-                handle.Free();
+                finally
+                {
+                    handle.Free();
+                }
             }
 
         }
 
-        public static void Read(this GraphicBuffer buffer, byte[] data, int offset, int bytes)
+        public static void Read(this GraphicBuffer buffer, byte[] data, int offset, int bytes) 
         {
-            GCHandle handle = GCHandle.Alloc(data, GCHandleType.Pinned);
-            IntPtr ptr = Marshal.UnsafeAddrOfPinnedArrayElement(data, 0);
-
-            try
+            unsafe
             {
-                unsafe
+                GCHandle handle = GCHandle.Alloc(data, GCHandleType.Pinned);
+                var ptr = ClrRuntime.Runtime.GetPointer(data, 0);
+
+                try
                 {
-                    buffer.Read(ptr.ToPointer(), offset, bytes);
-                }
-            }
 
-            finally
-            {
-                handle.Free();
+                    buffer.Read(ptr, offset, bytes);
+
+                }
+
+                finally
+                {
+                    handle.Free();
+                }
             }
         }
         /// <summary>
@@ -182,7 +192,7 @@ namespace Igneel.Graphics
         {
             byte* pBuffer = (byte*)buffer.Map(discard ? MapType.Write_Discard : MapType.Write, false);
 
-            ClrPlatform.Crl.CopyMemory(data, pBuffer + offset, bytes);
+            Runtime.Copy(data, pBuffer + offset, bytes);
 
             buffer.Unmap();
         }
@@ -198,14 +208,14 @@ namespace Igneel.Graphics
         {
             byte* pBuffer = (byte*)buffer.Map(MapType.Read, false);
 
-            ClrPlatform.Crl.CopyMemory(pBuffer + offset, data, bytes);
+            Runtime.Copy(pBuffer + offset, data, bytes);
 
             buffer.Unmap();
         }
 
-        public static T[] ToArray<T>(this GraphicBuffer buffer)
+        public static T[] ToArray<T>(this GraphicBuffer buffer) where T : struct
         {
-            T[] data = new T[buffer.SizeInBytes / Marshal.SizeOf(typeof(T))];
+            T[] data = new T[buffer.SizeInBytes / ClrRuntime.Runtime.SizeOf<T>()];
             buffer.Read(data);
             return data;
         }

@@ -20,6 +20,7 @@ namespace IgneelD3D10 {
 
 		return gcnew CbHandle(constantBuffer);
 	}
+
 	D3D10Shader::D3D10Shader(ID3D10Device * device,ID3D10DeviceChild* Shader, ShaderCode^ bytecode)
 	{
 		this->shader = Shader;
@@ -28,6 +29,7 @@ namespace IgneelD3D10 {
 		pin_ptr<byte> pterCode = &code[0];
 		D3D10ReflectShader(pterCode, code->Length,&reflec);
 		ShaderReflection = reflec;
+		ASTReflection = bytecode->Reflection;
 
 		D3D10_SHADER_DESC sd;
 		reflec->GetDesc(&sd);

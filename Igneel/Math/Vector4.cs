@@ -54,15 +54,7 @@ namespace Igneel
             Y = v.Y;
             Z = v.Z;
             W = w;
-        }
-
-        public Vector4(System.Drawing.Color c)
-        {
-            this.X = (float)c.R / 255f;
-            this.Y = (float)c.G / 255f;
-            this.Z = (float)c.B / 255f;
-            this.W = (float)c.A / 255f;
-        }
+        }      
 
         #endregion
 
@@ -490,10 +482,7 @@ namespace Igneel
 
         public static explicit operator float(Vector4 a) { return a.X; }
 
-        public static explicit operator Vector4(System.Drawing.Color a)
-        {
-            return new Vector4(a);
-        }
+      
         public int ToArgb()
         {
             int color;
@@ -513,11 +502,7 @@ namespace Igneel
             f * (float)(byte)(argb >> 0),
             f * (float)(byte)(argb >> 24));
         }
-
-        public System.Drawing.Color ToColor()
-        {
-            return System.Drawing.Color.FromArgb((int)(W * 255), (int)(X * 255), (int)(Y * 255), (int)(Z * 255));
-        }
+      
 
         public Vector3 ToVector3()
         {

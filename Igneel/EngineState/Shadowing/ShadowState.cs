@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Drawing;
 using System.ComponentModel;
-using Igneel.Design;
-using Igneel.Design.UITypeEditors;
-using System.Drawing.Design;
+
+
+
 using Igneel.Graphics;
 using System.Runtime.Serialization;
 using System.Reflection;
@@ -29,7 +29,7 @@ namespace Igneel
         [Category("ShadowMapping")]
         public ShadowMapState ShadowMapping { get { return shadowMap; } }                
 
-        [LockOnSet]
+        
         public Algoritm ShadowAlgoritm { get; set; }
 
         [Category("SoftShadow")]

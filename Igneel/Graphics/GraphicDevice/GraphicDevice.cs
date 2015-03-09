@@ -8,12 +8,16 @@ using System.Threading.Tasks;
 
 namespace Igneel.Graphics
 {
-   
+    public enum DeviceProfile
+    {
+        Direct3D,
+        OpenGL
+    }
+
     public abstract partial class GraphicDevice: ResourceAllocator
-    {        
-       
+    {               
         private DeviceInfo _deviceInfo;
-        protected GraphicDeviceDesc _desc;
+        protected GraphicDeviceDesc _desc;        
 
         public GraphicDevice(GraphicDeviceDesc desc)
         {
@@ -27,12 +31,23 @@ namespace Igneel.Graphics
             InitIA();         
             InitShading();
             InitRS();
-            InitOM();         
-        }       
+            InitOM();                                      
+        }
+
+        /// <summary>
+        /// returns the shader model in the format 000. For example SM 4.0 would be 400 , SM 4.1 would be 410 
+        /// and SM 5.0 500
+        /// </summary>
+        public int ShaderModelVersion { get; protected set; }
+
+        /// <summary>
+        /// Says what api model the implementation is using
+        /// </summary>
+        public DeviceProfile Profile { get; protected set; }
 
         public DeviceInfo Info { get { return _deviceInfo; } protected set { _deviceInfo = value; } }
 
-        public bool FullScreen { get { return _desc.FullScreen; } set { _desc.FullScreen = value; } }                
+        public GraphicDeviceDesc Description { get { return _desc; } }
 
         public void Clear(ClearFlags flags, int color, float depth, Color4 stencil)
         {
@@ -188,7 +203,7 @@ namespace Igneel.Graphics
         //        unsafe
         //        {
         //            void* pter = Marshal.UnsafeAddrOfPinnedArrayElement(vertexes, 0).ToPointer();
-        //            DrawUser(primitiveCount, pter, Marshal.SizeOf(typeof(T)));
+        //            DrawUser(primitiveCount, pter, ClrRuntime.Runtime.SizeOf<T>());
         //        }
         //    }
         //    finally
@@ -210,7 +225,7 @@ namespace Igneel.Graphics
         //            void* pIndices = Marshal.UnsafeAddrOfPinnedArrayElement(indices, 0).ToPointer();
         //            IndexFormat indexFormat = Marshal.SizeOf(typeof(I)) == 2 ? IndexFormat.Index16 : IndexFormat.Index32;
 
-        //            DrawIndexedUser(minVertexIndex, numVertices, primitiveCount, pIndices, indexFormat, pVertices, Marshal.SizeOf(typeof(T)));
+        //            DrawIndexedUser(minVertexIndex, numVertices, primitiveCount, pIndices, indexFormat, pVertices, ClrRuntime.Runtime.SizeOf<T>());
         //        }
         //    }
         //    finally

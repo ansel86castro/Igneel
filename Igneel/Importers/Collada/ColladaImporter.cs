@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Xml.Linq;
 using System.Runtime.InteropServices;
-using ClrPlatform;
+using ClrRuntime;
 using System.IO;
 using Igneel.Assets;
 using Igneel.Animations;
@@ -246,7 +246,7 @@ namespace Igneel.Importers.Collada
 
             ReadColorInfo(effect, "diffuse", (color, textureUrl) =>
             {
-                material.Diffuse = color.ToVector3();
+                material.Diffuse = new Color3(color.X, color.Y, color.Z);
                 if (textureUrl != null)
                 {
                     try
@@ -259,7 +259,7 @@ namespace Igneel.Importers.Collada
                         material.DiffuseMap = null;
                     }
                 }
-            });          
+            });
 
             ReadParamenterSurfaceInfo(effect, "normal_map-surface", url => material.NormalMap = Engine.Graphics.CreateTexture2DFromFile(url));            
 
@@ -726,11 +726,11 @@ namespace Igneel.Importers.Collada
                                     {
                                         #region Copy Vertex Attributes
 
-                                        Crl.CopyMemory((byte*)positionInput.Source.ArrayPointer + posIdx * 12, pVertexData + posOffset, 12);
+                                        Runtime.Copy((byte*)positionInput.Source.ArrayPointer + posIdx * 12, pVertexData + posOffset, 12);
                                         if (normalIdx >= 0)
-                                            Crl.CopyMemory((byte*)normalInput.Source.ArrayPointer + normalIdx * 12, pVertexData + normalOffset, 12);
+                                            Runtime.Copy((byte*)normalInput.Source.ArrayPointer + normalIdx * 12, pVertexData + normalOffset, 12);
                                         if (texCIdx >= 0)
-                                            Crl.CopyMemory((byte*)texCoordInput.Source.ArrayPointer + texCIdx * 8, pVertexData + texOffset, 8);
+                                            Runtime.Copy((byte*)texCoordInput.Source.ArrayPointer + texCIdx * 8, pVertexData + texOffset, 8);
 
                                         #endregion
 
@@ -765,11 +765,11 @@ namespace Igneel.Importers.Collada
                                     {
                                         #region Copy Vertex Attributes
 
-                                        Crl.CopyMemory((byte*)positionInput.Source.ArrayPointer + posIdx * 12, pVertexData + posOffset, 12);
+                                        Runtime.Copy((byte*)positionInput.Source.ArrayPointer + posIdx * 12, pVertexData + posOffset, 12);
                                         if (normalIdx >= 0)
-                                            Crl.CopyMemory((byte*)normalInput.Source.ArrayPointer + normalIdx * 12, pVertexData + normalOffset, 12);
+                                            Runtime.Copy((byte*)normalInput.Source.ArrayPointer + normalIdx * 12, pVertexData + normalOffset, 12);
                                         if (texCIdx >= 0)
-                                            Crl.CopyMemory((byte*)texCoordInput.Source.ArrayPointer + texCIdx * 8, pVertexData + texOffset, 8);
+                                            Runtime.Copy((byte*)texCoordInput.Source.ArrayPointer + texCIdx * 8, pVertexData + texOffset, 8);
 
                                         index = vertexBuilder.WriteVertex(vertexData, posIdx, normalIdx, texCIdx);
                                         vertexCount++;
@@ -815,6 +815,7 @@ namespace Igneel.Importers.Collada
             #region Create VertexBuffer
 
             byte[] buffer = vertexBuilder.GetBuffer();
+            var profile = Engine.Graphics.Profile;
 
             fixed (byte* pBuffer = buffer)
             {
@@ -824,9 +825,12 @@ namespace Igneel.Importers.Collada
 
                 for (int i = 0; i < vertexBuilder.Count; i++)
                 {
-                    //invert texture v coord
-                    Vector2* texCoord = (Vector2*)(pBuffer + i * size + texOffset);
-                    texCoord->Y = 1 - texCoord->Y;
+                    if (profile == DeviceProfile.Direct3D)
+                    {
+                        //invert texture v coord
+                        Vector2* texCoord = (Vector2*)(pBuffer + i * size + texOffset);
+                        texCoord->Y = 1 - texCoord->Y;
+                    }
 
                     if (z_up)
                     {
@@ -1252,7 +1256,7 @@ namespace Igneel.Importers.Collada
 
             element.FindDescendantByTag("intensity", x => light.Intensity = float.Parse(x.Value));
 
-            if (light.Diffuse != Vector3.Zero)
+            if (light.Diffuse != Color3.Black)
                 light.Enable = true;
 
             return new ElementRef { Element = element, Object = light };

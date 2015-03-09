@@ -6,11 +6,11 @@ struct PSIn
 };
 
 
-Texture2D t0 :register(t0);
-SamplerState s0 :register(s0);
+Texture2D DiffuseMap :register(t0);
+SamplerState sDiffuseMap :register(s0);
 
 float4 main(PSIn i) : SV_TARGET
 {
 	//return float4(1,0,0,1);
-	return t0.Sample(s0, i.texCoord);
+	return DiffuseMap.Sample(sDiffuseMap, i.texCoord);
 }

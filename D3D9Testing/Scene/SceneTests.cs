@@ -39,7 +39,7 @@ namespace D3D9Testing
             Scene scene;
             SceneNode camera;
             InitializeScene(out scene, out camera);
-            Engine.BackColor = Color.LightBlue;
+            Engine.BackColor = new Color4( Color.LightBlue .ToArgb());
 
             var box = new BoxMesh();
             scene.Renderables.Add(box);
@@ -57,10 +57,10 @@ namespace D3D9Testing
             scene.AmbientLight.SkyColor = new Vector3(1);
             scene.AmbientLight.GroundColor = new Vector3(0.5f);           
 
-            Engine.BackColor = Color.LightBlue;
+            Engine.BackColor = new Color4(Color.LightBlue.ToArgb());
             Engine.Scene = scene;
 
-            Engine.BackColor = Color.LightBlue;
+            Engine.BackColor =new Color4(Color.LightBlue.ToArgb());
             SceneNode camera = CreateCamera(scene); 
 
             var box = new BoxMesh();
@@ -116,7 +116,7 @@ namespace D3D9Testing
                 scene.Renderables.Add(env);
             }
 
-            Engine.BackColor = Color.LightBlue;
+            Engine.BackColor =new Color4(Color.LightBlue.ToArgb());
             Engine.Scene = scene;
             return scene;
         }

@@ -3,7 +3,6 @@
 
 using namespace System;
 using namespace System::ComponentModel;
-using namespace Igneel::Design;
 using namespace Igneel::Physics;
 using namespace System::Runtime::InteropServices;
 using namespace Igneel;
@@ -29,8 +28,8 @@ namespace Igneel { namespace PhysX {
 				void set(float v) override { actor->setMass(v); }
 			}
 
-			[Category(L"Velocity")]		
-			[PropertyConstrain(L"IsDynamic")]
+			
+			
 			virtual property Vector3 LinearVelocity{
 				Vector3 get() override
 				{
@@ -42,40 +41,40 @@ namespace Igneel { namespace PhysX {
 				} 
 			}
 
-			[Category(L"Damping")]			
-			[PropertyConstrain(L"IsDynamic")]
+						
+			
 			virtual property float LinearDamping{
 				float get() override{ return actor->getLinearDamping();}
 				void set(float v) override{ actor->setLinearDamping(v);}
 			}
 
-			[Category(L"Velocity")]		
-			[PropertyConstrain(L"IsDynamic")]
+					
+			
 			virtual property Vector3 AngularVelocity{
 				Vector3 get() override{ return TOVECTOR3(actor->getAngularVelocity());}
 				void set(Vector3 v) override{ actor->setAngularVelocity(TONXVEC3(v)); } 
 			}
 
-			[Category(L"Damping")]
 			
-			[PropertyConstrain(L"IsDynamic")]
+			
+			
 			virtual property float AngularDamping{
 				float get() override{ return  actor->getAngularDamping();}
 				void set(float v) override{  actor->setAngularDamping(v);}
 			}
 
-			[Category(L"Velocity")]
 			
-			[PropertyConstrain(L"IsDynamic")]
+			
+			
 			virtual property float MaxAngularVelocity
 			{
 				float get() override{ return actor->getMaxAngularVelocity();}
 				void set(float v) override{ actor->setMaxAngularVelocity(v);}
 			}
 
-			[Category(L"Transform")]			
-			[Deferred]
-			[LockOnSet]
+						
+			
+			
 			virtual property Vector3 GlobalPosition
 			{
 				virtual Vector3 get() override{
@@ -87,10 +86,10 @@ namespace Igneel { namespace PhysX {
 				}
 			}
 
-			[Category(L"Transform")]
+			
 			//[EditorAttribute(UIRotationMatrixEditor::typeid,UITypeEditor::typeid)]
-			[Deferred]
-			[LockOnSet]
+			
+			
 			virtual property Matrix GlobalOrientation
 			{
 				Matrix get() override{ 
@@ -101,8 +100,8 @@ namespace Igneel { namespace PhysX {
 				}
 			}
 
-			[Category(L"Transform")]
-			[Browsable(false)]
+			
+			
 			virtual property Quaternion GlobalOrientationQuat{
 				Quaternion get() override{ 
 					NxQuat q =  actor->getGlobalOrientationQuat();
@@ -119,57 +118,57 @@ namespace Igneel { namespace PhysX {
 				Matrix get() override {  return ToDxMatrix(actor->getGlobalPose()); }
 			}
 
-			[Category(L"Mass")]
-			[Browsable(false)]
-			[Deferred]
-			[LockOnSet]
-			[PropertyConstrain(L"IsDynamic")]
+			
+			
+			
+			
+			
 			virtual property Matrix CMassGlobalPose
 			{
 				Matrix get() override{ return ToDxMatrix(actor->getCMassGlobalPose()); }
 				void set(Matrix v) override { actor->setCMassGlobalPose(ToNxMat34(v)); }
 			}
 
-			[Category(L"Mass")]
+			
 						
-			[Deferred]
-			[LockOnSet]
-			[PropertyConstrain(L"IsDynamic")]
+			
+			
+			
 			virtual property Vector3 CMassGlobalPosition{
 				Vector3 get() override{ return TOVECTOR3(actor->getCMassGlobalPosition()); }
 				void set(Vector3 v) override { actor->setCMassGlobalPosition(TONXVEC3(v));}
 			}
 
-			[Category(L"Mass")]
+			
 			//[EditorAttribute(UIRotationMatrixEditor::typeid,UITypeEditor::typeid)] 		
-			[Deferred]
-			[LockOnSet]
-			[PropertyConstrain(L"IsDynamic")]
+			
+			
+			
 			virtual property Matrix CMassGlobalOrientation
 			{
 				Matrix get() override{ return ToDxMatrix(actor->getCMassGlobalOrientation());}
 				void set(Matrix v) override { actor->setCMassGlobalOrientation(ToNxMat33(v));}
 			}
 
-			[Browsable(false)]
-			[Category(L"Mass")]			
-			[PropertyConstrain(L"IsDynamic")]			
+			
+						
+						
 			virtual property Matrix CMassLocalPose
 			{
 				Matrix get() override{ return ToDxMatrix(actor->getCMassLocalPose()); }				
 
 			}
 
-			[Category(L"Mass")]			
-			[Deferred]
-			[LockOnSet]
-			[PropertyConstrain(L"IsDynamic")]
+						
+			
+			
+			
 			virtual property Vector3 MassSpaceInertiaTensor{
 				Vector3 get() override{ return TOVECTOR3(actor->getMassSpaceInertiaTensor());}
 				void set(Vector3 v) override{ actor->setMassSpaceInertiaTensor(TONXVEC3(v)); }
 			}
 
-			[Category(L"Actor")]
+			
 			virtual property bool IsKinematic{
 				bool get() override{ return isDynamic ? actor->readBodyFlag(NX_BF_KINEMATIC): false;}
 				void set(bool v) override
@@ -184,45 +183,45 @@ namespace Igneel { namespace PhysX {
 				}
 			}
 
-			[Category(L"Sleep")]
-			[PropertyConstrain(L"IsDynamic")]
+			
+			
 			virtual property bool IsSleeping
 			{
 				bool get() override{ return actor->isSleeping();}				
 			} 
 
-			[Category(L"Sleep")]
-			[PropertyConstrain(L"IsDynamic")]
+			
+			
 			virtual property float SleepEnergyThreshold
 			{
 				float get() override{ return  actor->getSleepEnergyThreshold(); }
 				void set(float v) override { actor->setSleepEnergyThreshold(v); } 
 			}
 
-			[Category(L"Sleep")]
-			[PropertyConstrain(L"IsDynamic")]
+			
+			
 			virtual property float SleepAngularVelocity
 			{
 				float get() override{ return  actor->getSleepAngularVelocity(); }
 				void set(float v) override { actor->setSleepAngularVelocity(v); } 
 			}
 			
-			[Category(L"Sleep")]
-			[PropertyConstrain(L"IsDynamic")]
+			
+			
 			virtual property float SleepLinearVelocity
 			{
 				float get() override{ return  actor->getSleepLinearVelocity(); }
 				void set(float v) override { actor->setSleepLinearVelocity(v); } 
 			}
 
-			[Category(L"Sleep")]
-			[PropertyConstrain(L"IsDynamic")]
+			
+			
 			virtual property bool IsGroupSleeping{
 				bool get() override{ return actor->isGroupSleeping();}
 			}			
 			
 
-			[PropertyConstrain(L"IsDynamic")]
+			
 			virtual property int SolverIterationCount
 			{
 				int get() override{ return  actor->getSolverIterationCount(); }
@@ -241,25 +240,25 @@ namespace Igneel { namespace PhysX {
 				void set(UInt16 v) override { actor->setDominanceGroup(v); }
 			}
 
-			[PropertyConstrain(L"IsDynamic")]
+			
 			virtual property NxReal CCDMotionThreshold{
 				NxReal get() override{ return actor->getCCDMotionThreshold();}
 				void set(NxReal v) override { actor->setCCDMotionThreshold(v);}
 			}
 
-			[PropertyConstrain(L"IsDynamic")]
+			
 			virtual property Vector3 LinearMomentum{
 				Vector3 get() override{ return TOVECTOR3(actor->getLinearMomentum());}
 				void set(Vector3 v) override{ actor->setLinearMomentum(TONXVEC3(v));}
 			}
 			
-			[PropertyConstrain(L"IsDynamic")]
+			
 			virtual property Vector3 AngularMomentum{
 				Vector3 get() override{ return TOVECTOR3(actor->getAngularMomentum());}
 				void set(Vector3 v) override{ actor->setAngularMomentum(TONXVEC3(v));}
 			}		
 						
-			[PropertyConstrain(L"IsDynamic")]
+			
 			virtual property NxReal ContactReportThreshold{
 				NxReal get() override{ return actor->getContactReportThreshold();}
 				void set(NxReal v) override { actor->setContactReportThreshold(v);}

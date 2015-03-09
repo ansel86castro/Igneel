@@ -90,7 +90,7 @@ namespace D3D9Testing.Techniques
 
                     Action renderAction = () =>
                     {
-                        presenter.Begin(Color.Aqua);
+                        presenter.Begin(new Color4(Color.Aqua.ToArgb()));
                         sprite.Begin();
 
                         var textures = new RenderTexture2D[4, 3]

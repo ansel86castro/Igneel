@@ -1,4 +1,4 @@
-﻿using Igneel.Design;
+﻿
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,16 +16,16 @@ namespace Igneel
             EnvironmentMapZf = 1000;
         }
 
-        [LockOnSet]
+        
         public int EnvironmentMapSize { get; set; }
 
-        [LockOnSet]
+        
         public float EnvironmentMapZn { get; set; }
 
-        [LockOnSet]
+        
         public float EnvironmentMapZf { get; set; }
 
-        [LockOnSet]
+        
         public bool BDREnable { get; set; }
 
         public bool UseDefaultTechnique { get; set; }

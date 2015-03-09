@@ -169,21 +169,24 @@ namespace Igneel.Graphics
         }
 
         public GraphicBuffer CreateVertexBuffer<T>(ResourceUsage usage = ResourceUsage.Default, CpuAccessFlags cpuAcces = CpuAccessFlags.ReadWrite, ResBinding binding = ResBinding.VertexBuffer, T[] data = null)
+            where T:struct
         {
-            int stride = Marshal.SizeOf(typeof(T));
+            int stride = ClrRuntime.Runtime.SizeOf<T>();
             int size = data.Length * stride;
             return CreateVertexBuffer(size, stride, data, usage, cpuAcces, binding);
         }
 
         public GraphicBuffer CreateVertexBuffer<T>(int stride, ResourceUsage usage = ResourceUsage.Default, CpuAccessFlags cpuAcces = CpuAccessFlags.ReadWrite, ResBinding binding = ResBinding.VertexBuffer, T[] data = null)
+            where T : struct
         {
-            int size = data.Length * Marshal.SizeOf(typeof(T));
+            int size = data.Length * ClrRuntime.Runtime.SizeOf<T>();
             return CreateVertexBuffer(size, stride,data, usage, cpuAcces, binding);
         }
 
         public GraphicBuffer CreateIndexBuffer<T>(ResourceUsage usage = ResourceUsage.Default, CpuAccessFlags cpuAcces = CpuAccessFlags.ReadWrite, T[] data = null)
+            where T : struct
         {
-            int stride = Marshal.SizeOf(typeof(T));
+            int stride = ClrRuntime.Runtime.SizeOf<T>();
             int size = data.Length * stride;
             IndexFormat format = stride == 2 ? IndexFormat.Index16 : IndexFormat.Index32;
             return CreateIndexBuffer(size, data, format, usage, cpuAcces);

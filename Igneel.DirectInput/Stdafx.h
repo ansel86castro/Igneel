@@ -10,6 +10,7 @@
 using namespace System;
 using namespace Igneel;
 using namespace Igneel::Input;
+using namespace Igneel::Windows;
 using namespace System::Runtime::InteropServices;
 
 #define SAFECALL(x) if(FAILED(x)) throw gcnew InvalidOperationException(L"Invalid Call")

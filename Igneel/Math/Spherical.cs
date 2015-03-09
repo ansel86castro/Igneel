@@ -1,10 +1,10 @@
-﻿using Igneel.Design;
-using Igneel.Design.UITypeEditors;
+﻿
+
 
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Drawing.Design;
+
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,7 +13,7 @@ namespace Igneel
 {
     [Serializable]
     [System.Runtime.InteropServices.StructLayout(System.Runtime.InteropServices.LayoutKind.Sequential)]
-    [TypeConverter(typeof(DesignTypeConverter))]
+   
     public struct Spherical
     {
 
@@ -21,14 +21,14 @@ namespace Igneel
         /// Angle respect to the X axis (Pitch)
         /// </summary>
         /// 
-        [Browsable(false)]
+       
         public float Theta;
 
         /// <summary>
         /// Angle respect to the Y axis (Heading)
         /// </summary>
         /// 
-        [Browsable(false)]
+       
         public float Phi;
 
         /// <summary>
@@ -42,7 +42,7 @@ namespace Igneel
             this.Phi = phi;
         }
 
-        [Editor(typeof(UIAngleTypeEditor), typeof(UITypeEditor))]
+        
         [Description("Angle respect to the X axis (Pitch)")]
         public float ThetaAngle
         {
@@ -56,7 +56,7 @@ namespace Igneel
             }
         }
 
-        [Editor(typeof(UIAngleTypeEditor), typeof(UITypeEditor))]
+        
         [Description("Angle respect to the Y axis (Heading)")]
         public float PhiAngle
         {

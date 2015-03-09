@@ -8,22 +8,13 @@ using System.Threading.Tasks;
 namespace Igneel.Rendering.Bindings
 {
     public class EnvironmentMapBinding : RenderBinding<EnvironmentMapTechnique>
-    {
-        public interface IEnvMap
-        {
-            bool USE_ENVIROMENT_MAP { get; set; }
-        }
-
-        IEnvMap mapping;
-        const int ReflectionSampler  = 4;
-        private IShaderStage stage;
-
+    {        
+        IEnvironmentMap mapping;     
         protected override void OnEffectChanged(Effect effect)
         {
             base.OnEffectChanged(effect);
 
-            mapping = effect.Map<IEnvMap>();
-            stage = Engine.Graphics.PS;
+            mapping = effect.Map<IEnvironmentMap>();          
         }
 
         public override void OnBind(EnvironmentMapTechnique value)
@@ -31,9 +22,8 @@ namespace Igneel.Rendering.Bindings
             if (mapping != null)
             {
                 if (Engine.Lighting.Reflection.Enable)
-                {
-                    stage.SetResource(ReflectionSampler, value.Texture);
-                    stage.SetSampler(ReflectionSampler, SamplerState.Linear);
+                {                    
+                    mapping.EnvironmentMap = value.Texture.ToSampler();
                     mapping.USE_ENVIROMENT_MAP = true;
                 }
                 else
@@ -45,8 +35,7 @@ namespace Igneel.Rendering.Bindings
         {
             if (mapping != null && mapping.USE_ENVIROMENT_MAP)
             {
-                stage.SetResource(ReflectionSampler, null);
-                //stage.SetSampler(ReflectionSampler, SamplerState.Linear);
+                mapping.EnvironmentMap = Sampler<Texture2D>.Null;                
                 mapping.USE_ENVIROMENT_MAP = false;
             }
         }

@@ -1,7 +1,7 @@
 
 
-Texture2D    t0 : register(t0);
-SamplerState s0 : register(s0);
+Texture2D    DiffuseMap :register(t0);
+SamplerState sDiffuseMap :register(s0);
 
 struct PSIn
 {
@@ -11,7 +11,7 @@ struct PSIn
 
 float4 main(PSIn i): SV_Target
 {
-	float4 color = t0.Sample(s0, i.texCoord);
+	float4 color = DiffuseMap.Sample(sDiffuseMap, i.texCoord);
 	
 	if(color.a == 1.0f)
 		discard;

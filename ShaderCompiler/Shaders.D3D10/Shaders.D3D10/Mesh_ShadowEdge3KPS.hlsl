@@ -4,12 +4,12 @@
 #include "Lighting.hlsli"
 #include "LigthingShadowed.hlsli"
 
-Texture2D t8 :register(t8);		// edge texture
-SamplerState s8:register(s8);	
+Texture2D EdgeTexture;		// edge texture
+SamplerState sEdgeTexture;	
 
 float4 main(SMVSOutput input) : SV_TARGET0
 {   	
-	clip(dot(float4(input.PositionW, 1), clipPlane));
+	clip(dot(float4(input.PositionW, 1), ClipPlane));
 	
 	gPositionW   = input.PositionW;
 	gNormalW     = input.NormalW;
@@ -20,13 +20,13 @@ float4 main(SMVSOutput input) : SV_TARGET0
 	
 	ComputeShadowTexCoord();
 
-	float edge = t8.Sample(s8, gScreenCoord.xy / gScreenCoord.w).r;
+	float edge = EdgeTexture.Sample(sEdgeTexture, gScreenCoord.xy / gScreenCoord.w).r;
 
 	[branch]
 	if(edge > 0)
 	 	 return float4(1,0,0,1);//ComputeShadowFactor();	
 	else
-		gShadowFactor = t7.SampleCmpLevelZero(s7, gShadowTexCoord.xy , gShadowTexCoord.z);	
+		gShadowFactor = ShadowMap.SampleCmpLevelZero(sShadowMap, gShadowTexCoord.xy , gShadowTexCoord.z);	
 
 	ComputeLighting();
 

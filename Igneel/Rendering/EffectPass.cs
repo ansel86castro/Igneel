@@ -85,12 +85,11 @@ namespace Igneel.Rendering
                 //bind variables to the pipeline
                 foreach (var v in variables)
                 {
-                    v.Variable.SetSetter(v.Setter);
+                    var variable = v.Variable;
+                    variable.binder = v.Setter;
+                    variable.SetValue();                 
                 }
-                //setup Input Assembler Layout
-                //device.IAInputLayout = program.InputDefinition;
-
-                //Setup Shaders
+              
                 device.Program = program;                             
 
                 return true;
@@ -126,6 +125,9 @@ namespace Igneel.Rendering
                 Variable = v,                   
                 Setter = program.CreateUniformSetter(name)
             };
+            if (binding.Setter == null)
+                throw new NullReferenceException("The IUniformSetter is null");
+
             variables.Add(binding);
         }
 
@@ -157,17 +159,40 @@ namespace Igneel.Rendering
             return this;
         }
 
-        public TechniqueDesc Pass<TVert>(params string[] shaders)
+        public TechniqueDesc Pass<TVert>(string vertexShader, params string[] shaders)
              where TVert : struct
         {
             EffectPassDesc desc = new EffectPassDesc(device);
-            desc.WithVertexShader<TVert>(shaders[0]);
-            for (int i = 1; i < shaders.Length; i++)
+            desc.WithVertexShader<TVert>(vertexShader);
+            for (int i = 0; i < shaders.Length; i++)
             {
                 desc.WithShader(shaders[i]);
             }
             Passes.Add(desc);
             return this;
+        }
+
+        public TechniqueDesc Pass<TVert, TOut>(string vertexShader, string geometryShader, bool rasterizedStream0 , params string[] shaders)
+            where TVert : struct
+            where TOut :struct
+        {
+            EffectPassDesc desc = new EffectPassDesc(device);
+            desc.WithVertexShader<TVert>(vertexShader);
+            desc.WithGeometryShader<TOut>(geometryShader, rasterizedStream0);
+
+            for (int i = 0; i < shaders.Length; i++)
+            {
+                desc.WithShader(shaders[i]);
+            }
+            Passes.Add(desc);
+            
+            return this;
+        }
+        public TechniqueDesc Pass<TVert, TOut>(string vertexShader, string geometryShader, params string[] shaders)
+            where TVert : struct
+            where TOut : struct
+        {
+            return Pass<TVert, TOut>(vertexShader, geometryShader, false, shaders);
         }
     }
 
@@ -244,6 +269,13 @@ namespace Igneel.Rendering
             where TInput : struct
         {
             Program.LinkVertexShader<TInput>(filename);
+            return this;
+        }
+
+        public EffectPassDesc WithGeometryShader<TOutput>(string filename, bool rasterizedStream0 = false)
+            where TOutput : struct
+        {
+            Program.LinkGeometryShader<TOutput>(filename, rasterizedStream0);
             return this;
         }
     }

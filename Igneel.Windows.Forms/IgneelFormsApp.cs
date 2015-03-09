@@ -40,18 +40,20 @@ namespace Igneel.Windows.Forms
                 var pFactory = Service.Get<Physics.PhysicManager>();
                 var iFactory =Service.Get<Input.InputManager>();
 
-                Engine.InitializeEngine(mainForm.Handle, new GraphicDeviceDesc
+                Engine.InitializeEngine(new WindowContext(mainForm.Handle), new GraphicDeviceDesc
                 {
                     Adapter = 0,
-                    BackBufferWidth = canvas.Width,
-                    BackBufferHeight = canvas.Height,
-                    BackBufferFormat = Format.R8G8B8A8_UNORM_SRGB,
-                    DepthStencilFormat = Format.D24_UNORM_S8_UINT,
                     DriverType = GraphicDeviceType.Hardware,
-                    FullScreen = false,
-                    MSAA = new Multisampling(1, 0),
-                    WindowsHandle = canvas.Handle,
-                    Interval = PresentionInterval.Default
+                    Context = new WindowContext(canvas.Handle)
+                    {
+                        BackBufferWidth = canvas.Width,
+                        BackBufferHeight = canvas.Height,
+                        BackBufferFormat = Format.R8G8B8A8_UNORM_SRGB,
+                        DepthStencilFormat = Format.D24_UNORM_S8_UINT,                        
+                        FullScreen = false,
+                        Sampling = new Multisampling(1, 0),                        
+                        Presentation = PresentionInterval.Default
+                    }                      
                 });
 
 

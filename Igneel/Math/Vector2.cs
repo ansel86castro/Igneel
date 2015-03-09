@@ -10,6 +10,12 @@ using System.Globalization;
 namespace Igneel
 {
 
+    public struct Point2
+    {
+        public int X;
+        public int Y;
+    }
+
     [Serializable]
     [StructLayout(LayoutKind.Sequential)]
     public struct Vector2:IEquatable<Vector2>
@@ -22,21 +28,6 @@ namespace Igneel
         public float X;
         public float Y;
 
-        #region Converters
-
-        public static explicit operator System.Drawing.Point(Vector2 v)
-        {
-            return new System.Drawing.Point((int)v.X, (int)v.Y);
-        }
-        public static explicit operator Vector2(System.Drawing.Point point)
-        {
-            return new Vector2(point.X, point.Y);
-        }
-        public System.Drawing.Point ToPoint()
-        {
-            return new System.Drawing.Point((int)X, (int)Y);
-        }      
-        #endregion
 
         #region Constructors
 
@@ -50,13 +41,7 @@ namespace Igneel
         {
             this.X = x;
             this.Y = y;            
-        }
-
-        public Vector2(System.Drawing.Point p)
-        {
-            this.X = p.X;
-            this.Y = p.Y;            
-        }
+        }      
 
         #endregion
 

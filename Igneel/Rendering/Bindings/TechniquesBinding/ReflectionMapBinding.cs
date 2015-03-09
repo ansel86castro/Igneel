@@ -9,19 +9,14 @@ namespace Igneel.Rendering.Bindings
 {
     public class PlaneReflectionBinding : RenderBinding<ReflectiveNodeTechnique>
     {
-        public interface IMapping
-        {
-            bool USE_REFLECTION_MAP { get; set; }
-            bool USE_REFRACTION_MAP { get; set; }
-        }
-
-        IMapping mapping;
+       
+        IPlanarReflecionMap mapping;
 
         protected override void OnEffectChanged(Effect effect)
         {
             base.OnEffectChanged(effect);
 
-            mapping = effect.Map<IMapping>();
+            mapping = effect.Map<IPlanarReflecionMap>();
         }
 
         public override void OnBind(ReflectiveNodeTechnique value)
@@ -36,13 +31,11 @@ namespace Igneel.Rendering.Bindings
 
                 if (value.UseReflection)
                 {
-                    Engine.Graphics.PS.SetResource(5, value.ReflectionTexture);
-                    Engine.Graphics.PS.SetSampler(5, SamplerState.Linear);
+                    mapping.ReflectionMap = value.ReflectionTexture.ToSampler();                    
                 }
                 if (value.UseRefraction)
                 {
-                    Engine.Graphics.PS.SetResource(6, value.RefractionTexture);
-                    Engine.Graphics.PS.SetSampler(6, SamplerState.Linear);
+                    mapping.RefractionMap = value.RefractionTexture.ToSampler();
                 }
             }
         }
@@ -51,8 +44,8 @@ namespace Igneel.Rendering.Bindings
         {
             if (mapping != null && Engine.Lighting.Reflection.Enable)
             {
-                Engine.Graphics.PS.SetResource(5, null);
-                Engine.Graphics.PS.SetResource(6, null);
+                mapping.ReflectionMap = Sampler<Texture2D>.Null;
+                mapping.RefractionMap = Sampler<Texture2D>.Null;
             }
         }
     }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ClrRuntime;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,6 +11,7 @@ namespace Igneel.Graphics
     {
         byte[] code;
         bool isCompiled;
+        ShaderReflection shaderReflection;
 
         public ShaderCode(IntPtr ptrCode,  int sizeInBytes, bool isCompiled)
         {
@@ -18,7 +20,7 @@ namespace Igneel.Graphics
             {
                 fixed (byte* pCode = code)
                 {
-                    ClrPlatform.Crl.CopyMemory(ptrCode.ToPointer(), pCode, sizeInBytes);
+                    Runtime.Copy(ptrCode.ToPointer(), pCode, sizeInBytes);
                 }
             }
         }
@@ -32,10 +34,11 @@ namespace Igneel.Graphics
         public byte[] Code { get { return code; } }
 
         public bool IsCompiled { get { return isCompiled; } }
+
+        public ShaderReflection Reflection { get { return shaderReflection; } set { shaderReflection = value; } }
     }
 
-    public struct ShaderCompilationUnit<T>
-        where T:Shader
+    public struct ShaderCompilationUnit<T>      
     {
         public ShaderCompilationUnit(ShaderCode code, T shader)
         {

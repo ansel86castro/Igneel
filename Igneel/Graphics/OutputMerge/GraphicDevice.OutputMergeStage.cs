@@ -132,9 +132,9 @@ namespace Igneel.Graphics
 
         protected abstract void OMSetBlendState(BlendState state);
 
-        protected abstract void OMSetDepthStencilState(DepthStencilState state);      
+        protected abstract void OMSetDepthStencilState(DepthStencilState state);
 
-        protected abstract SwapChain CreateSwapChainImp(SwapChainDesc desc);
+        protected abstract SwapChain CreateSwapChainImp(IGraphicContext context);
 
         #endregion                
 
@@ -151,9 +151,9 @@ namespace Igneel.Graphics
             return CreateDepthStencil(new DepthStencilDesc(width, height, format, multisampling, false));
         }
 
-        public SwapChain CreateSwapChain(SwapChainDesc desc)
+        public SwapChain CreateSwapChain(IGraphicContext context)
         {
-            var swapChain = CreateSwapChainImp(desc);
+            var swapChain = CreateSwapChainImp(context);
             _swapChains.Add(swapChain);
             swapChain.Device = this;
 
@@ -181,8 +181,8 @@ namespace Igneel.Graphics
                 Array.Clear(_omRenderTargets, 0, numTargets);                
             }
             else
-            {
-                ClrPlatform.Crl.CopyMemory(renderTargets, _omRenderTargets, numTargets);                
+            {                
+                ClrRuntime.Runtime.Copy(renderTargets, _omRenderTargets, numTargets);                
             }
 
             this._omDepthStencil = dephtStencil;
@@ -198,7 +198,7 @@ namespace Igneel.Graphics
             }
             else
             {
-                ClrPlatform.Crl.CopyMemory(renderTargets, _omRenderTargets, numTargets);
+                ClrRuntime.Runtime.Copy(renderTargets, _omRenderTargets, numTargets);
             }
         }
 

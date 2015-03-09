@@ -39,7 +39,7 @@ namespace Igneel.Graphics
                 Matrix.RotationX(-Numerics.PIover2)
             };
 
-            Colors = new Vector4[]{ new Vector4(Color.Red), new Vector4(Color.Blue), new Vector4(Color.Green)};
+            Colors = new Vector4[] { new Vector4(1, 0, 0, 1), new Vector4(0, 1, 0, 1), new Vector4(0, 0, 1, 1) };
         }
     }
 }

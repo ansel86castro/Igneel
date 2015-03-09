@@ -24,8 +24,7 @@ namespace Igneel.Rendering
         {
             for (int i = 0; i < presenters.Length; i++)
             {
-                var p = presenters[i];
-                p.RenderFrame();
+                 presenters[i].RenderFrame();                
             }
         }
 

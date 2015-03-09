@@ -21,7 +21,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <PlatformTarget>x86</PlatformTarget>
+    <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -52,39 +52,13 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="antlr.runtime, Version=2.7.7.1, Culture=neutral, PublicKeyToken=d7701e059243744f, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>bin\Debug\antlr.runtime.dll</HintPath>
-    </Reference>
-    <Reference Include="Antlr3.Runtime, Version=3.1.0.39271, Culture=neutral, PublicKeyToken=3a9cab8f8d22bfb7, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>bin\Debug\Antlr3.Runtime.dll</HintPath>
-    </Reference>
-    <Reference Include="Antlr3.Utility, Version=0.1.0.37314, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>bin\Debug\Antlr3.Utility.dll</HintPath>
-    </Reference>
-    <Reference Include="ClrPlatformLib, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>bin\Debug\ClrPlatformLib.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Xna.Framework.Math">
-      <HintPath>..\..\..\XNA Math Helper DLL\C#\Microsoft.Xna.Framework.Math.dll</HintPath>
-    </Reference>
-    <Reference Include="StringTemplate, Version=3.0.1.21733, Culture=neutral, PublicKeyToken=beee492b52c41e85, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>bin\Debug\StringTemplate.dll</HintPath>
+    <Reference Include="ClrRuntime">
+      <HintPath>..\..\CLRPlatform\CLRPlatform\bin\Debug\ClrRuntime.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Design" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Drawing.Design" />
-    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
@@ -125,25 +99,24 @@
     <Compile Include="Collections\ResourceCollection.cs" />
     <Compile Include="Collections\Utils.cs" />
     <Compile Include="Components\DrawingEntry.cs" />
+    <Compile Include="Graphics\Color3.cs" />
     <Compile Include="Graphics\GraphicStates\GraphicDevice.States.cs" />
     <Compile Include="Graphics\GraphicStates\StateStack.cs" />
     <Compile Include="Graphics\OutputMerge\DepthStencilDesc.cs" />
+    <Compile Include="Graphics\Platform\GraphicFont.cs" />
+    <Compile Include="Graphics\Platform\GraphicContext.cs" />
     <Compile Include="Graphics\Resources\ShaderBuffer.cs" />
     <Compile Include="Graphics\Shaders\IShaderStage.cs" />
     <Compile Include="Graphics\Shaders\ShaderReflection.cs" />
-    <Compile Include="Graphics\TargaImage.cs" />
+    <Compile Include="Graphics\Shaders\StreamOutDeclaration.cs" />
     <Compile Include="IA\Inference\Facts.cs" />
     <Compile Include="IA\StateMachines\InferenceEngine.cs" />
-    <Compile Include="Importers\BVH\BVHAnimationImporter.cs" />
-    <Compile Include="Importers\BVH\bvhLexer.cs" />
-    <Compile Include="Importers\BVH\BVHNode.cs" />
-    <Compile Include="Importers\BVH\bvhParser.cs" />
-    <Compile Include="Importers\BVH\BVHSkelletonRender.cs" />
+    <Compile Include="Input\IInputContext.cs" />
     <Compile Include="Math\Ray.cs" />
     <Compile Include="Physics\Scene\ContactReport.cs" />
     <Compile Include="Physics\Scene\ITriggerCallback.cs" />
     <Compile Include="Physics\Scene\RaycastHit.cs" />
-    <Compile Include="Rendering\Bindings\TransformsBindings.cs" />
+    <Compile Include="Rendering\Bindings\InterfacesMapDefinitions.cs" />
     <Compile Include="Components\BillBoard.cs" />
     <Compile Include="Components\Camera.cs" />
     <Compile Include="Components\GraphicObject.cs" />
@@ -425,11 +398,13 @@
     <Compile Include="Components\SceneNode.cs" />
     <Compile Include="Components\SceneState.cs" />
     <Compile Include="Components\SceneStateTriggers.cs" />
+    <Compile Include="Rendering\UniformMappers.cs" />
     <Compile Include="Services\CommonService.cs" />
     <Compile Include="Services\INotificationService.cs" />
     <Compile Include="Services\IPickingService.cs" />
     <Compile Include="IA\StateMachines\Automata.cs" />
     <Compile Include="IA\StateMachines\State.cs" />
+    <Compile Include="Tools\Assert.cs" />
     <Compile Include="Tools\CharacterControllerTagProcessor.cs" />
     <Compile Include="Tools\EnvironmentMapTagProcessor.cs" />
     <Compile Include="Tools\ActorTagProcessor.cs" />
@@ -439,72 +414,8 @@
     <Compile Include="Utilities\Bounds3.cs" />
     <Compile Include="Collections\NamedItemCollection.cs" />
     <Compile Include="Collections\ObservableCollection.cs" />
-    <Compile Include="Design\Controls\AngleControl.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Design\Controls\AttitudePicker.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Design\Controls\AttitudePicker.Designer.cs">
-      <DependentUpon>AttitudePicker.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Design\Controls\ColorPicker.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Design\Controls\ColorPicker.Designer.cs">
-      <DependentUpon>ColorPicker.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Design\Controls\DirectionPicker.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Design\Controls\DirectionPicker.Designer.cs">
-      <DependentUpon>DirectionPicker.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Design\Controls\EulerEditor.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Design\Controls\EulerEditor.Designer.cs">
-      <DependentUpon>EulerEditor.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Design\Controls\NumericStep.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Design\Controls\NumericStep.Designer.cs">
-      <DependentUpon>NumericStep.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Design\Controls\Vector3Editor.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Design\Controls\Vector3Editor.Designer.cs">
-      <DependentUpon>Vector3Editor.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Design\CustumPropertyDescritors.cs" />
-    <Compile Include="Design\DesignAttributes.cs" />
-    <Compile Include="Design\Form\AttitudePickerForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Design\Form\AttitudePickerForm.Designer.cs">
-      <DependentUpon>AttitudePickerForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Design\DesignTypeConverter.cs" />
-    <Compile Include="Design\Form\TypeProviderForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Design\Form\TypeProviderForm.Designer.cs">
-      <DependentUpon>TypeProviderForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Design\PDProviders\PDProvider.cs" />
-    <Compile Include="Design\UITypeEditors\UIActionEditor.cs" />
-    <Compile Include="Design\UITypeEditors\UIAttitudeTypeEditor.cs" />
-    <Compile Include="Design\UITypeEditors\UIColorTypeEditor.cs" />
-    <Compile Include="Design\UITypeEditors\UICreatorEditor.cs" />
-    <Compile Include="Design\UITypeEditors\UIDirectionEditor.cs" />
-    <Compile Include="Design\UITypeEditors\UIInmediateNumericEditor.cs" />
-    <Compile Include="Design\UITypeEditors\UIRadianTypeEditor.cs" />
-    <Compile Include="Design\UITypeEditors\UIRotationMatrixEditor.cs" />
-    <Compile Include="Design\UITypeEditors\UIVector3TypeEditor.cs" />
     <Compile Include="Utilities\Generator.cs" />
-    <Compile Include="Graphics\Color.cs" />
+    <Compile Include="Graphics\Color4.cs" />
     <Compile Include="Graphics\Exceptions.cs" />
     <Compile Include="Graphics\GraphicDevice\Adapter.cs" />
     <Compile Include="Graphics\GraphicDevice\Enums.cs" />
@@ -532,7 +443,6 @@
     <Compile Include="Graphics\Resources\Texture2D.cs" />
     <Compile Include="Graphics\Resources\Enums.cs" />
     <Compile Include="Graphics\Resources\Texture1D.cs" />
-    <Compile Include="Graphics\Resources\TextureCube.cs" />
     <Compile Include="Rendering\EffectVariable.cs" />
     <Compile Include="Rendering\Effect.cs" />
     <Compile Include="Graphics\Shaders\Enums.cs" />
@@ -541,7 +451,7 @@
     <Compile Include="Graphics\Shaders\Shaders.cs" />
     <Compile Include="Graphics\Shaders\GraphicDevice.Shaders.cs" />
     <Compile Include="Graphics\Resources\GraphicBuffer.cs" />
-    <Compile Include="Graphics\InputAssembler\VertexDescriptor.cs" />
+    <Compile Include="Graphics\VertexDescriptor.cs" />
     <Compile Include="Graphics\Resources\Resources.cs" />
     <Compile Include="Engine\IBoundable.cs" />
     <Compile Include="Engine\IInitializable.cs" />
@@ -580,38 +490,9 @@
     <Compile Include="Utilities\StringConverter.cs" />
     <Compile Include="Utilities\Structs.cs" />
     <Compile Include="Utilities\Util.cs" />
-    <Compile Include="Graphics\InputAssembler\VertexComponents.cs" />
+    <Compile Include="Graphics\VertexComponents.cs" />
     <Compile Include="Graphics\InputAssembler\VertexElement.cs" />
-    <Compile Include="Graphics\InputAssembler\Vertices.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Design\Controls\AngleControl.resx">
-      <DependentUpon>AngleControl.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Design\Controls\AttitudePicker.resx">
-      <DependentUpon>AttitudePicker.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Design\Controls\ColorPicker.resx">
-      <DependentUpon>ColorPicker.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Design\Controls\DirectionPicker.resx">
-      <DependentUpon>DirectionPicker.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Design\Controls\EulerEditor.resx">
-      <DependentUpon>EulerEditor.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Design\Controls\NumericStep.resx">
-      <DependentUpon>NumericStep.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Design\Controls\Vector3Editor.resx">
-      <DependentUpon>Vector3Editor.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Design\Form\AttitudePickerForm.resx">
-      <DependentUpon>AttitudePickerForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Design\Form\TypeProviderForm.resx">
-      <DependentUpon>TypeProviderForm.cs</DependentUpon>
-    </EmbeddedResource>
+    <Compile Include="Graphics\Vertices.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Rendering\Renders\Recorte.txt" />

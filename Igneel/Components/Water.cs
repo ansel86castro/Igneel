@@ -5,9 +5,9 @@ using System.Text;
 using Igneel.Graphics;
 using System.Runtime.Serialization;
 using System.ComponentModel;
-using Igneel.Design;
-using Igneel.Design.UITypeEditors;
-using System.Drawing.Design;
+
+
+
 
 namespace Igneel.Components
 {
@@ -86,7 +86,7 @@ namespace Igneel.Components
 
     //    #region Propertys
 
-    //    [Browsable(false)]
+    //   
     //    public int CurrentCaustic { get { return currentCaustic; } set { currentCaustic = value; } }
 
     //    public Matrix CausticTransformMatrix { get { return causticTexM; } set { causticTexM = value; } }
@@ -127,7 +127,7 @@ namespace Igneel.Components
     //        set { time = value; }
     //    }
 
-    //    [TypeConverter(typeof(DesignTypeConverter))]
+    //   
     //    public Vector3 WinDirection
     //    {
     //        get { return winDirection; }
@@ -403,7 +403,7 @@ namespace Igneel.Components
 
     //    #region IGeometrySource Members
 
-    //    [Browsable(false)]
+    //   
     //    public VertexDescriptor VertexDescriptor
     //    {
     //        get { return vd; }

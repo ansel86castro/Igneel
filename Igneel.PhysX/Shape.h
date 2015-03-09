@@ -3,7 +3,7 @@
 
 using namespace System::ComponentModel;
 using namespace System;
-using namespace Igneel::Design;
+
 using namespace Igneel::Physics;
 
 namespace Igneel { namespace PhysX {

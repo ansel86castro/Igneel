@@ -4,7 +4,6 @@ using Igneel.Animations;
 using Igneel.Components;
 using Igneel.IA;
 using Igneel.Importers;
-using Igneel.Importers.BVH;
 using Igneel.Input;
 using System;
 using System.Collections.Generic;

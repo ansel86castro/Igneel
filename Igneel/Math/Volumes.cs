@@ -1,11 +1,11 @@
-﻿using Igneel.Design;
-using Igneel.Design.UITypeEditors;
+﻿
+
 using Igneel.Graphics;
 
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Drawing.Design;
+
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;

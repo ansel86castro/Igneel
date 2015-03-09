@@ -1,6 +1,6 @@
 ﻿using Igneel.Assets;
 using Igneel.Components;
-using Igneel.Design;
+
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Igneel.Rendering
 {
-    [TypeConverter(typeof(DesignTypeConverter))]  
+     
     public abstract class RenderBinder : IAssetProvider
     {
      

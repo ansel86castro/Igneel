@@ -1,5 +1,9 @@
+
 #include "ShadowMapTransform.hlsli"
-#include "Skinned.hlsli"
+
+#ifndef SKINNED
+	#include "Skinned.hlsli"
+#endif
 
 void TransformSkinnedPNL()
 {

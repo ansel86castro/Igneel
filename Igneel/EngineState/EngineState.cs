@@ -1,4 +1,4 @@
-﻿using Igneel.Design;
+﻿
 using Igneel.Services;
 using System;
 using System.Collections.Generic;
@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Igneel
 {
-    [TypeConverter(typeof(DesignTypeConverter))]
+   
     public class EngineState: IInitializable
     {
         public EngineState()
@@ -40,7 +40,7 @@ namespace Igneel
         }
 
 
-        [LockOnSet]
+        
         public bool Enable
         {
             get { return enable; }

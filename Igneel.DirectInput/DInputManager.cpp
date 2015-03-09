@@ -6,7 +6,7 @@
 
 namespace IgneelDirectInput {
 
-	DInputManager::DInputManager()
+	DInputManager::DInputManager()		
 	{
 		IDirectInput8* _input;
 		HRESULT hr = DirectInput8Create( GetModuleHandle( NULL ), DIRECTINPUT_VERSION,
@@ -47,23 +47,25 @@ namespace IgneelDirectInput {
 		return h;
 	}
 
-	Keyboard^ DInputManager::CreateKeyboard(IntPtr hwnd)
+	Keyboard^ DInputManager::CreateKeyboard(IInputContext^ context)
 	{
+		WindowContext^ wc = static_cast<WindowContext^>(context);
 		auto handle = EnsureHanlesCapasity(_nbHandles + 1);
-		auto kb = gcnew DKeyBoard(input, hwnd , handle);			
+		auto kb = gcnew DKeyBoard(input, wc , handle);			
 		devices->Add(kb);
 		return kb;
 	}
 
-	Mouse^ DInputManager::CreateMouse(IntPtr hwnd)
+	Mouse^ DInputManager::CreateMouse(IInputContext^ context)
 	{
+		WindowContext^ wc = static_cast<WindowContext^>(context);
 		auto handle = EnsureHanlesCapasity(_nbHandles + 1);
-		auto device =  gcnew DMouse(input, hwnd, handle);				
+		auto device =  gcnew DMouse(input, wc, handle);				
 		devices->Add(device);
 		return device;
 	}
 
-	array<Joystick^>^ DInputManager::CreateJoysticks(IntPtr hwnd)
+	array<Joystick^>^ DInputManager::CreateJoysticks(IInputContext^ context)
 	{
 		return nullptr;
 	}

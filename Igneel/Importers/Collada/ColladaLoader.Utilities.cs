@@ -9,6 +9,7 @@ using System.Runtime.InteropServices;
 using Igneel.Rendering;
 using Igneel.Graphics;
 using Igneel.Components;
+using ClrRuntime;
 
 namespace Igneel.Importers.Collada
 {
@@ -375,7 +376,7 @@ namespace Igneel.Importers.Collada
 
             fixed (float* pArray = array)
             {            
-                ClrPlatform.Crl.CopyMemory(pArray, &mat, 16 * 4);
+                Runtime.Copy(pArray, &mat, 16 * 4);
             }
           
             return ConvertMatrix(mat);
@@ -514,7 +515,7 @@ namespace Igneel.Importers.Collada
 
             fixed (Matrix* pMatrices = matrices)
             {
-                ClrPlatform.Crl.CopyMemory((void*)source.ArrayPointer, pMatrices, source.Array.Length * 4);
+                Runtime.Copy((void*)source.ArrayPointer, pMatrices, source.Array.Length * 4);
             }
 
             for (int i = 0; i < matrices.Length; i++)            
@@ -578,8 +579,8 @@ namespace Igneel.Importers.Collada
 
             for (int i = 0; i < source.Accesor.Count; i++, pter += stride)
             {
-                T data =converter(ClrPlatform.Crl.GetValue<T>(pter));
-                ClrPlatform.Crl.SetValue(pter, data);
+                T data =converter(ClrRuntime.Runtime.GetValue<T>(pter));
+                ClrRuntime.Runtime.SetValue(data , pter);
             }
 
             source.Unlock();

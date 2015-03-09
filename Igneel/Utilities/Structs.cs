@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 
 using System.ComponentModel;
-using Igneel.Design.UITypeEditors;
-using System.Drawing.Design;
+
+
 using System.Runtime.InteropServices;
-using Igneel.Design;
+
 
 namespace Igneel
 {  
@@ -157,7 +157,7 @@ namespace Igneel
 
     [Serializable]
     [System.Runtime.InteropServices.StructLayout(System.Runtime.InteropServices.LayoutKind.Sequential)]
-    [TypeConverter(typeof(DesignTypeConverter))]
+   
     public struct SizeF
     {
         public float Width;
@@ -169,7 +169,7 @@ namespace Igneel
             this.Height = height;
         }
 
-        [Browsable(false)]
+       
         public bool IsEmpty { get { return Width == 0 && Height == 0; } }
 
         public static readonly SizeF Empty = new SizeF();
@@ -177,7 +177,7 @@ namespace Igneel
    
     [Serializable]
     [System.Runtime.InteropServices.StructLayout(System.Runtime.InteropServices.LayoutKind.Sequential)]
-    [TypeConverter(typeof(DesignTypeConverter))]
+   
     public struct Size
     {
         public int Width;
@@ -190,7 +190,7 @@ namespace Igneel
             this.Height = height;
         }
 
-        [Browsable(false)]
+       
         public bool IsEmpty { get { return Width == 0 && Height == 0; } }
 
         public static readonly Size Empty = new Size();

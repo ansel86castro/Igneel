@@ -4,7 +4,7 @@
 
 float4 main(SMVSOutput input) : SV_TARGET0
 {   	
-	clip(dot(float4(input.PositionW, 1), clipPlane));
+	clip(dot(float4(input.PositionW, 1), ClipPlane));
 	
 	gPositionW   = input.PositionW;
 	gNormalW     = input.NormalW;
@@ -15,7 +15,7 @@ float4 main(SMVSOutput input) : SV_TARGET0
 	
 	ComputeShadowTexCoord();
 	
-	gShadowFactor = t7.SampleCmpLevelZero(s7, gShadowTexCoord.xy , gShadowTexCoord.z);
+	gShadowFactor = ShadowMap.SampleCmpLevelZero(sShadowMap, gShadowTexCoord.xy , gShadowTexCoord.z);
 
 	ComputeLighting();
 

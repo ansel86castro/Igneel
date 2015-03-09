@@ -6,6 +6,6 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
-        <WindowsFormsHost Name="formHost" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+        <WindowsFormsHost Name="formHost" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
     </Grid>
 </UserControl>

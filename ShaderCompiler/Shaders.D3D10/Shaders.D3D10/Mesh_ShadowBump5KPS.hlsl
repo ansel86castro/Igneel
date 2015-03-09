@@ -6,7 +6,7 @@
 
 float4 main(SMBumpVSOutput input) : SV_TARGET
 {   	
-	clip(dot(float4(input.PositionW, 1), clipPlane));
+	clip(dot(float4(input.PositionW, 1), ClipPlane));
 	
 	gScreenCoord = input.ScreenCoord;
 	gPositionW = input.PositionW;

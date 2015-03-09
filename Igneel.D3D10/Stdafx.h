@@ -8,6 +8,7 @@
 #include <d3dx10.h>
 #include <dxerr.h>
 #include <dxgi.h>
+#include <Windows.h>
 
 using namespace System;
 using namespace Igneel;

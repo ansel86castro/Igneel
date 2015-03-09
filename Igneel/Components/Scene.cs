@@ -13,7 +13,7 @@ using System.Collections;
 using Igneel.Collections;
 using System.ComponentModel;
 using Igneel.Assets;
-using Igneel.Design;
+
 using Igneel.Physics;
 using Igneel.Animations;
 using Igneel.Rendering;
@@ -22,7 +22,7 @@ namespace Igneel.Components
 {       
    
     [OnComplete("LoadComplete")]
-    [TypeConverter(typeof(DesignTypeConverter))]   
+      
     [ProviderActivator(typeof(Scene.Activator))]  
     public class Scene : IAssetProvider, IAssetProviderNotificator, IDynamic, INameable
     {
@@ -86,45 +86,45 @@ namespace Igneel.Components
         [AssetMember]
         public GlobalLigth AmbientLight { get { return globalLight; } set { globalLight = value; } }
 
-        [Browsable(false)]
+       
         public List<DrawingEntry> RenderList { get { return renderList; } }
 
-        [Browsable(false)]
+       
         public List<DrawingEntry> TransparentRenderList { get { return transparentList; } }
      
-        [Browsable(false)]
+       
         public AnimationManager AnimManager { get { return animationManager; } }
 
-        [Browsable(false)]
+       
         public ObservedDictionary<string, Camera> Cameras { get { return cameras; } }
 
-        [Browsable(false)]
+       
         public List<IDynamic> Dynamics { get { return dynamics; } }
 
-        [Browsable(false)]
+       
         public List<NodeTechnique> Techniques { get { return techniques; } }
 
-        [Browsable(false)]
+       
         public List<LightInstance> Lights { get { return lightNodes; } }
 
-        [Browsable(false)]
+       
         public List<LightInstance> ActiveLights { get { return activelightNodes; } }
         
         public List<SceneNode> Geometries { get { return geometries; } }
 
         public ObservedDictionary<int, IIdentificable> Identificables { get { return identificables; } }
 
-        [Browsable(false)]        
+               
         public List<SceneNode> Nodes { get { return rootNodes; } }
 
         public Camera ActiveCamera { get { return activeCamera; } set { activeCamera = value; } }        
 
         public ICuller<SceneNode> CullingProvider { get { return quadTree; } }
 
-        [Browsable(false)]
+       
         public ICollection<SceneNode> NonCullingProviderSuported { get { return nonCullingProviderSuported; } }
 
-        [Browsable(false)]
+       
         [AssetMember(typeof(CollectionStoreConverter<IGraphicObject>))]
         public List<IGraphicObject> Renderables { get { return renderables; } }
 
@@ -262,10 +262,11 @@ namespace Igneel.Components
             foreach (var item in renderables)
             {               
                 if (item.Visible)
-                {
+                {                    
                     renderList.Add(new DrawingEntry
                     {
                         GraphicObject = item,
+                        Render = item.GetRender(),    
                         IsTransparent = item.IsTransparent,
                     });
                 }

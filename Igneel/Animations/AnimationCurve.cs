@@ -1,4 +1,4 @@
-﻿using ClrPlatform;
+﻿using ClrRuntime;
 using Igneel.Assets;
 using System;
 using System.Collections.Generic;
@@ -151,7 +151,7 @@ namespace Igneel.Animations
                         fixed (float* pOutput = output)
                         {
                             if (output.Length == outDim)
-                                Crl.CopyMemory(pOutput, pResult, outDim * sizeof(float));
+                                Runtime.Copy(pOutput, pResult, outDim * sizeof(float));
                             else
                             {
                                 float* p0 = pOutput + lowkey * outDim;
@@ -161,7 +161,7 @@ namespace Igneel.Animations
                                 switch (interpolationType)
                                 {
                                     case InterpolationMethod.STEP:
-                                        Crl.CopyMemory(p0, pResult, outDim * sizeof(float));
+                                        Runtime.Copy(p0, pResult, outDim * sizeof(float));
                                         break;
                                     case InterpolationMethod.LINEAR:
                                         Numerics.Lerp(pResult, p0, p1, s, outDim);

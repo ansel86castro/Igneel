@@ -12,6 +12,7 @@
 #include "ShaderProgram.h"
 
 using namespace System::Drawing::Imaging;
+using namespace Igneel::Windows;
 
 namespace IgneelD3D10
 {
@@ -19,6 +20,8 @@ namespace IgneelD3D10
 		:GraphicDevice(desc)
 	{
 		OpenConstantBuffers = gcnew List<CbHandle^>();
+		this->ShaderModelVersion = 400;
+		this->Profile  = DeviceProfile::Direct3D;
 	}
 	
 	DeviceInfo GraphicDevice10::InitDevice(GraphicDeviceDesc^ desc)
@@ -29,25 +32,28 @@ namespace IgneelD3D10
 		ID3D10Device * device = NULL;
 		DeviceInfo di = DeviceInfo();
 
-		if(desc->WindowsHandle != IntPtr::Zero)
+		Igneel::Windows::WindowContext^ context= reinterpret_cast<Igneel::Windows::WindowContext^>(desc->Context);
+
+		if(context->WindowHandle != IntPtr::Zero)
 		{		
 			DXGI_SWAP_CHAIN_DESC sd;
 			ZeroMemory( &sd, sizeof(DXGI_SWAP_CHAIN_DESC) );
 
 			sd.BufferCount = 1;
-			sd.BufferDesc.Width = desc->BackBufferWidth;
-			sd.BufferDesc.Height = desc->BackBufferHeight;
-			sd.BufferDesc.Format = static_cast<DXGI_FORMAT>(desc->BackBufferFormat); 
+			sd.BufferDesc.Width = context->BackBufferWidth;
+			sd.BufferDesc.Height = context->BackBufferHeight;
+			sd.BufferDesc.Format = static_cast<DXGI_FORMAT>(context->BackBufferFormat); 
 			sd.BufferDesc.RefreshRate.Numerator = 60;
 			sd.BufferDesc.RefreshRate.Denominator = 1;
 			sd.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;
-			sd.OutputWindow = (HWND) desc->WindowsHandle.ToPointer();	
-			sd.SampleDesc.Count = desc->MSAA.Count;
-			sd.SampleDesc.Quality = desc->MSAA.Quality;
+			sd.OutputWindow = (HWND) context->WindowHandle.ToPointer();	
+			sd.SampleDesc.Count = context->Sampling.Count;
+			sd.SampleDesc.Quality = context->Sampling.Quality;
+
 			sd.SwapEffect = DXGI_SWAP_EFFECT_DISCARD;
 			//sd.Flags = DXGI_SWAP_CHAIN_FLAG_GDI_COMPATIBLE;
-			sd.Windowed = !desc->FullScreen;
-			if(desc->FullScreen)
+			sd.Windowed = !context->FullScreen;
+			if(context->FullScreen)
 				sd.Flags|=DXGI_SWAP_CHAIN_FLAG_ALLOW_MODE_SWITCH;
 
 				switch (desc->DriverType)
@@ -118,8 +124,8 @@ namespace IgneelD3D10
 		_swapChain = swapChain;
 
 		D3D10_VIEWPORT vp;
-	    vp.Width = desc->BackBufferWidth;
-		vp.Height = desc->BackBufferHeight;
+	    vp.Width = context->BackBufferWidth;
+		vp.Height = context->BackBufferHeight;
 		vp.MinDepth = 0.0f;
 		vp.MaxDepth = 1.0f;
 		vp.TopLeftX = 0;
@@ -128,10 +134,10 @@ namespace IgneelD3D10
 
 	   ViewPort = *(Graphics::ViewPort*)&vp;
 
-	   di.DisplayFormat = desc->BackBufferFormat;
-	   di.DisplayHeight = desc->BackBufferWidth;
-	   di.DisplayHeight = desc->BackBufferHeight;
-	   di.MSAA = desc->MSAA;
+	   di.DisplayFormat = context->BackBufferFormat;
+	   di.DisplayHeight = context->BackBufferWidth;
+	   di.DisplayHeight = context->BackBufferHeight;
+	   di.MSAA = context->Sampling;
 
 	 /*  if(swapChain)
 	   {
@@ -170,8 +176,7 @@ namespace IgneelD3D10
 		{				
 			case Igneel::Graphics::ResourceType::Buffer:
 				switch (binding)
-				{
-					case Igneel::Graphics::BindFlags::ConstantBuffer: return result && D3D10_FORMAT_SUPPORT_BUFFER;				
+				{					
 					case Igneel::Graphics::BindFlags::IndexBuffer: return result && D3D10_FORMAT_SUPPORT_IA_INDEX_BUFFER;							
 					case Igneel::Graphics::BindFlags::StreamOutput: return result && D3D10_FORMAT_SUPPORT_SO_BUFFER;
 					case Igneel::Graphics::BindFlags::VertexBuffer: return result && D3D10_FORMAT_SUPPORT_IA_VERTEX_BUFFER;
@@ -528,9 +533,7 @@ namespace IgneelD3D10
 
 	void GraphicDevice10::ResizeBackBuffer(int width, int height)
 	{		
-		DefaultSwapChain->ResizeBackBuffer(width, height);
-		_desc->BackBufferWidth = width;
-		_desc->BackBufferHeight = height;
+		DefaultSwapChain->ResizeBackBuffer(width, height);		
 
 		ID3D10Texture2D* depthTex;
 		ID3D10DepthStencilView *depthView;

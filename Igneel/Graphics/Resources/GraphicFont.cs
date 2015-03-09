@@ -26,17 +26,5 @@ namespace Igneel.Graphics
        // INTERNAL              =   0x00001000
     }
 
-    public abstract class GraphicFont
-    {
-        protected Font font;
-
-        GraphicFont(Font font)
-        {
-            this.font = font;
-        }
-
-        public Font Font { get { return font; } }
-
-        public abstract void DrawText(string text, Rectangle rec, Color4 color, DrawFontFormat format);
-    }
+  
 }

@@ -1,9 +1,12 @@
-#include "Transform.hlsli"
+
+#ifndef TRANSFORM
+	#include "Transform.hlsli"
+#endif
 
 //GLOBALS
 static float4 gPositionL;
 
-cbuffer shadowMapCamera
+cbuffer cbShadowMapCamera
 {		
 	float4x4 LightVP;			
 };

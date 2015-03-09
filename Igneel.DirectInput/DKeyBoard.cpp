@@ -3,7 +3,8 @@
 
 namespace IgneelDirectInput {
 
-	DKeyBoard::DKeyBoard(IDirectInput8* input, IntPtr hwnd, HANDLE hEvent)
+	DKeyBoard::DKeyBoard(IDirectInput8* input, WindowContext^ context, HANDLE hEvent)
+		: Keyboard(context)
 	{
 		LPDIRECTINPUTDEVICE8 device;
 		SAFECALL( input->CreateDevice(GUID_SysKeyboard ,&device, NULL) ); 
@@ -42,7 +43,7 @@ namespace IgneelDirectInput {
 #ifdef DEBUG
 		SAFECALL( keyboard->SetCooperativeLevel((HWND)hwnd.ToPointer(),  DISCL_BACKGROUND | DISCL_NONEXCLUSIVE) );
 #else
-		SAFECALL( keyboard->SetCooperativeLevel((HWND)hwnd.ToPointer(),  DISCL_BACKGROUND | DISCL_NONEXCLUSIVE) );
+		SAFECALL( keyboard->SetCooperativeLevel((HWND)context->WindowHandle.ToPointer(),  DISCL_BACKGROUND | DISCL_NONEXCLUSIVE) );
 #endif
 		SAFECALL(  keyboard->Acquire()) ;
 

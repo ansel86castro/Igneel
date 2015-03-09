@@ -114,7 +114,7 @@ namespace IgneelD3D10
 
 			OVERRIDE( void OMSetDepthStencilState(DepthStencilState^ state) );			
 
-			OVERRIDE( SwapChain^ CreateSwapChainImp(SwapChainDesc desc) );
+			OVERRIDE( SwapChain^ CreateSwapChainImp(IGraphicContext^ context) );
 
 		public:
 			OVERRIDE( RenderTarget^ CreateRenderTarget(Texture2D^ texture, int subResource , int count) );			

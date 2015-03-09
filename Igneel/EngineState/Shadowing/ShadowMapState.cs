@@ -1,4 +1,4 @@
-﻿using Igneel.Design;
+﻿
 using Igneel.Graphics;
 using Igneel.Rendering;
 using Igneel.Rendering.Effects;
@@ -20,7 +20,7 @@ namespace Igneel
             GaussianDeviation = (float)Math.Sqrt(3);
         }
 
-        [LockOnSet]
+        
         public int Size { get; set; }
 
         public float Bias { get; set; }

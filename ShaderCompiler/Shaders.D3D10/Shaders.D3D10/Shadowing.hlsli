@@ -1,11 +1,10 @@
+#define SHADOWING
+
 #ifndef GLOBALS
 	#include "Globals.hlsli"
 #endif
 
-#define SHADOWING
-
-
-cbuffer shadowMap
+cbuffer cbShadowMap
 {	
 	float SHADOW_EPSILON;	
 };

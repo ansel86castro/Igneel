@@ -66,6 +66,12 @@ namespace Igneel.Graphics
             return mipSlice + (arraySlice * mipLevels);
         }
 
+        public static void DecoupleSubresource(int subResource, int mipLevels ,out int arrayIndex, out int mipLevel )
+        {
+            arrayIndex = subResource / mipLevels;
+            mipLevel = subResource % mipLevels;
+        }
+
 
         public abstract void UnMap(int subResource);      
     }

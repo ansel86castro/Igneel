@@ -1,6 +1,7 @@
 ﻿using Igneel.Collections;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,6 +10,7 @@ namespace Igneel.Graphics
 {
     public abstract class ShaderStage : IShaderStage
     {
+      
         public struct ShaderStageInitialization
         {
             public int NbSamples { get; set; }
@@ -96,7 +98,73 @@ namespace Igneel.Graphics
 
         protected abstract void OnSetResources(int index, int nbResources ,ShaderResource[] resources);
 
-        internal protected virtual void Dispose() { }
+        internal protected virtual void Dispose() { }       
+    }
+
+    public abstract class ShaderStage<T> : ShaderStage, IShaderStage<T>        
+    {
+        protected struct ShaderCacheEntry
+        {
+            public ShaderCode Code;
+            public T Shader;
+        }
+
+        private Dictionary<string, ShaderCacheEntry> shaderCache = new Dictionary<string, ShaderCacheEntry>();
+
+        public ShaderCompilationUnit<T> CreateShader(string filename, string functionName = "main", ShaderMacro[] defines = null)
+        {
+            ShaderCacheEntry entry;
+            if (!shaderCache.TryGetValue(filename, out entry))
+            {
+                var locator = Service.Require<IShaderRepository>();
+                string srcFile = locator.Locate(filename);
+                string ext = Path.GetExtension(srcFile);
+                ShaderCode code;
+
+                if (ext == ".cso")
+                {
+                    code = new ShaderCode(File.ReadAllBytes(srcFile), true);
+                }
+                else
+                {
+                    code = CompileFromFile(srcFile, functionName, defines);
+                }
+
+                entry = new ShaderCacheEntry { Shader = CreateShader(code), Code = code };
+                shaderCache[filename] = entry;
+            }
+            return new ShaderCompilationUnit<T>(entry.Code, (T)entry.Shader);
+        }
+
+        public abstract T CreateShader(ShaderCode bytecode);                
+
+        public abstract ShaderCode CompileFromMemory(string shaderCode, string functionName = "main", ShaderMacro[] defines = null);
+
+        public abstract ShaderCode CompileFromFile(string filename, string functionName="main", ShaderMacro[] defines = null);
+
+        //public ShaderCode CompileFile(string filename, string functionName = "main", ShaderMacro[] defines = null)
+        //{
+        //    var compiler = new HLSLCompiler();
+        //    compiler.Sources = new string[] { tbSource.Text };
+        //    compiler.IncludePath = new string[] { @"E:\Projects\Igneel\ShaderCompiler\Shaders.D3D10\Shaders.D3D10" };
+        //    compiler.Compile();
+
+        //    if (_compiler.Errors.Count > 0)
+        //    {
+        //        var sb = new StringBuilder();
+        //        foreach (var item in _compiler.Errors)
+        //        {
+        //            sb.AppendLine(item);
+        //        }
+        //        MessageBox.Show(sb.ToString(), "Errors");
+        //    }
+        //    else
+        //    {
+        //        tbCompiled.Text = _compiler.GenerateCode();
+        //    }
+        //}
+
+     
     }
 
     public static class ShaderStageEx

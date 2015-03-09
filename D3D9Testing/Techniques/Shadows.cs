@@ -229,7 +229,7 @@ namespace D3D9Testing.Techniques
 
                 Engine.RenderFrame += () =>
                 {
-                    presenter.Begin(Color.Aqua);
+                    presenter.Begin(new Color4(Color.Aqua.ToArgb()));
 
                     var device = Engine.Graphics;
                     device.PS.SamplerStacks[0].Push(SamplerState.Linear);                    

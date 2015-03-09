@@ -3,7 +3,7 @@
 #include "IPollable.h"
 
 using namespace System;
-
+using namespace Igneel::Windows;
 
 namespace IgneelDirectInput {
 
@@ -12,7 +12,7 @@ namespace IgneelDirectInput {
 		LPDIRECTINPUTDEVICE8 joystick;
 		LPDIJOYSTATE2 state;
 	public:
-		DJoystick(LPDIRECTINPUT8 input,  IntPtr hwnd);
+		DJoystick(LPDIRECTINPUT8 input,  WindowContext^ context);
 
 		virtual void Pool();
 

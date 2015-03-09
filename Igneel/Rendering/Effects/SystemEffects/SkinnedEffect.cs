@@ -11,12 +11,12 @@ namespace Igneel.Rendering.Effects
 {
     public class SkinWorldBiding : RenderBinding<SceneNode>
     {
-        SceneNodeBinding.IWorldMapping mapping;
+        IWorldMap mapping;
 
         protected override void OnEffectChanged(Effect effect)
         {
             base.OnEffectChanged(effect);
-            mapping = effect.Map<SceneNodeBinding.IWorldMapping>(true);
+            mapping = effect.Map<IWorldMap>();
         }
         public override void OnBind(SceneNode value)
         {

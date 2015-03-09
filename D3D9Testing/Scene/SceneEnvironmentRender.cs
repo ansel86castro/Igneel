@@ -69,14 +69,14 @@ namespace Igneel.Design
                 axis = new VertexPositionColor[6];
 
             //X axis
-            axis[0] = new VertexPositionColor(Vector3.UnitX * size, Color.Red);
-            axis[1] = new VertexPositionColor(Vector3.UnitX * -size, Color.Red);
+            axis[0] = new VertexPositionColor(Vector3.UnitX * size, new Color4(Color.Red.ToArgb()));
+            axis[1] = new VertexPositionColor(Vector3.UnitX * -size, new Color4(Color.Red.ToArgb()));
             //Y axis
-            axis[2] = new VertexPositionColor(Vector3.UnitY * size, Color.Green);
-            axis[3] = new VertexPositionColor(Vector3.UnitY * -size, Color.Green);
+            axis[2] = new VertexPositionColor(Vector3.UnitY * size, new Color4(Color.Green.ToArgb()));
+            axis[3] = new VertexPositionColor(Vector3.UnitY * -size, new Color4(Color.Green.ToArgb()));
             //Z axis
-            axis[4] = new VertexPositionColor(Vector3.UnitZ * size, Color.Blue);
-            axis[5] = new VertexPositionColor(Vector3.UnitZ * -size, Color.Blue);
+            axis[4] = new VertexPositionColor(Vector3.UnitZ * size, new Color4(Color.Blue.ToArgb()));
+            axis[5] = new VertexPositionColor(Vector3.UnitZ * -size, new Color4(Color.Blue.ToArgb()));
 
             float left = -size;
             float right = size;
@@ -87,7 +87,7 @@ namespace Igneel.Design
             int sizeV = sizeH;
 
 
-            Vector4 color = (Vector4)Color.DarkGray;
+            Vector4 color = new Vector4(Color.DarkGray.ToArgb());
 
             lines = new VertexPositionColor[(sizeH + sizeV) * 2 + 4];
 

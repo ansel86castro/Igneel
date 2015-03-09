@@ -49,11 +49,13 @@ namespace Igneel.Graphics
 
         public abstract IUniformSetter CreateUniformSetter(string name);
 
-        protected abstract bool IsUniformDefined(string name);        
-       
-        public abstract UniformDesc[] GetUniformDescriptions();
+        //public abstract IResourceSetter CreateResourceSetter(string name);
 
-        public abstract UniformDesc GetUniformDescription(string name);
+        protected abstract bool IsUniformDefined(string name);
+       
+        public abstract ShaderReflectionVariable[] GetUniformDescriptions();
+
+        public abstract ShaderReflectionVariable GetUniformDescription(string name);
 
         //public abstract UniformDesc GetUniformDescription(int index);
 

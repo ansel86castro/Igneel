@@ -8,7 +8,7 @@ static const int DIRECTIONAL = 1;
 static const int POINT = 2;
 static const int SPOT = 3;
 
-struct Light
+struct ShaderLight
 {
 	 float3 Pos;
      float3 Dir;     
@@ -32,40 +32,40 @@ struct SurfaceInfo
 	 //float4 data; // x= Transparecy, y =Relectivity , z =Refractivity , w =SpecularPower
 };
 
-cbuffer Ambient
+cbuffer cbAmbient
 {
-	float3 sky;
-	float3 ground;
-	float3 northPole;
-	float3 ambient;
-	bool hemisphere;
+	float3 SkyColor;
+	float3 GroundColor;
+	float3 NorthPole;
+	float3 AmbientColor;
+	bool HemisphericalLighting;
 };
 
-cbuffer perCamera
+cbuffer cbCamera
 {	
-	float3 eyePos;	
+	float3 EyePos;	
 };
 
-cbuffer perLight
+cbuffer cbLight
 {	
-	Light light;
+	ShaderLight Light;
 };
 
-cbuffer transparencyFlags
+cbuffer cbTransparency
 {
-	bool fNoRenderTransparency;
+	bool NoRenderTransparency;
 	bool NoRenderOpaque;		
 };
 
-cbuffer clippingPlane
+cbuffer cbClipPlane
 {
-	float4 clipPlane		: CLIP_PLANE = {0,0,0,0};  //plane in Homogenius Space		
+	float4 ClipPlane		: CLIP_PLANE = {0,0,0,0};  //plane in Homogenius Space		
 };
 
 
-cbuffer perSurface
+cbuffer cbMaterial
 {
-	SurfaceInfo surface;
+	SurfaceInfo Surface;
 	bool USE_DIFFUSE_MAP;
 	bool USE_SPECULAR_MAP;
 	bool USE_ENVIROMENT_MAP;
@@ -85,11 +85,11 @@ float4 ParallelLight(float3 lightDir, float3 toEye, float3 normal, float3 diffus
 
 void PointLight()
 {	
-	float3 lightDir = light.Pos - gPositionW;
+	float3 lightDir = Light.Pos - gPositionW;
 	float d = length(lightDir);
-	if(d <= light.Range)
+	if(d <= Light.Range)
 	{
-		float3 toEye = normalize(eyePos - gPositionW);	
+		float3 toEye = normalize(EyePos - gPositionW);	
 		lightDir /= d;		
 	
 		float3 h = normalize(lightDir + toEye);
@@ -97,14 +97,14 @@ void PointLight()
 		l.z = pow(l.z, gSpecularPower);	
 	
 		//add diffuse contribution
-		float3 color = (gDiffuse * light.Diffuse) * l.y;		
+		float3 color = (gDiffuse * Light.Diffuse) * l.y;		
 	
 		//add specular contribution
-		color += (gSpecular * light.Specular) * l.z;	
+		color += (gSpecular * Light.Specular) * l.z;	
 	
-		color *= light.Intensity;		
+		color *= Light.Intensity;		
 		color *= gShadowFactor;
-		color /= dot(light.Att, float3(1.0f, d, d*d));
+		color /= dot(Light.Att, float3(1.0f, d, d*d));
 		
 		gColor.rgb += color;
 	}
@@ -112,11 +112,11 @@ void PointLight()
 
 void SpotLight()
 {
-	float3 lightDir = light.Pos - gPositionW;
+	float3 lightDir = Light.Pos - gPositionW;
 	float d = length(lightDir);
-	if(d <= light.Range)
+	if(d <= Light.Range)
 	{
-		float3 toEye = normalize(eyePos - gPositionW);	
+		float3 toEye = normalize(EyePos - gPositionW);	
 		lightDir /= d;		
 	
 		float3 h = normalize(lightDir + toEye);
@@ -124,16 +124,16 @@ void SpotLight()
 		l.z = pow(l.z, gSpecularPower);	
 	
 		//add diffuse contribution
-		float3 color = (gDiffuse * light.Diffuse) * l.y;		
+		float3 color = (gDiffuse * Light.Diffuse) * l.y;		
 	
 		//add specular contribution
-		color += (gSpecular * light.Specular) * l.z;	
+		color += (gSpecular * Light.Specular) * l.z;	
 	
-		color *= light.Intensity;		
+		color *= Light.Intensity;		
 		color *= gShadowFactor;
-		color /= dot(light.Att, float3(1.0f, d, d*d));				
+		color /= dot(Light.Att, float3(1.0f, d, d*d));				
 
-		float kSpot = pow(saturate(dot(-lightDir , light.Dir)) , light.SpotPower);
+		float kSpot = pow(saturate(dot(-lightDir , Light.Dir)) , Light.SpotPower);
 		color *= kSpot;		
 
 		gColor.rgb += color;
@@ -142,20 +142,20 @@ void SpotLight()
 
 void DirectionalLight()
 {
-	float3 toEye = normalize(eyePos - gPositionW);	
-    float3 lightDir = -light.Dir;
+	float3 toEye = normalize(EyePos - gPositionW);	
+    float3 lightDir = -Light.Dir;
 
 	float3 h = normalize(lightDir + toEye);
 	float4 l = lit(dot(gNormalW, lightDir), dot(gNormalW, h), 1);
 	l.z = pow(l.z, gSpecularPower);	
 	
 	//add diffuse contribution
-	float3 color = (gDiffuse * light.Diffuse) * l.y;		
+	float3 color = (gDiffuse * Light.Diffuse) * l.y;		
 	
 	//add specular contribution
-	color += (gSpecular * light.Specular) * l.z;	
+	color += (gSpecular * Light.Specular) * l.z;	
 	
-	color *= light.Intensity;		
+	color *= Light.Intensity;		
 	color *= gShadowFactor;	
 	
 	gColor.rgb += color;
@@ -167,10 +167,10 @@ float4 PointLight(float3 lightPos, float3 att ,float range ,float3 pos, float3 n
 	// LightColor = (l.Ambient * s.Ambient + ks * s.Diffuse * l.Diffuse + ks * l.Specular * s.Specular) / (l.Att.x  + l.Att.y * d + a.Att.z * d^2)	
 
 	float3 lightDir = lightPos - pos;	
-	// The distance from surface to light.
+	// The distance from Surface to Light.
 	float d = length(lightDir);
 	if( d > range ) return float4(0.0f, 0.0f, 0.0f, 0.0f);
-	// Normalize the light vector.
+	// Normalize the Light vector.
 	lightDir /= d;	
 		
 	float3 reflecVec = reflect(-lightDir, normal);	//otra forma es float vHalf = normalize(toEye + (-lightDir));
@@ -192,34 +192,34 @@ float4 SpotLight(float3 lightPos, float3 lightDir, float3 att ,float spotPower,
 	return color;
 }
 
-float3 ComputeHemisphere(float3 sky, float3 ground, float3 diffuse, float3 normal, 
+float3 ComputeHemisphere(float3 SkyColor, float3 GroundColor, float3 diffuse, float3 normal, 
 						float3 nortPole, float occlutionFactor )
 {
 	float k = 0.5f + 0.5f * dot(normal, nortPole);
-	float3 color = diffuse * lerp(ground ,sky , k) * ( 1 - occlutionFactor);
+	float3 color = diffuse * lerp(GroundColor ,SkyColor , k) * ( 1 - occlutionFactor);
 	return color;
 }
 
 void ComputeHemisphere()
 {	
-	float k = 0.5f + 0.5f * dot(gNormalW, northPole);
-	gColor.rgb += gDiffuse * lerp(ground ,sky , k) * gOcc; //( 1 - occlutionFactor);	
+	float k = 0.5f + 0.5f * dot(gNormalW, NorthPole);
+	gColor.rgb += gDiffuse * lerp(GroundColor ,SkyColor , k) * gOcc; //( 1 - occlutionFactor);	
 }
 
 void ComputeAmbient()
 {
-	gColor.rgb += gDiffuse.rgb * ambient * gOcc; //(1 - gOcc)
+	gColor.rgb += gDiffuse.rgb * AmbientColor * gOcc; //(1 - gOcc)
 }
 
 void ComputeHemisphere(out float3 color)
 {	
-	float k = 0.5f + 0.5f * dot(gNormalW, northPole);
-	color = gDiffuse * lerp(ground ,sky , k) * gOcc; //( 1 - occlutionFactor);	
+	float k = 0.5f + 0.5f * dot(gNormalW, NorthPole);
+	color = gDiffuse * lerp(GroundColor ,SkyColor , k) * gOcc; //( 1 - occlutionFactor);	
 }
 
 void ComputeAmbient(out float3 color)
 {
-	color = gDiffuse.rgb * ambient * gOcc; //(1 - gOcc)
+	color = gDiffuse.rgb * AmbientColor * gOcc; //(1 - gOcc)
 }
 
 void ComputeDirectLighting()
@@ -227,26 +227,26 @@ void ComputeDirectLighting()
 	// LightColor = (l.Ambient * s.Ambient + kd * s.Diffuse * l.Diffuse + ks * l.Specular * s.Specular) /
 	//				(l.Att.x  + l.Att.y * d + a.Att.z * d^2)	
 	
-	float3 toEye = normalize(eyePos - gPositionW);	
+	float3 toEye = normalize(EyePos - gPositionW);	
 	float att = 1;
 	float kSpot = 1;
-	float3 lightDir = light.Dir;
+	float3 lightDir = Light.Dir;
 	
 	[branch]	
-	if(light.Type != DIRECTIONAL)
+	if(Light.Type != DIRECTIONAL)
 	{
 		// Point or Spot
-		lightDir = gPositionW - light.Pos;
+		lightDir = gPositionW - Light.Pos;
 		float d = length(lightDir);
 		lightDir /= d;
 		
 		[branch]
-		if(light.Type == SPOT)
-			kSpot = pow(saturate(dot(lightDir , light.Dir)) , light.SpotPower);
+		if(Light.Type == SPOT)
+			kSpot = pow(saturate(dot(lightDir , Light.Dir)) , Light.SpotPower);
 			
-		att = dot(light.Att, float3(1.0f, d, d*d));
+		att = dot(Light.Att, float3(1.0f, d, d*d));
 		
-		if(d > light.Range)
+		if(d > Light.Range)
 			kSpot = 0.0f;
 	}
 	
@@ -257,12 +257,12 @@ void ComputeDirectLighting()
 	l.z = pow(l.z, gSpecularPower);	
 	
 	//add diffuse contribution
-	float3 color = (gDiffuse * light.Diffuse) * l.y;		
+	float3 color = (gDiffuse * Light.Diffuse) * l.y;		
 	
 	//add specular contribution
-	color += (gSpecular * light.Specular) * l.z;	
+	color += (gSpecular * Light.Specular) * l.z;	
 	
-	color *= light.Intensity;	
+	color *= Light.Intensity;	
 	color *= kSpot;
 	color *= gShadowFactor;
 	color /= att;

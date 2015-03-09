@@ -6,9 +6,6 @@ using System.Runtime.InteropServices;
 using Igneel.Graphics;
 using System.Runtime.Serialization;
 using System.ComponentModel;
-using Igneel.Design.UITypeEditors;
-using System.Drawing.Design;
-using Igneel.Design;
 using Igneel.Assets;
 using Igneel.Services;
 using Igneel.Rendering.Effects;
@@ -16,8 +13,7 @@ using Igneel.Rendering;
 
 namespace Igneel.Components
 {
-    [Serializable]
-    [TypeConverter(typeof(DesignTypeConverter))]
+    [Serializable]   
     [StructLayout(LayoutKind.Sequential)]
     public struct LayerSurface
     {
@@ -55,40 +51,27 @@ namespace Igneel.Components
         private LayerSurface surface = LayerSurface.Default;
         private bool containsAlpha;  
 
-        [Browsable(false)]
+       
         public LayerSurface Surface
         {
             get { return surface; }
             set { surface = value; }
         }
 
-        [Category("Diffuse")]
-        [TypeConverter(typeof(DesignTypeConverter))]
-        [Editor(typeof(UIColorTypeEditor), typeof(UITypeEditor))]
-        public Vector3 Diffuse
+        
+        public Color3 Diffuse
         {
             get
             {
-                unsafe
-                {
-                    var diffuse = surface.Color;
-                    return *(Vector3*)&diffuse;
-                }
+               return (Color3)surface.Color;
             }
             set 
             {
-                unsafe
-                {
-                    var color = surface.Color;
-                    *(Vector3*)&color = value;
-                    surface.Color = color;
-                }
+                surface.Color = new Color4(value, surface.Color.A);                
             }
         }
 
-        [Category("Specular")]
-        [TypeConverter(typeof(DesignTypeConverter))]
-        [Editor(typeof(UIColorTypeEditor), typeof(UITypeEditor))]
+                     
         public float SpecularIntensity 
         {
             get
@@ -101,8 +84,8 @@ namespace Igneel.Components
             }
         }
 
-        [Category("Transparencey")]
-        [Editor(typeof(UIInmediateNumericEditor), typeof(UITypeEditor))]
+       
+        
         public float Alpha
         {
             get { return surface.Color.A; }
@@ -114,33 +97,25 @@ namespace Igneel.Components
             }
         }
 
-        [Category("Scattering")]
-        [Editor(typeof(UIInmediateNumericEditor), typeof(UITypeEditor))]
-        public float Reflectivity { get { return surface.Reflectivity; } set { surface.Reflectivity = value; } }
-
-        [Category("Scattering")]
-        [Editor(typeof(UIInmediateNumericEditor), typeof(UITypeEditor))]
+       
+        
+        public float Reflectivity { get { return surface.Reflectivity; } set { surface.Reflectivity = value; } }       
+        
         public float Refractitity { get { return surface.Refractitity; } set { surface.Refractitity = value; } }
-
-        [Category("Specular")]
-        [Editor(typeof(UIInmediateNumericEditor), typeof(UITypeEditor))]
-        public float SpecularPower { get { return surface.SpecularPower; } set { surface.SpecularPower = value; } }
-
-        [Category("Emissive")]
-        [TypeConverter(typeof(DesignTypeConverter))]
-        [Editor(typeof(UIColorTypeEditor), typeof(UITypeEditor))]
+               
+        public float SpecularPower { get { return surface.SpecularPower; } set { surface.SpecularPower = value; } }        
+               
         public float EmisiveIntensity { get { return surface.EmisiveIntensity; } set { surface.EmisiveIntensity = value; } }
 
-        public bool ContainsTrasparency { get { return containsAlpha; } protected set { containsAlpha = value; } }      
+        public bool ContainsTrasparency { get { return containsAlpha; } protected set { containsAlpha = value; } }
 
         public abstract Asset CreateAsset();               
     }
 
-    [TypeConverter(typeof(DesignTypeConverter))]
+   
     public class MeshMaterial : SurfaceMaterial, INameable
     {                       
-        private string name;       
-          
+        private string name;                 
         private Texture2D diffuseMap;
         private Texture2D specularMap;
         private Texture2D normalMap;           
@@ -158,16 +133,14 @@ namespace Igneel.Components
 
         }
       
-        [AssetMember]
-        [Category("Material")]
+        [AssetMember]        
         public string Name
         {
             get { return name; }
             set { name = value; }
         }
 
-        [AssetMember(StoreAs = StoreType.Reference)]
-        [Category("Diffuse")]
+        [AssetMember(StoreAs = StoreType.Reference)]        
         public Texture2D DiffuseMap
         {
             get { return diffuseMap; }
@@ -177,16 +150,14 @@ namespace Igneel.Components
             }
         }
 
-        [AssetMember(StoreAs = StoreType.Reference)]
-        [Category("Specular")]
+        [AssetMember(StoreAs = StoreType.Reference)]       
         public Texture2D SpecularMap
         {
             get { return specularMap; }
             set { specularMap = value; }
         }
 
-        [AssetMember(StoreAs = StoreType.Reference)]
-        [Category("Normal")]
+        [AssetMember(StoreAs = StoreType.Reference)]        
         public Texture2D NormalMap
         {
             get { return normalMap; }
@@ -226,17 +197,8 @@ namespace Igneel.Components
                 Engine.Unlock();
             }
 
-            return ContainsTrasparency;
-
-            //containsAlpha = Alpha < 1;
-            //if (!containsAlpha && diffuseMap != null)
-            //    containsAlpha = diffuseMap.ContainsTrasparency();
-
-            //if (containsAlpha && renderLayerIndex == -1)
-            //    renderLayerIndex = Scene.TransparentLayer;
-
-            //return containsAlpha;
-        }      
+            return ContainsTrasparency;            
+        }
     }
 
     public class TransparencyChecker
@@ -287,7 +249,7 @@ namespace Igneel.Components
             device.ViewPort = oldvp;
 
             var rec = renderTexture.Texture.Map(0, MapType.Read);
-            var containsTransparency = Marshal.ReadByte(rec.DataPointer);
+            var containsTransparency = ClrRuntime.Runtime.GetValue<byte>(rec.DataPointer);
             renderTexture.Texture.UnMap(0);
             
             return containsTransparency > 0;            

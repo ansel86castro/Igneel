@@ -1,10 +1,10 @@
 ﻿using Igneel.Assets;
-using Igneel.Design;
-using Igneel.Design.UITypeEditors;
+
+
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Drawing.Design;
+
 using System.Linq;
 using System.Text;
 using Igneel.Collections;

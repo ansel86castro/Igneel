@@ -1,6 +1,6 @@
 ﻿using Igneel.Assets;
 using Igneel.Components;
-using Igneel.Design;
+
 using Igneel.Graphics;
 using Igneel.Rendering;
 using System;
@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 namespace Igneel.Animations
 {    
 
-    [TypeConverter(typeof(DesignTypeConverter))]   
+      
     public class SkinDeformer : Deformer
     {
         Mesh mesh;

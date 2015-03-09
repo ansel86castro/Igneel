@@ -5,7 +5,7 @@ using System.Text;
 using Igneel.Graphics;
 using Igneel.Rendering.Effects;
 using System.ComponentModel;
-using Igneel.Design;
+
 
 namespace Igneel.Rendering
 {
@@ -29,7 +29,7 @@ namespace Igneel.Rendering
     /// tone mapping and postprocesing effect as bloom
     /// </summary>
     /// 
-    [TypeConverter(typeof(DesignTypeConverter))]   
+      
     public class HDRTechnique : Technique<HDREffect>
     {
         HDRState state;

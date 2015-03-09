@@ -10,13 +10,13 @@ using System.Reflection;
 using System.IO;
 using System.Xml.Linq;
  
-using Igneel.Design;
+
 using Igneel.Assets;
 using System.ComponentModel;
 
 namespace Igneel.Components
 {
-    [TypeConverter(typeof(DesignTypeConverter))]  
+     
     [ProviderActivator(typeof(SkyDome.Activator))]
     public class SkyDome:GraphicObject<SkyDome>,IInitializable
     {

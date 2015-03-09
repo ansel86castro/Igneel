@@ -144,7 +144,15 @@ namespace Igneel.Windows.Wpf
 
         public SwapChainPresenter CreateSwapChainPresenter(Format backBufferFormat = Format.R8G8B8A8_UNORM_SRGB, Format depthStencilFormat = Format.D24_UNORM_S8_UINT, Multisampling msaa = default(Multisampling))
         {
-            var p = new SwapChainPresenter((int)Width, (int)Height, backBufferFormat, depthStencilFormat, msaa, Handle);
+            var p = new SwapChainPresenter(new WindowContext
+            {
+                BackBufferWidth = (int)Width,
+                BackBufferHeight = (int)Height,
+                BackBufferFormat = backBufferFormat,
+                DepthStencilFormat = depthStencilFormat,
+                Sampling = msaa,
+                WindowHandle = Handle
+            });
             presenter = p;
             return p;
         }

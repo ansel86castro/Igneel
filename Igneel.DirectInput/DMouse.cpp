@@ -3,7 +3,8 @@
 
 namespace IgneelDirectInput {
 
-	DMouse::DMouse(IDirectInput8* input, IntPtr hwnd, HANDLE hEvent)
+	DMouse::DMouse(IDirectInput8* input, WindowContext^ context, HANDLE hEvent)
+		:Mouse(context)
 	{
 		LPDIRECTINPUTDEVICE8 device;
 		SAFECALL( input->CreateDevice(GUID_SysMouse ,&device, NULL) ); 
@@ -50,7 +51,7 @@ namespace IgneelDirectInput {
 
 		//SAFECALL(mouse->SetProperty(DIPROP_BUFFERSIZE, &dipdw.diph));
 
-		SAFECALL( device->SetCooperativeLevel((HWND)hwnd.ToPointer(),  DISCL_BACKGROUND | DISCL_NONEXCLUSIVE) );
+		SAFECALL( device->SetCooperativeLevel((HWND)context->WindowHandle.ToPointer(),  DISCL_BACKGROUND | DISCL_NONEXCLUSIVE) );
 		SAFECALL(  device->Acquire()) ;
 
 		state = new DIMOUSESTATE2();

@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Runtime.InteropServices;
 using System.ComponentModel;
-using Igneel.Design;
+
 
 
 namespace Igneel
@@ -13,7 +13,7 @@ namespace Igneel
 
     [Serializable]
     [StructLayout(LayoutKind.Sequential, Pack = 4)]
-    [TypeConverter(typeof(DesignTypeConverter))]
+   
     public struct Vector3:IEquatable<Vector3>
     {
         public static readonly Vector3 Zero = new Vector3();
@@ -48,13 +48,7 @@ namespace Igneel
             this.Y = v.Y;
             this.Z = z;
         }
-
-        public Vector3(System.Drawing.Color c)
-        {
-            this.X = (float)c.R / 255f;
-            this.Y = (float)c.G / 255f;
-            this.Z = (float)c.B / 255f;
-        }
+       
 
         #endregion
 
@@ -81,16 +75,7 @@ namespace Igneel
             }
         }
 
-        public static explicit operator Vector3(System.Drawing.Color c)
-        {
-            return new Vector3(c);
-        }
-
-        public static explicit operator System.Drawing.Color(Vector3 v)
-        {
-           return  System.Drawing.Color.FromArgb((int)(v.X * 255f), (int)(v.Y * 255f), (int)(v.Z * 255f));
-        }
-
+      
         #endregion
 
         #region Operators
@@ -220,12 +205,7 @@ namespace Igneel
         public override string ToString()
         {
             return X + " ," + Y + " ," + Z;
-        }
-
-        public System.Drawing.Color ToColor()
-        {
-            return System.Drawing.Color.FromArgb((int)(X * 255), (int)(Y * 255), (int)(Z * 255));
-        }
+        }     
 
         public float[] ToArray()
         {

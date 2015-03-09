@@ -23,7 +23,7 @@ namespace Igneel.Controllers
     {
         private SceneNode node;
 
-        [Browsable(false)]
+       
         [AssetMember(storeAs: StoreType.Reference)]
         public SceneNode Node 
         { 

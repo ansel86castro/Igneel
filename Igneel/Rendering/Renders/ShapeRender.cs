@@ -27,7 +27,7 @@ namespace Igneel.Rendering
         public ShapeRender()
         {                     
             vd = VertexDescriptor.GetDescriptor<MeshVertex>();
-            color = new Vector4(System.Drawing.Color.White);
+            color = new Vector4(1, 1, 1, 1);
             Distance = 0.5f;
         }              
 

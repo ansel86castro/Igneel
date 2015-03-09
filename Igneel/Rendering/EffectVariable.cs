@@ -10,27 +10,27 @@ namespace Igneel.Rendering
 {  
     public abstract class ShaderVariable
     {      
-        protected IUniformSetter binder;   
+        public IUniformSetter binder;   
    
         public string Name { get; set; }
        
         public abstract void SetValue();      
 
-        public void SetSetter(IUniformSetter binder)
-        {
-            this.binder = binder;
-            if (binder == null)
-                throw new ArgumentNullException();
-            SetValue();           
-        }
+        //public void SetSetter(IUniformSetter binder)
+        //{
+        //    this.binder = binder;
+        //    if (binder == null)
+        //        throw new ArgumentNullException();
+        //    SetValue();           
+        //}
 
-        public void Commit()
-        {
-            if (binder != null)
-            {
-                SetValue();
-            }
-        }
+        //public void Commit()
+        //{
+        //    if (binder != null)
+        //    {
+        //        SetValue();
+        //    }
+        //}
 
         public abstract Type ValueType { get; }
 
@@ -48,13 +48,13 @@ namespace Igneel.Rendering
     public class ShaderVariable<T> : ShaderVariable
         where T:struct
     {                
-       public static int Size = Marshal.SizeOf(typeof(T));               
+       public static int Size = ClrRuntime.Runtime.SizeOf<T>();               
 
         public T Value;
 
         public override unsafe void SetValue()
         {
-            void* pter = ClrPlatform.Crl.GetPointer(ref Value).ToPointer();
+            void* pter = ClrRuntime.Runtime.GetPointer(ref Value);
             binder.SetValue(pter, Size);
         }
 
@@ -69,17 +69,15 @@ namespace Igneel.Rendering
     {
         public T[] Value;
 
-        public static int Size = Marshal.SizeOf(typeof(T));       
+        public static int Size = ClrRuntime.Runtime.SizeOf<T>();       
 
         public override unsafe void SetValue()
         {
             if (Value == null) return;
 
             GCHandle handle = GCHandle.Alloc(Value, GCHandleType.Pinned);
-            void* pter = Marshal.UnsafeAddrOfPinnedArrayElement(Value, 0).ToPointer();
-
+            void* pter =  ClrRuntime.Runtime.GetPointer(Value, 0);
             binder.SetValue(pter, Size *  Math.Min(Elements , Value.Length));
-
             handle.Free();
         }
            
@@ -230,7 +228,7 @@ namespace Igneel.Rendering
     {
         public SArray<T> Value;
       
-        public static int Size = Marshal.SizeOf(typeof(T));
+        public static int Size = ClrRuntime.Runtime.SizeOf<T>();
 
         public override sealed unsafe void SetValue()
         {
@@ -250,6 +248,102 @@ namespace Igneel.Rendering
         public override Type ValueType
         {
             get { return typeof(SArray<T>); }
+        }
+    }
+
+    public sealed class ResourceVariable : ShaderVariable
+    {
+        public ShaderResource Value;
+
+        public override void SetValue()
+        {
+            binder.SetResource(Value);
+        }
+
+        public override Type ValueType
+        {
+            get { return typeof(ShaderResource); }
+        }
+    }
+
+    public sealed class ResourceVariableArray : ShaderVariableArray
+    {
+        public ShaderResource[] Value;
+
+        public override void SetValue()
+        {
+            if (Value == null)
+                binder.SetResource(null, Elements);
+            else
+                binder.SetResource(Value, Value.Length);
+        }
+
+        public override Type ValueType
+        {
+            get { return typeof(ShaderResource[]); }
+        }
+    }
+
+    public sealed class SamplerStateVariable : ShaderVariable
+    {
+        public SamplerState Value;
+
+        public override void SetValue()
+        {
+            binder.SetSampler(Value);
+        }
+
+        public override Type ValueType
+        {
+            get { return typeof(SamplerState); }
+        }
+    }
+
+    public sealed class SamplerStateVariableArray : ShaderVariableArray
+    {
+        public SamplerState[] Value;
+
+        public override void SetValue()
+        {
+            if (Value == null)
+                binder.SetSampler(null, Elements);
+            else
+                binder.SetSampler(Value, Value.Length);
+        }
+
+        public override Type ValueType
+        {
+            get { return typeof(SamplerState[]); }
+        }
+    }
+
+    public sealed class SamplerVariable<T> : ShaderVariable<Sampler<T>>
+        where T:Texture
+    {
+        public override sealed unsafe void SetValue()
+        {
+            binder.SetResource(Value.Texture);
+            binder.SetSampler(Value.State);
+        }
+    }
+
+    public sealed class SamplerVariableArray<T> : ShaderVariable<SamplerArray<T>>
+        where T:Texture
+    {
+        public int Elements;
+
+        public override unsafe void SetValue()
+        {
+            if (Value.Textures == null)
+            {
+                binder.SetResource(null, Elements);
+                binder.SetSampler(null, Elements);
+            }
+            else
+            {
+                binder.SetResource(ClrRuntime.Runtime.StaticCast<ShaderResource[]>(Value.Textures), Elements);
+                binder.SetSampler(Value.States, Elements);
+            }
         }
     }
 }

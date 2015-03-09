@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Drawing;
 using System.ComponentModel;
-using Igneel.Design;
-using Igneel.Design.UITypeEditors;
-using System.Drawing.Design;
+
+
+
 using Igneel.Graphics;
 using System.Runtime.Serialization;
 using System.Reflection;
@@ -14,7 +14,7 @@ using Igneel.Physics;
 
 namespace Igneel
 {
-    [TypeConverter(typeof(DesignTypeConverter))]
+   
     public class LightingState : EngineState
     {             
         HDRState hdrSettings = new HDRState();
@@ -29,7 +29,7 @@ namespace Igneel
             EnableAmbient = true;
         }       
         
-        [LockOnSet]
+        
         public bool TransparencyEnable { get; set; }
         
         [Category("Reflection")]
@@ -50,7 +50,7 @@ namespace Igneel
         [Category("HemisphericalAmbient")]
         public bool HemisphericalAmbient { get; set; }       
 
-        [LockOnSet]
+        
         public bool PerPixelLightingEnable { get; set; }              
 
         public bool EnableAmbient { get; set; }

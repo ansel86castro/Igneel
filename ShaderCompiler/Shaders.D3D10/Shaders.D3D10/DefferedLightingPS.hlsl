@@ -50,17 +50,17 @@ PSOut main(PSIn input)
 	gGlossFactor = Specular.g;
 
 	[branch]
-	if(hemisphere)
+	if(HemisphericalLighting)
 		ComputeHemisphere();
 	else
 		ComputeAmbient();
 	 
 	  [branch]
-	 if(light.Type == DIRECTIONAL)
+	 if(Light.Type == DIRECTIONAL)
 		DirectionalLight();	 					
-	 else [branch] if(light.Type == POINT)
+	 else [branch] if(Light.Type == POINT)
 		PointLight();	 
-	 else [branch] if(light.Type == SPOT)
+	 else [branch] if(Light.Type == SPOT)
 		SpotLight();
 	
 	 o.Color = gColor;

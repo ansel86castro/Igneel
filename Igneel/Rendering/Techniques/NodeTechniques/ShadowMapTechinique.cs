@@ -5,9 +5,9 @@ using System.Text;
 using Igneel.Graphics;
 using System.Runtime.Serialization;
 using System.ComponentModel;
-using Igneel.Design;
-using Igneel.Design.UITypeEditors;
-using System.Drawing.Design;
+
+
+
 using Igneel.Assets;
 using Igneel.Components;
 
@@ -15,7 +15,7 @@ namespace Igneel.Rendering
 {
     public enum ShadowMapType { Simple, Cube }
    
-    [TypeConverter(typeof(DesignTypeConverter))]
+   
     [ProviderActivator(typeof(ShadowMapTechnique.Activator))]
     public class ShadowMapTechnique : BindedSceneNodeTechnique<ShadowMapTechnique> ,IDeferreable
     {
@@ -82,11 +82,11 @@ namespace Igneel.Rendering
         #region PROPERTYS
 
         [Category("ShadowMap")]
-        [Editor(typeof(UIInmediateNumericEditor), typeof(UITypeEditor))]        
+                
         public float Bias { get { return bias; } set { bias = value; } }
 
         [Category("ShadowMap")]
-        [Browsable(true)]
+       
         [AssetMember(StoreType.Reference)]
         public Camera Camera
         {
@@ -103,20 +103,20 @@ namespace Igneel.Rendering
         }
 
         [Category("ShadowMap")]
-        [Browsable(false)]
+       
         public Texture DepthTexture
         {
             get { return shadowMap.Texture; }
         }
 
         [Category("ShadowMap")]
-        [Browsable(true)]        
+               
         public bool IsDynamic { get { return isDynamic; } set { isDynamic = value; } }
 
         [Category("ShadowMap")]
-        [Browsable(true)]
-        [LockOnSet]
-        [Editor(typeof(UIInmediateNumericEditor), typeof(UITypeEditor))]        
+       
+        
+                
         public int Size
         {
             get { return size; }

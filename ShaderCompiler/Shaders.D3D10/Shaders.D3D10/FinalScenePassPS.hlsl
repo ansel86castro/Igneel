@@ -8,8 +8,8 @@ float4 main(PS_RenderQuadInput input) : SV_TARGET
 	float3 star	  = t3.SampleLevel(s3, input.texCoord , 0).rgb;	
 		
 	float pixelLum = dot(color.rgb, LUMINANCE_VECTOR);
-	// For very low light conditions, the rods will dominate the perception
-    // of light, and therefore color will be desaturated and shifted
+	// For very low Light conditions, the rods will dominate the perception
+    // of Light, and therefore color will be desaturated and shifted
     // towards blue.
 	[branch]
     if( EnableBlueShift )
@@ -21,7 +21,7 @@ float4 main(PS_RenderQuadInput input) : SV_TARGET
 
 		// Lerp between current color and blue, desaturated copy
         float3 vRodColor = pixelLum * BLUE_SHIFT_VECTOR;
-        color.rgb = lerp( (float3)color, vRodColor, fBlueShiftCoefficient );
+        color.rgb = lerp( color.rbg, vRodColor, fBlueShiftCoefficient );
     }
     	
 	

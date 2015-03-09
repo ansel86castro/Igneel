@@ -21,23 +21,23 @@ struct PSOut
 
 PSOut main(PSIn input)
 {
-	//clip(dot(float4(input.PositionW, 1), clipPlane));			
+	//clip(dot(float4(input.PositionW, 1), ClipPlane));			
 		
-	float4 diffuse = surface.Diffuse;
+	float4 diffuse = Surface.Diffuse;
 
 	[branch]
 	if(USE_DIFFUSE_MAP)	
-		diffuse *= t0.Sample(s0 ,input.Texcoord);			
+		diffuse *= DiffuseMap.Sample(sDiffuseMap ,input.Texcoord);			
 
-	clip(-(fNoRenderTransparency && diffuse.a != 1.0f));
+	clip(-(NoRenderTransparency && diffuse.a != 1.0f));
 
 	PSOut o = (PSOut)0;	
-	o.Diffuse = float4(diffuse.rgb , surface.Emisive);
-	o.Specular = float4(surface.Specular, surface.Reflectivity ,surface.SpecularPower , 1);		
+	o.Diffuse = float4(diffuse.rgb , Surface.Emisive);
+	o.Specular = float4(Surface.Specular, Surface.Reflectivity ,Surface.SpecularPower , 1);		
 	
 	[branch]
 	if(USE_SPECULAR_MAP)	
-		o.Specular.ra *= t1.Sample(s1 ,input.Texcoord).ra;			
+		o.Specular.ra *= SpecularMap.Sample(sDiffuseMap ,input.Texcoord).ra;			
 
 	o.PositionRhz = float4(PackPositionForFatFramebuffer(input.PositionRhz), 1);
 	//o.PositionRhz = input.PositionRhz;

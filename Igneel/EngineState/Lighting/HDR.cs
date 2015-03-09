@@ -1,11 +1,11 @@
-﻿using Igneel.Design;
-using Igneel.Design.UITypeEditors;
+﻿
+
 using Igneel.Graphics;
 using Igneel.Rendering;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Drawing.Design;
+
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 namespace Igneel
 {
     [Serializable]
-    [TypeConverter(typeof(DesignTypeConverter))]
+   
     public class HDRState : EnabilitableState
     {       
         GlareDefinition glare;
@@ -33,7 +33,7 @@ namespace Igneel
         }
         
         [NonSerializedProp]
-        [Browsable(false)]
+       
         public HDRTechnique Technique
         {
             get { return Service.Get<HDRTechnique>(); }
@@ -43,28 +43,28 @@ namespace Igneel
 
         public bool CalculateEyeAdaptation { get; set; }
 
-        [Editor(typeof(UIInmediateNumericEditor), typeof(UITypeEditor))]
+        
         public float MiddleGray { get; set; }
      
-        [Editor(typeof(UIInmediateNumericEditor), typeof(UITypeEditor))]
+        
         public float BrightThreshold { get; set; }
 
-        [Editor(typeof(UIInmediateNumericEditor), typeof(UITypeEditor))]
+        
         public float GaussianMultiplier { get; set; }
 
-        [Editor(typeof(UIInmediateNumericEditor), typeof(UITypeEditor))]
+        
         public float GaussainMean { get; set; }
 
-        [Editor(typeof(UIInmediateNumericEditor), typeof(UITypeEditor))]
+        
         public float GaussianDeviation { get; set; }
       
-        [Editor(typeof(UIInmediateNumericEditor), typeof(UITypeEditor))]
+        
         public float BloomBlendFactor { get; set; }
 
-        [Editor(typeof(UIInmediateNumericEditor), typeof(UITypeEditor))]
+        
         public float StarBlendFactor { get; set; }
 
-        [LockOnSet]
+        
         public GlareLibType GlareType
         {
             get { return glareType; }
@@ -76,7 +76,7 @@ namespace Igneel
             }
         }
         
-        [Browsable(false)]
+       
         public GlareDefinition Glare { get { return glare; } }
 
         public override void OnEnableChanged()

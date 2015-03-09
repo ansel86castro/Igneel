@@ -1,4 +1,4 @@
-﻿using Igneel.Design;
+﻿
 using Igneel.Graphics;
 using System;
 using System.Collections.Generic;
@@ -31,10 +31,10 @@ namespace Igneel
 
         public FillMode FillMode { get; set; }
 
-        [LockOnSet]
+        
         public bool BumpMappingEnable { get; set; }
 
-        [LockOnSet]
+        
         public bool ParallaxMappingEnable { get; set; }
 
         [Category("DepthOfField")]

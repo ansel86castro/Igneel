@@ -4,16 +4,12 @@
 	#include "Transform.hlsli"
 #endif
 
-#ifndef GLOBALS
-	#include "Globals.hlsli"
-#endif
-
 #define MAX_PALLETE 32
 #define NumBones 4
 
-cbuffer bones
+cbuffer cbBonesTransforms
 {	
-	float4x4 WorldArray[MAX_PALLETE] : WORLDMATRIXARRAY;
+	float4x4 WorldArray[MAX_PALLETE];
 };
 
 //GLOBALS

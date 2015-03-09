@@ -1,10 +1,10 @@
-﻿using Igneel.Design;
-using Igneel.Design.UITypeEditors;
+﻿
+
 using Igneel.Graphics;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Drawing.Design;
+
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 namespace Igneel
 {
     [Serializable]
-    [TypeConverter(typeof(DesignTypeConverter))]
+   
     [StructLayout(LayoutKind.Sequential)]
     public class OrientedBox : IRotable, ITranslatable
     {
@@ -34,12 +34,12 @@ namespace Igneel
 
         public Matrix GlobalPose { get { return globalPose; } set { globalPose = value; } }
 
-        [TypeConverter(typeof(DesignTypeConverter))]
-        [EditorAttribute(typeof(UIRotationMatrixEditor), typeof(UITypeEditor))]
+       
+        
         public Matrix LocalRotation { get { return rotation; } set { rotation = value; } }
 
-        [TypeConverter(typeof(DesignTypeConverter))]
-        [Editor(typeof(UIVector3TypeEditor), typeof(UITypeEditor))]
+       
+        
         public Vector3 LocalPosition { get { return center; } set { center = value; } }
 
         public Vector3 GlobalTraslation { get { return globalPose.GetAxis(3); } }

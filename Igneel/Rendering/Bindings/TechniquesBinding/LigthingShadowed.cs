@@ -95,22 +95,22 @@ namespace Igneel.Rendering.Bindings
     //    }
     //}
 
-    public class BuildSMapMatBinding : RenderBinding<MeshMaterial, MeshMaterialBinding.IMaterialFlagsBinding>
+    public class BuildSMapMatBinding : RenderBinding<MeshMaterial, IMeshMaterialMap>
     {        
      
         public override void OnBind(MeshMaterial value)
         {
-            mapping.surface = value.Surface;
+            mapping.Surface = value.Surface;
 
             if (value.ContainsTrasparency && value.DiffuseMap != null)
             {
-                Engine.Graphics.PS.SetResource(0, value.DiffuseMap);
+                mapping.DiffuseMap = value.DiffuseMap.ToSampler();
                 mapping.USE_DIFFUSE_MAP = true;
             }
             else
             {
                 mapping.USE_DIFFUSE_MAP = false;
-                Engine.Graphics.PS.SetResource(0, null);
+                mapping.DiffuseMap = new Sampler<Texture2D>();
             }
         }
 

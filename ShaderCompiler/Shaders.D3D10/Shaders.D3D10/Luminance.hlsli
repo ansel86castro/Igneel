@@ -1,7 +1,7 @@
 #define LUMINANCE
 
-#define RGB16_MAX  100;
-#define RGB16_EXP = 5;
+#define RGB16_MAX  100
+#define RGB16_EXP  5
 
 float ComputeLuminance(float4 color , int luminanceType)
 {

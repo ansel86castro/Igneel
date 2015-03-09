@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows.Forms;
+
 
 namespace Igneel.Input
 {
@@ -52,15 +52,17 @@ namespace Igneel.Input
         Dictionary<int, MappingStage>[] joystickButtonMap;
         Dictionary<MouseAxis, MouseAxisMapping> axisMouseMap;
         Dictionary<JoystickAxis, JoystickAxisMapping>[] axisJoystickMap;
-
+      
         public InputManager()
         {            
             keyboardMap = new Dictionary<int, MappingStage>();
             mouseButtonMap = new Dictionary<int, MappingStage>();                
-            axisMouseMap = new Dictionary<MouseAxis, MouseAxisMapping>();
+            axisMouseMap = new Dictionary<MouseAxis, MouseAxisMapping>();      
 
             Service.Set<InputManager>(this);
         }
+
+       
 
         private void MapStage(Dictionary<int, MappingStage> map, int key, Action action, bool bTransition)
         {
@@ -162,13 +164,13 @@ namespace Igneel.Input
                     axisJoystickMap[i].Clear();
                 }
             }
-        }    
+        }
 
-        public abstract Keyboard CreateKeyboard(IntPtr hwnd);
+        public abstract Keyboard CreateKeyboard(IInputContext context);
 
-        public abstract Mouse CreateMouse(IntPtr hwnd);
+        public abstract Mouse CreateMouse(IInputContext context);
 
-        public abstract Joystick[] CreateJoysticks(IntPtr hwnd);
+        public abstract Joystick[] CreateJoysticks(IInputContext context);
 
         public abstract bool CheckInputStates();
 

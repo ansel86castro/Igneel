@@ -5,7 +5,7 @@ using System.Text;
 using System.Runtime.Serialization;
 using System.ComponentModel;
 using Igneel.Collections;
-using Igneel.Design;
+
 using Igneel.Assets;
 using Igneel.Animations;
 using Igneel.Graphics;

@@ -18,7 +18,7 @@ namespace Igneel.Graphics
 
         int Height { get; }
 
-        Multisampling MSAA { get; }
+        Multisampling MSAA { get; }     
 
         MappedTexture2D Map(int subResource, MapType map, bool doNotWait = false);
     }

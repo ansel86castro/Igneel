@@ -72,7 +72,7 @@ namespace D3D9Testing.Techniques
 
                 Engine.RenderFrame += () =>
                 {
-                    presenter.Begin(Color.Aqua);
+                    presenter.Begin(new Color4(Color.Aqua.ToArgb()));
 
                     var device = Engine.Graphics;                    
                     var untranformed = Service.Require<RenderQuadEffect>();
@@ -111,10 +111,10 @@ namespace D3D9Testing.Techniques
             lights = new SceneNode[6];
             Random ran = new Random();
 
-            Vector3[] colors = new Vector3[8]
+            Color3[] colors = new Color3[8]
             {
-                new Vector3(Color.Yellow) ,new Vector3(Color.Red), new Vector3(Color.Green), new Vector3(Color.LightCoral),
-                new Vector3(Color.DarkBlue) ,new Vector3(Color.Gray), new Vector3(Color.IndianRed), new Vector3(Color.LightSalmon)
+                new Color3(Color.Yellow.ToArgb()) ,new Color3(Color.Red.ToArgb()), new Color3(Color.Green.ToArgb()), new Color3(Color.LightCoral.ToArgb()),
+                new Color3(Color.DarkBlue.ToArgb()) ,new Color3(Color.Gray.ToArgb()), new Color3(Color.IndianRed.ToArgb()), new Color3(Color.LightSalmon.ToArgb())
             };
 
             float step = Numerics.TwoPI / lights.Length;

@@ -1,14 +1,15 @@
 ﻿
 namespace Igneel.Graphics
 {
-    public interface IShaderFactory<T>
-        where T:Shader
+    public interface IShaderFactory<T>       
     {        
-        T CreateShader(ShaderCode bytecode);                     
+        T CreateShader(ShaderCode bytecode);
 
-        ShaderCode CompileFromMemory(string shaderCode,string functionName ,ShaderMacro[] defines);
+        ShaderCompilationUnit<T> CreateShader(string filename, string functionName="main", ShaderMacro[] defines = null);
 
-        ShaderCode CompileFromFile(string filename, string functionName, ShaderMacro[] defines);
+        ShaderCode CompileFromMemory(string shaderCode, string functionName = "main", ShaderMacro[] defines = null);
+
+        ShaderCode CompileFromFile(string filename, string functionName = "main", ShaderMacro[] defines = null);
     }   
     
 }

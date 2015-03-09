@@ -116,10 +116,5 @@ namespace IgneelD3D10 {
 				void* data = cb[i].GetBuffer();			 
 				memcpy(data, value, sizeof(Vector4) * count);
 			}
-	   }
-
-	   void D3DUniformSetter::OnDispose(bool disposing)
-	   {
-		  
-	   }
+	   }	  
 }

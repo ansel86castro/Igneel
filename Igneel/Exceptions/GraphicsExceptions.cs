@@ -16,9 +16,9 @@ namespace Igneel
         public int AdapterIndex { get; private set; }
     }
 
-    public class ShaderCompileException : Exception
+    public class ShaderCompilationException : Exception
     {
-        public ShaderCompileException(string message)
+        public ShaderCompilationException(string message)
             : base(message)
         {
 

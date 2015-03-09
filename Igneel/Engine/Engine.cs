@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Windows.Forms;
 using System.IO;
 using System.Xml.Linq;
 using System.Threading;
@@ -104,9 +103,7 @@ namespace Igneel
         public static bool Initialized { get { return initialized; } }              
 
         [AssetMember(storeAs:StoreType.Reference)]
-        public static SceneManager SceneManager { get { return sceneManager; } internal set { sceneManager = value; } }
-
-       static IntPtr hwnd;
+        public static SceneManager SceneManager { get { return sceneManager; } internal set { sceneManager = value; } }       
 
         [AssetMember]
         public static Color4 BackColor { get; set; }
@@ -121,17 +118,16 @@ namespace Igneel
             }
         }            
 
-        public static void InitializeEngine(IntPtr inputHWND, GraphicDeviceDesc desc)
+        public static void InitializeEngine(IInputContext inputContext, GraphicDeviceDesc graphicDeviceDesc)
         {
-            if (initialized) throw new InvalidOperationException();
-
-            hwnd = inputHWND;
+            if (initialized) return;
+           
             loopThread = Thread.CurrentThread;
             waitHandler = new ManualResetEvent(false);
             proccedWaitHandler = new ManualResetEvent(false);
 
             var graphicFactory = Service.Require<GraphicDeviceFactory>();
-            graphics = graphicFactory.CreateInstance(desc);
+            graphics = graphicFactory.CreateInstance(graphicDeviceDesc);
 
             var physicManager = Service.Get<PhysicManager>();
             if (physicManager != null)
@@ -148,12 +144,11 @@ namespace Igneel
             var input = Service.Get<InputManager>();            
             if (input != null)
             {
-                keyboard = input.CreateKeyboard(inputHWND);
-                mouse = input.CreateMouse(inputHWND);
-                joysticks = input.CreateJoysticks(inputHWND);
+                keyboard = input.CreateKeyboard(inputContext);
+                mouse = input.CreateMouse(inputContext);
+                joysticks = input.CreateJoysticks(inputContext);
             }
             
-
             PushTechnique<SceneTechnique>();
             initialized = true;
         }
