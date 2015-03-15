@@ -1,9 +1,9 @@
 ﻿using Igneel;
-using Igneel.Components;
+using Igneel.Scenering;
 using Igneel.Graphics;
 using Igneel.Importers;
 using Igneel.Rendering;
-using Igneel.Rendering.Effects;
+using Igneel.Scenering.Effects;
 using Igneel.Windows.Forms;
 using System;
 using System.Collections.Generic;
@@ -25,13 +25,13 @@ namespace D3D9Testing.Techniques
         {
             TestSettings.UseFrameLines = false;
             SceneTests.InitializeScene();
-            Engine.Scene.AmbientLight.SkyColor = new Vector3(0.0f, 0.0f, 0.0f);
-            Engine.Scene.AmbientLight.GroundColor = new Vector3(0, 0, 0);
+            SceneManager.Scene.AmbientLight.SkyColor = new Vector3(0.0f, 0.0f, 0.0f);
+            SceneManager.Scene.AmbientLight.GroundColor = new Vector3(0, 0, 0);
 
-            Engine.PushTechnique<DefferedLigthing<DefferedLightingEffect>>();            
+            RenderManager.PushTechnique<DefferedLigthing<DefferedLightingEffect>>();            
             DrawGBuffers<DefferedLightingEffect>();
 
-            Engine.Scene.Create("boxMesh", new MeshInstance(new MeshMaterial[]{ new MeshMaterial{
+            SceneManager.Scene.Create("boxMesh", new MeshInstance(new MeshMaterial[]{ new MeshMaterial{
                          //Diffuse = new Vector3(0.2f , 0.2f, 0.2f)
                          Diffuse = new Vector3(1f , 1f, 1f)
                           //SpecularIntensity = 1,
@@ -39,18 +39,18 @@ namespace D3D9Testing.Techniques
 
             CreateLights();
 
-            //ContentImporter.Import(Engine.Scene, @"E:\Modelos\2PINCHA CASA\terreno.DAE");
-            //ContentImporter.Import(Engine.Scene, @"I:\3D Media\Elementalist - Soul of the Ultimate Nation Character\Texture\rabbi.DAE");
-            ContentImporter.Import(Engine.Scene, @"C:\Users\ansel\Documents\3dsmax\export\nissan2.DAE")
-                .OnAddToScene(Engine.Scene);
-            //ContentImporter.Import(Engine.Scene, @"E:\Modelos\CITIZEN EXTRAS_FEMALE 02.dae");
+            //ContentImporter.Import(SceneManager.Scene, @"E:\Modelos\2PINCHA CASA\terreno.DAE");
+            //ContentImporter.Import(SceneManager.Scene, @"I:\3D Media\Elementalist - Soul of the Ultimate Nation Character\Texture\rabbi.DAE");
+            ContentImporter.Import(SceneManager.Scene, @"C:\Users\ansel\Documents\3dsmax\export\nissan2.DAE")
+                .OnAddToScene(SceneManager.Scene);
+            //ContentImporter.Import(SceneManager.Scene, @"E:\Modelos\CITIZEN EXTRAS_FEMALE 02.dae");
            
         }
 
         public static void DrawGBuffers<T>()
             where T: Effect
         {
-            var technique = Engine.ActiveTechnique as DefferedLigthing<T>;
+            var technique = RenderManager.ActiveTechnique as DefferedLigthing<T>;
             if (technique != null)
             {
                 Form form = new Form();
@@ -74,7 +74,7 @@ namespace D3D9Testing.Techniques
                 {
                     presenter.Begin(new Color4(Color.Aqua.ToArgb()));
 
-                    var device = Engine.Graphics;                    
+                    var device = GraphicDeviceFactory.Device;                    
                     var untranformed = Service.Require<RenderQuadEffect>();
 
                     var sprite = Service.Require<Sprite>();
@@ -134,11 +134,11 @@ namespace D3D9Testing.Techniques
                 pos.Y = 50;
 
                 var instance =new LightInstance(light);
-                var node = Engine.Scene.Create("light" + i, instance, 
+                var node = SceneManager.Scene.Create("light" + i, instance, 
                     localPosition: pos,
                     localRotationEuler: Euler.FromDirection(new Vector3(0, -1, 0)),
                     localScale:new Vector3(1,1,1));
-                Engine.Scene.Dynamics.Add(new Dynamic(x=>
+                SceneManager.Scene.Dynamics.Add(new Dynamic(x=>
                     {
                         SceneNode n = node;
                         n.LocalPosition = Vector3.TransformCoordinates(n.LocalPosition,

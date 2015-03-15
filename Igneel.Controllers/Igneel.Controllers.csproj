@@ -1,0 +1,103 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{CDB6769F-AC2F-472A-BAA2-E4534D4A8131}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Igneel.Controllers</RootNamespace>
+    <AssemblyName>Igneel.Controllers</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Class1.cs" />
+    <Compile Include="FPCameraController.cs" />
+    <Compile Include="INodeController.cs" />
+    <Compile Include="NodeController.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Vehicles\InputMap.cs" />
+    <Compile Include="Vehicles\LinearInterpolationValues.cs" />
+    <Compile Include="Vehicles\RayCastWheel.cs" />
+    <Compile Include="Vehicles\SimpleVehicle.cs" />
+    <Compile Include="Vehicles\Vehicle.cs" />
+    <Compile Include="Vehicles\VehicleMotor.cs" />
+    <Compile Include="Vehicles\Wheel.cs" />
+    <Compile Include="WaterSimulator.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Igneel.Animations\Igneel.Animations.csproj">
+      <Project>{e466ab9b-9457-422e-bba7-0aa52f9535d3}</Project>
+      <Name>Igneel.Animations</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Igneel.Assets\Igneel.Assets.csproj">
+      <Project>{c7c6af7b-9770-45b7-9105-877c4a5dced0}</Project>
+      <Name>Igneel.Assets</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Igneel.Core\Igneel.Core.csproj">
+      <Project>{fe38226c-e9e7-4461-ad14-b14369255a9c}</Project>
+      <Name>Igneel.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Igneel.Graphics\Igneel.Graphics.csproj">
+      <Project>{2a7c0792-7f47-4b07-a665-56ab6bf15f71}</Project>
+      <Name>Igneel.Graphics</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Igneel.Input\Igneel.Input.csproj">
+      <Project>{606fdb3f-628e-4d48-9735-3a6f54f1b010}</Project>
+      <Name>Igneel.Input</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Igneel.Math\Igneel.Math.csproj">
+      <Project>{ac47c0d4-b22a-4ced-b06b-50b828d56b07}</Project>
+      <Name>Igneel.Math</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Igneel.Physics\Igneel.Physics.csproj">
+      <Project>{7d76eb73-4742-45c7-84a6-f50b9961d874}</Project>
+      <Name>Igneel.Physics</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Igneel.Scening\Igneel.Scenering.csproj">
+      <Project>{228f60e4-4aaa-44f9-9a85-334192bd1897}</Project>
+      <Name>Igneel.Scenering</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Igneel.Shared\Igneel.Shared.csproj">
+      <Project>{23b14551-20d5-437f-bc17-ba70ea50184d}</Project>
+      <Name>Igneel.Shared</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

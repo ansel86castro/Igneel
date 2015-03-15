@@ -87,13 +87,45 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Igneel.Assets\Igneel.Assets.csproj">
+      <Project>{c7c6af7b-9770-45b7-9105-877c4a5dced0}</Project>
+      <Name>Igneel.Assets</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Igneel.Core\Igneel.Core.csproj">
+      <Project>{fe38226c-e9e7-4461-ad14-b14369255a9c}</Project>
+      <Name>Igneel.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Igneel.Graphics\Igneel.Graphics.csproj">
+      <Project>{2a7c0792-7f47-4b07-a665-56ab6bf15f71}</Project>
+      <Name>Igneel.Graphics</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Igneel.Input\Igneel.Input.csproj">
+      <Project>{606fdb3f-628e-4d48-9735-3a6f54f1b010}</Project>
+      <Name>Igneel.Input</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Igneel.Math\Igneel.Math.csproj">
+      <Project>{ac47c0d4-b22a-4ced-b06b-50b828d56b07}</Project>
+      <Name>Igneel.Math</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Igneel.Physics\Igneel.Physics.csproj">
+      <Project>{7d76eb73-4742-45c7-84a6-f50b9961d874}</Project>
+      <Name>Igneel.Physics</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Igneel.Rendering\Igneel.Rendering.csproj">
+      <Project>{185f3662-2f7f-4945-9156-9aab127281ab}</Project>
+      <Name>Igneel.Rendering</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Igneel.Scening\Igneel.Scenering.csproj">
+      <Project>{228f60e4-4aaa-44f9-9a85-334192bd1897}</Project>
+      <Name>Igneel.Scenering</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Igneel.Shared\Igneel.Shared.csproj">
+      <Project>{23b14551-20d5-437f-bc17-ba70ea50184d}</Project>
+      <Name>Igneel.Shared</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Igneel.Windows\Igneel.Windows.csproj">
       <Project>{8b1a1553-d47c-4a98-ad2c-11f3b38bc74a}</Project>
       <Name>Igneel.Windows</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Igneel\Igneel.csproj">
-      <Project>{daf07c37-563a-4be2-bb47-32147dfe12dc}</Project>
-      <Name>Igneel</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

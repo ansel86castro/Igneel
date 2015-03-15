@@ -3,7 +3,7 @@
 
 namespace IgneelDirectInput {
 
-	DKeyBoard::DKeyBoard(IDirectInput8* input, WindowContext^ context, HANDLE hEvent)
+	DKeyBoard::DKeyBoard(IDirectInput8* input, InputContext^ context, HANDLE hEvent)
 		: Keyboard(context)
 	{
 		LPDIRECTINPUTDEVICE8 device;

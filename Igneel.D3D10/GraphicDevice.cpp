@@ -255,9 +255,9 @@ namespace IgneelD3D10
 		if(texture == nullptr)
 			throw gcnew InvalidOperationException("Invalid Resource Type");				
 
-		auto noti = Service::Get<Igneel::Services::INotificationService^>();
+		/*auto noti = Service::Get<Igneel::Services::INotificationService^>();
 		if(noti!=nullptr)
-			noti->OnObjectCreated(texture);
+			noti->OnObjectCreated(texture);*/
 		return texture;
 	}
 
@@ -293,9 +293,9 @@ namespace IgneelD3D10
 		if(texture == nullptr)
 			throw gcnew InvalidOperationException("Invalid Resource Type");				
 
-		auto noti = Service::Get<Igneel::Services::INotificationService^>();
+	/*	auto noti = Service::Get<Igneel::Services::INotificationService^>();
 		if(noti!=nullptr)
-			noti->OnObjectCreated(texture);
+			noti->OnObjectCreated(texture);*/
 		return texture;
 	}
 

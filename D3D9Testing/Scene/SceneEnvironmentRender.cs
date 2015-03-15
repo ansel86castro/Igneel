@@ -8,9 +8,10 @@ using System.Windows.Forms;
 using Igneel.Rendering;
 using Igneel.Graphics;
 using System.Runtime.InteropServices;
-using Igneel.Components;
-using Igneel.Rendering.Effects;
+using Igneel.Scenering;
+using Igneel.Scenering.Effects;
 using Igneel.Rendering.Bindings;
+using Igneel.Scenering.Bindings;
 
 namespace Igneel.Design
 {
@@ -35,7 +36,7 @@ namespace Igneel.Design
 
             SetRender<SceneTechnique, RenderMeshColorEffect>((component, render) =>
             {
-                var device = Engine.Graphics;
+                var device = GraphicDeviceFactory.Device;
 
                 var effect = render.Effect;
                 if (map == null)
@@ -112,7 +113,7 @@ namespace Igneel.Design
             Array.ConstrainedCopy(axis, 0, vbData, lines.Length, axis.Length);
 
             int vertexSize = Marshal.SizeOf(typeof(VertexPositionColor));
-            vb = Engine.Graphics.CreateVertexBuffer(vbData.Length * vertexSize, vertexSize, vbData, usage: ResourceUsage.Default, cpuAcces: CpuAccessFlags.ReadWrite);
+            vb = GraphicDeviceFactory.Device.CreateVertexBuffer(vbData.Length * vertexSize, vertexSize, vbData, usage: ResourceUsage.Default, cpuAcces: CpuAccessFlags.ReadWrite);
            
            //unsafe{
            //    VertexPositionColor* pter = (VertexPositionColor*)vb.Map(MapType.ReadWrite);               
@@ -144,7 +145,7 @@ namespace Igneel.Design
     //{
     //    public override void Draw(DesignEnvironment component)
     //    {
-    //        var device = Engine.Graphics;
+    //        var device = GraphicDeviceFactory.Device;
 
     //        var effect = Effect;
     //        effect.Constants.World = Matrix.Identity;           

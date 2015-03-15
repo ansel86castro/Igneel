@@ -146,11 +146,17 @@
     <ProjectReference Include="..\HLSLCompiler\Ignee.Compiling.csproj">
       <Project>{cab901c0-7a4e-4f0f-b27d-2b5e73548329}</Project>
     </ProjectReference>
+    <ProjectReference Include="..\Igneel.Graphics\Igneel.Graphics.csproj">
+      <Project>{2a7c0792-7f47-4b07-a665-56ab6bf15f71}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\Igneel.Math\Igneel.Math.csproj">
+      <Project>{ac47c0d4-b22a-4ced-b06b-50b828d56b07}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\Igneel.Shared\Igneel.Shared.csproj">
+      <Project>{23b14551-20d5-437f-bc17-ba70ea50184d}</Project>
+    </ProjectReference>
     <ProjectReference Include="..\Igneel.Windows\Igneel.Windows.csproj">
       <Project>{8b1a1553-d47c-4a98-ad2c-11f3b38bc74a}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\Igneel\Igneel.csproj">
-      <Project>{daf07c37-563a-4be2-bb47-32147dfe12dc}</Project>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

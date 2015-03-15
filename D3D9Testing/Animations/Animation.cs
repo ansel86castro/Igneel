@@ -1,7 +1,7 @@
 ﻿using Antlr.Runtime;
 using Igneel;
 using Igneel.Animations;
-using Igneel.Components;
+using Igneel.Scenering;
 using Igneel.IA;
 using Igneel.Importers;
 using Igneel.Input;
@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Igneel.Scenering.Animations;
 
 namespace D3D9Testing.Animations
 {
@@ -27,14 +28,14 @@ namespace D3D9Testing.Animations
                 if (d.ShowDialog() == System.Windows.Forms.DialogResult.OK)
                 {
                     SceneTests.InitializeScene();
-                    var pk = ContentImporter.Import(Engine.Scene, d.FileName);
-                    pk.OnAddToScene(Engine.Scene);
+                    var pk = ContentImporter.Import(SceneManager.Scene, d.FileName);
+                    pk.OnAddToScene(SceneManager.Scene);
 
-                    var animation = Engine.Scene.AnimManager.Animations[0];                   
+                    var animation = SceneManager.Scene.AnimManager.Animations[0];                   
                     var resetter = new AnimationBonesResetter(animation); //  new HeirarchyPoseResetter(root);
                     var state = animation.GetCursor(0);
                     state.Looping = AnimationLooping.Secuential;
-                   Engine.Scene.Dynamics.Add(new Dynamic(deltaT =>
+                   SceneManager.Scene.Dynamics.Add(new Dynamic(deltaT =>
                     {
                         resetter.Reset();
 
@@ -60,19 +61,19 @@ namespace D3D9Testing.Animations
 
             Vector3 speedVector = new Vector3(0, 0, -1f);
 
-            var content = ContentImporter.Import(Engine.Scene, @"C:\Users\ansel\Documents\3dsmax\export\lighting_shadowed.DAE");
-            content.OnAddToScene(Engine.Scene);
+            var content = ContentImporter.Import(SceneManager.Scene, @"C:\Users\ansel\Documents\3dsmax\export\lighting_shadowed.DAE");
+            content.OnAddToScene(SceneManager.Scene);
 
-            SceneNode cameraNode = Engine.Scene.GetNode("camera1");
+            SceneNode cameraNode = SceneManager.Scene.GetNode("camera1");
 
-            SceneNode root = Engine.Scene.EnumerateNodesPosOrden().First(x => x.Type == NodeType.Bone);
+            SceneNode root = SceneManager.Scene.EnumerateNodesPosOrden().First(x => x.Type == NodeType.Bone);
             BonesResetter resetter = new BonesResetter(root);
 
             Vector3 iniTrasnlation = root.LocalPosition;
             Vector3 translation = root.LocalPosition;
             var iniHeading = root.Heading;
 
-            var animation = Engine.Scene.AnimManager.Animations[0];
+            var animation = SceneManager.Scene.AnimManager.Animations[0];
 
             animation.Sample(startTimeWalk);
             var iniKeyValue = root.LocalPosition;
@@ -154,7 +155,7 @@ namespace D3D9Testing.Animations
 
                         }));
 
-            Engine.Scene.Dynamics.Add(
+            SceneManager.Scene.Dynamics.Add(
                 new Dynamic(deltaT =>
                     {
                         var oldposition = root.GlobalPosition;
@@ -199,17 +200,17 @@ namespace D3D9Testing.Animations
 
             Vector3 speedVector = new Vector3(0, 0, -1f);
 
-            ContentImporter.Import(Engine.Scene, @"C:\Users\ansel\Documents\3dsmax\export\lighting_shadowed.DAE")
-               .OnAddToScene(Engine.Scene);
-            SceneNode cameraNode = Engine.Scene.GetNode("camera1");
+            ContentImporter.Import(SceneManager.Scene, @"C:\Users\ansel\Documents\3dsmax\export\lighting_shadowed.DAE")
+               .OnAddToScene(SceneManager.Scene);
+            SceneNode cameraNode = SceneManager.Scene.GetNode("camera1");
 
-            SceneNode root = Engine.Scene.EnumerateNodesPosOrden().First(x => x.Type == NodeType.Bone);
+            SceneNode root = SceneManager.Scene.EnumerateNodesPosOrden().First(x => x.Type == NodeType.Bone);
             BonesResetter resetter = new BonesResetter(root);
             
             Vector3 translation = root.LocalPosition;
             var iniHeading = root.Heading;
 
-            var animation = Engine.Scene.AnimManager.Animations[0];
+            var animation = SceneManager.Scene.AnimManager.Animations[0];
 
             animation.Sample(startTimeWalk);
             var iniKeyValue = root.LocalPosition;
@@ -290,7 +291,7 @@ namespace D3D9Testing.Animations
                 .AddTransition("walk-idle", "idle", x => 
                     walk_idle.TransitionComplete);
 
-            Engine.Scene.Dynamics.Add(new Dynamic(deltaT =>
+            SceneManager.Scene.Dynamics.Add(new Dynamic(deltaT =>
                 {
                     //store position previus animation
                     var localPosition = root.LocalPosition;
@@ -330,15 +331,15 @@ namespace D3D9Testing.Animations
         {
             SceneTests.InitializeScene();
 
-            ContentImporter.Import(Engine.Scene, @"C:\Users\ansel\Documents\3dsmax\export\Lighting\armed.DAE")
-                .OnAddToScene(Engine.Scene);
-            ContentImporter.ImportAnimation(Engine.Scene, @"C:\Users\ansel\Documents\3dsmax\export\Lighting\walk.DAE")
-                .OnAddToScene(Engine.Scene);
+            ContentImporter.Import(SceneManager.Scene, @"C:\Users\ansel\Documents\3dsmax\export\Lighting\armed.DAE")
+                .OnAddToScene(SceneManager.Scene);
+            ContentImporter.ImportAnimation(SceneManager.Scene, @"C:\Users\ansel\Documents\3dsmax\export\Lighting\walk.DAE")
+                .OnAddToScene(SceneManager.Scene);
 
-            var armed = Engine.Scene.AnimManager.Animations[0];
-            var walk = Engine.Scene.AnimManager.Animations[1];            
+            var armed = SceneManager.Scene.AnimManager.Animations[0];
+            var walk = SceneManager.Scene.AnimManager.Animations[1];            
 
-            SceneNode root = Engine.Scene.EnumerateNodesPosOrden().First(x => x.Type == NodeType.Bone);
+            SceneNode root = SceneManager.Scene.EnumerateNodesPosOrden().First(x => x.Type == NodeType.Bone);
             var resetter = new BonesResetter(root);            
             var translation = root.LocalPosition;
 
@@ -348,7 +349,7 @@ namespace D3D9Testing.Animations
             cursorArmed.Looping = AnimationLooping.Secuential;
             cursorWalk.Looping = AnimationLooping.Secuential;
 
-            Engine.Scene.Dynamics.Add(
+            SceneManager.Scene.Dynamics.Add(
                 new Dynamic(deltaT =>
                     {
                         resetter.Reset();
@@ -369,13 +370,13 @@ namespace D3D9Testing.Animations
 
         //    SceneTests.InitializeScene();
 
-        //    ContentImporter.Import(Engine.Scene, @"C:\Users\ansel\Documents\3dsmax\export\Lighting\armed.DAE");
-        //    ContentImporter.ImportAnimation(Engine.Scene, file);
+        //    ContentImporter.Import(SceneManager.Scene, @"C:\Users\ansel\Documents\3dsmax\export\Lighting\armed.DAE");
+        //    ContentImporter.ImportAnimation(SceneManager.Scene, file);
 
-        //    var armed = Engine.Scene.AnimManager.Animations[0];
-        //    var walk = Engine.Scene.AnimManager.Animations[1];
+        //    var armed = SceneManager.Scene.AnimManager.Animations[0];
+        //    var walk = SceneManager.Scene.AnimManager.Animations[1];
 
-        //    SceneNode root = Engine.Scene.Root.EnumerateNodesPosOrden().First(x => x.Type == NodeType.Bone);
+        //    SceneNode root = SceneManager.Scene.Root.EnumerateNodesPosOrden().First(x => x.Type == NodeType.Bone);
         //    var resetter = new BonesResetter(root);
         //    var translation = root.LocalPosition;
 

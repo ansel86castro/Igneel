@@ -1,6 +1,6 @@
-﻿using Igneel.Components;
-using Igneel.Graphics;
+﻿using Igneel.Graphics;
 using Igneel.Rendering;
+using Igneel.Scenering;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -79,7 +79,7 @@ namespace Igneel.Windows.Wpf
             var scene = this.scene;
             var camera = this.camera;
             if (scene == null)
-                scene = Engine.Scene;
+                scene = SceneManager.Scene;
             if (camera == null && scene != null)
                 camera = scene.ActiveCamera;
 

@@ -3,7 +3,7 @@
 
 namespace IgneelDirectInput {
 
-	DJoystick::DJoystick(LPDIRECTINPUT8 input,  WindowContext^ context)
+	DJoystick::DJoystick(LPDIRECTINPUT8 input,  InputContext^ context)
 		:Joystick(context)
 	{
 		LPDIRECTINPUTDEVICE8 device;

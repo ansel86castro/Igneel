@@ -5,13 +5,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Igneel.TagProcesors;
+using Igneel.Scenering.TagProcesors;
 using Igneel.Physics;
 using Igneel.Input;
-using Igneel.Components;
+using Igneel.Scenering;
 using Igneel.Animations;
 using Igneel.Graphics;
-using Igneel.Rendering.Effects;
+using Igneel.Scenering.Effects;
 
 namespace D3D9Testing
 {
@@ -25,16 +25,17 @@ namespace D3D9Testing
         public void CreateControllerFromFile()
         {
             SceneTests.InitializeScene();
-            Engine.PhyScene.Enable = true;
-            Engine.PhyScene.Visible = true;
+          
+            SceneManager.Scene.Physics.Enable = true;
+            SceneManager.Scene.Physics.Visible = true;
 
             CharacterControllerTagProcessor.ControllerCreated += CharacterControllerTagProcessor_ControllerCreated;
-            ContentImporter.Import(Engine.Scene, @"C:\Users\ansel\Documents\3dsmax\export\controller.DAE");
+            ContentImporter.Import(SceneManager.Scene, @"C:\Users\ansel\Documents\3dsmax\export\controller.DAE");
             CharacterController controller = CharacterControllerManager.Instance.Controllers[0];
 
-            Engine.Scene.Dynamics.Add(new Dynamic( deltaT =>
+            SceneManager.Scene.Dynamics.Add(new Dynamic( deltaT =>
                 {
-                    var camera = Engine.Scene.ActiveCamera;                                    
+                    var camera = SceneManager.Scene.ActiveCamera;                                    
                     Vector3 direction = new Vector3();
                     if (Engine.KeyBoard.IsKeyPressed(Keys.O))
                         direction = camera.Front;
@@ -70,21 +71,21 @@ namespace D3D9Testing
             const float durationRun = endRunTime - startTimeRun;
 
             SceneTests.InitializeScene();
-            Engine.PhyScene.Enable = true;
-            Engine.PhyScene.Visible = false;
+            SceneManager.Scene.Physics.Enable = true;
+            SceneManager.Scene.Physics.Visible = false;
 
             CharacterControllerTagProcessor.ControllerCreated += CharacterControllerTagProcessor_ControllerCreated;
 
-            ContentImporter.Import(Engine.Scene, @"C:\Users\ansel\Documents\3dsmax\export\game_level0\game_level0.DAE");
-            ContentImporter.ImportAnimation(Engine.Scene, @"C:\Users\ansel\Documents\3dsmax\export\Lighting\walk.DAE");
-            ContentImporter.ImportAnimation(Engine.Scene, @"C:\Users\ansel\Documents\3dsmax\export\Lighting\run.DAE");
+            ContentImporter.Import(SceneManager.Scene, @"C:\Users\ansel\Documents\3dsmax\export\game_level0\game_level0.DAE");
+            ContentImporter.ImportAnimation(SceneManager.Scene, @"C:\Users\ansel\Documents\3dsmax\export\Lighting\walk.DAE");
+            ContentImporter.ImportAnimation(SceneManager.Scene, @"C:\Users\ansel\Documents\3dsmax\export\Lighting\run.DAE");
 
             CharacterController controller = CharacterControllerManager.Instance.Controllers[0];
-            var animationWalk = Engine.Scene.AnimManager.Animations[1];
-            var animationRun = Engine.Scene.AnimManager.Animations[2];
+            var animationWalk = SceneManager.Scene.AnimManager.Animations[1];
+            var animationRun = SceneManager.Scene.AnimManager.Animations[2];
 
             var character = (((SceneNode)controller.Affectable)).GetNode((SceneNode x)=>x.Type == NodeType.Bone);
-            Engine.Scene.GetNode("camera1").BindTo(character);
+            SceneManager.Scene.GetNode("camera1").BindTo(character);
 
             ThirdPersonControllerDesc desc = new ThirdPersonControllerDesc
             {
@@ -95,22 +96,22 @@ namespace D3D9Testing
                 CameraMaxPich = Numerics.ToRadians(45),
                 CameraMinPich = Numerics.ToRadians(25),
                 TransitionTime = blendDuration,
-                Camera = Engine.Scene.GetNode("camera1"),
+                Camera = SceneManager.Scene.GetNode("camera1"),
                 Idle = new AnimationPlayback(animationWalk, startTimeIdle, durationIdle, AnimationLooping.Secuential),
                 Walk = new AnimationPlayback(animationWalk, startTimeWalk, durationWalk, AnimationLooping.Secuential, velocity:1),
                 //Walk = new AnimationPlayback(animationRun, startTimeRun, durationRun, AnimationLooping.Secuential),
             };
             ThirdPersonController characterController = new ThirdPersonController(desc);          
          
-            Engine.Scene.Dynamics.Add(characterController);
+            SceneManager.Scene.Dynamics.Add(characterController);
 
-            //Engine.Shadow.ShadowMapping.Bias = 0.9e-2f;
-            LightInstance.CreateShadowMapForAllLights(Engine.Scene);
+            //EngineState.Shadow.ShadowMapping.Bias = 0.9e-2f;
+            LightInstance.CreateShadowMapForAllLights(SceneManager.Scene);
          
 
         }
 
-        void CharacterControllerTagProcessor_ControllerCreated(Igneel.Physics.CharacterControllerDesc arg1, Igneel.Components.SceneNode arg2)
+        void CharacterControllerTagProcessor_ControllerCreated(Igneel.Physics.CharacterControllerDesc arg1, Igneel.Scenering.SceneNode arg2)
         {
             arg1.HitReport = new MyHitReport();
         }
@@ -123,17 +124,17 @@ namespace D3D9Testing
             }
             if (rastState == null)
             {
-                rastState = Engine.Graphics.CreateRasterizerState(new RasterizerDesc(true)
+                rastState = GraphicDeviceFactory.Device.CreateRasterizerState(new RasterizerDesc(true)
                 {
                     Fill = FillMode.Wireframe,
                     Cull = CullMode.None
                 });
             }
-            var device = Engine.Graphics;
+            var device = GraphicDeviceFactory.Device;
             var effect = Service.Require<RenderMeshIdEffect>();
         
             effect.U.World = Matrix.Translate(0, 0, 0.5f) * targetCamera.InvViewProjection;
-            effect.U.ViewProj = Engine.Scene.ActiveCamera.ViewProj;
+            effect.U.ViewProj = SceneManager.Scene.ActiveCamera.ViewProj;
             effect.U.gId = new Vector4(1);
 
             device.RasterizerStack.Push(rastState);

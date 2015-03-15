@@ -12,7 +12,7 @@ namespace IgneelDirectInput {
 		LPDIRECTINPUTDEVICE8 joystick;
 		LPDIJOYSTATE2 state;
 	public:
-		DJoystick(LPDIRECTINPUT8 input,  WindowContext^ context);
+		DJoystick(LPDIRECTINPUT8 input,  InputContext^ context);
 
 		virtual void Pool();
 

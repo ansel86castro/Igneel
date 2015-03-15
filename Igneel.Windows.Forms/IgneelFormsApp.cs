@@ -1,5 +1,5 @@
 ﻿using Igneel.Graphics;
-using Igneel.Services;
+using Igneel.Scenering;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -40,7 +40,7 @@ namespace Igneel.Windows.Forms
                 var pFactory = Service.Get<Physics.PhysicManager>();
                 var iFactory =Service.Get<Input.InputManager>();
 
-                Engine.InitializeEngine(new WindowContext(mainForm.Handle), new GraphicDeviceDesc
+                Engine.InitializeEngine(new InputContext(mainForm.Handle), new GraphicDeviceDesc
                 {
                     Adapter = 0,
                     DriverType = GraphicDeviceType.Hardware,
@@ -67,11 +67,11 @@ namespace Igneel.Windows.Forms
 
         void canvas_Resize(object sender, EventArgs e)
         {
-            Engine.Graphics.ResizeBackBuffer(canvas.Width, canvas.Height);
-            if (Engine.Scene != null)
+            GraphicDeviceFactory.Device.ResizeBackBuffer(canvas.Width, canvas.Height);
+            if (SceneManager.Scene != null)
             {
-                Engine.Scene.ActiveCamera.AspectRatio = (float)canvas.Width / (float)canvas.Height;
-                Engine.Scene.ActiveCamera.CommitChanges();
+                SceneManager.Scene.ActiveCamera.AspectRatio = (float)canvas.Width / (float)canvas.Height;
+                SceneManager.Scene.ActiveCamera.CommitChanges();
             }
             
         }

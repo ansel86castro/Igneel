@@ -15,7 +15,7 @@ namespace IgneelDirectInput {
 		DIMOUSESTATE2* state;
 		bool pooled;
 	public:
-		DMouse(IDirectInput8* input, WindowContext^ context, HANDLE hEvent);
+		DMouse(IDirectInput8* input, InputContext^ context, HANDLE hEvent);
 
         virtual property int X { 
 			int get() override; }

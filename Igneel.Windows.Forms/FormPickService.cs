@@ -1,6 +1,6 @@
-﻿using Igneel.Components;
+﻿using Igneel.Scenering;
 using Igneel.Rendering;
-using Igneel.Services;
+
 using System;
 using System.Collections.Generic;
 using System.Drawing;

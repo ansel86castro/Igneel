@@ -2,7 +2,8 @@
 using Igneel.Graphics;
 using Igneel.Importers;
 using Igneel.Rendering;
-using Igneel.Rendering.Effects;
+using Igneel.Scenering;
+using Igneel.Scenering.Effects;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,7 +28,7 @@ namespace D3D9Testing.Techniques
             {
                 boxBuilder.Vertices[i].Position += translation;
             }
-            vb = Engine.Graphics.CreateVertexBuffer<MeshVertex>(data: boxBuilder.Vertices);
+            vb = GraphicDeviceFactory.Device.CreateVertexBuffer<MeshVertex>(data: boxBuilder.Vertices);
         }
 
         [TestMethod]
@@ -38,22 +39,22 @@ namespace D3D9Testing.Techniques
                 if (d.ShowDialog() == DialogResult.OK)
                 {
                     SceneTests.InitializeScene();
-                    var content = ContentImporter.Import(Engine.Scene, d.FileName);                                     
-                    var technique = Engine.Scene.EnumerateNodesInPreOrden().Where(x => x.Technique is EnvironmentMapTechnique).Select(x => (EnvironmentMapTechnique)x.Technique).FirstOrDefault();
+                    var content = ContentImporter.Import(SceneManager.Scene, d.FileName);                                     
+                    var technique = SceneManager.Scene.EnumerateNodesInPreOrden().Where(x => x.Technique is EnvironmentMapTechnique).Select(x => (EnvironmentMapTechnique)x.Technique).FirstOrDefault();
                     Engine.Presenter.Rendering += () =>
                     {
                         if (rastState == null)
                         {
-                            rastState = Engine.Graphics.CreateRasterizerState(new RasterizerDesc(true)
+                            rastState = GraphicDeviceFactory.Device.CreateRasterizerState(new RasterizerDesc(true)
                             {
                                 Fill = FillMode.Wireframe,
                                 Cull = CullMode.None
                             });
                         }
-                        var device = Engine.Graphics;
+                        var device = GraphicDeviceFactory.Device;
                         var effect = Service.Require<RenderMeshColorEffect>();
 
-                        effect.U.ViewProj = Engine.Scene.ActiveCamera.ViewProj;
+                        effect.U.ViewProj = SceneManager.Scene.ActiveCamera.ViewProj;
                         effect.U.Color = new Vector4(1);
 
                         device.RasterizerStack.Push(rastState);
@@ -88,13 +89,13 @@ namespace D3D9Testing.Techniques
                 if (d.ShowDialog() == DialogResult.OK)
                 {
                     SceneTests.InitializeScene();
-                    var content = ContentImporter.Import(Engine.Scene, d.FileName);
-                    ReflectiveNodeTechnique technique = Engine.Scene.EnumerateNodesInPreOrden().Where(x => x.Technique is ReflectiveNodeTechnique).Select(x => (ReflectiveNodeTechnique)x.Technique).FirstOrDefault();
+                    var content = ContentImporter.Import(SceneManager.Scene, d.FileName);
+                    ReflectiveNodeTechnique technique = SceneManager.Scene.EnumerateNodesInPreOrden().Where(x => x.Technique is ReflectiveNodeTechnique).Select(x => (ReflectiveNodeTechnique)x.Technique).FirstOrDefault();
                     Engine.Presenter.Rendering += ()=>
                     {                        
                          var untranformed = Service.Require<RenderQuadEffect>();
                         var sprite = Service.Require<Sprite>();
-                        Engine.Graphics.PS.SetResource(0, technique.ReflectionTexture);
+                        GraphicDeviceFactory.Device.PS.SetResource(0, technique.ReflectionTexture);
 
                         untranformed.U.alpha = 1;
                         untranformed.Technique = 1;

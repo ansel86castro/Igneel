@@ -1,6 +1,6 @@
 ﻿using D3D9Testing.Import;
 using Igneel;
-using Igneel.Components;
+using Igneel.Scenering;
 using Igneel.Graphics;
 using Igneel.Importers;
 using System;
@@ -23,8 +23,8 @@ namespace D3D9Testing.Techniques
             Engine.BackColor = new Color4(Color.Yellow.ToArgb());
 
             ScreenDecal decal = new ScreenDecal(null);
-            decal.Texture = Engine.Graphics.CreateTexture2DFromFile( @"F:\Pictures\Yo\DSC03854.JPG" );
-            //decal.Texture = Engine.Graphics.CreateTexture2DFromFile(@"F:\Pictures\gray.jpg");
+            decal.Texture = GraphicDeviceFactory.Device.CreateTexture2DFromFile( @"F:\Pictures\Yo\DSC03854.JPG" );
+            //decal.Texture = GraphicDeviceFactory.Device.CreateTexture2DFromFile(@"F:\Pictures\gray.jpg");
 
             Engine.Presenter.RenderBegin += (p) =>
             {
@@ -41,9 +41,9 @@ namespace D3D9Testing.Techniques
             {
                 if (d.ShowDialog() == DialogResult.OK)
                 {                
-                    var content = ContentImporter.Import(Engine.Scene, d.FileName);
-                    if (Engine.Scene.Physics != null)
-                        Engine.Scene.Physics.Enable = true;
+                    var content = ContentImporter.Import(SceneManager.Scene, d.FileName);
+                    if (SceneManager.Scene.Physics != null)
+                        SceneManager.Scene.Physics.Enable = true;
                 }
             }
         }

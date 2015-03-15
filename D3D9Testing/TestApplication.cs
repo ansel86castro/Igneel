@@ -63,11 +63,11 @@ namespace D3D9Testing
 
     //    void screen_Resize(object sender, EventArgs e)
     //    {
-    //        Engine.Graphics.ResizeBackBuffer(form1.screen.Width, form1.screen.Height);
-    //        if (Engine.Scene != null)
+    //        GraphicDeviceFactory.Device.ResizeBackBuffer(form1.screen.Width, form1.screen.Height);
+    //        if (SceneManager.Scene != null)
     //        {
-    //            Engine.Scene.ActiveCamera.AspectRatio = (float)form1.screen.Width / (float)form1.screen.Height;
-    //            Engine.Scene.ActiveCamera.CommitChanges();
+    //            SceneManager.Scene.ActiveCamera.AspectRatio = (float)form1.screen.Width / (float)form1.screen.Height;
+    //            SceneManager.Scene.ActiveCamera.CommitChanges();
     //        }
             
     //    }

@@ -1,10 +1,10 @@
 ﻿using Igneel;
 using Igneel.Assets;
-using Igneel.Components;
+using Igneel.Scenering;
 using Igneel.Graphics;
 using Igneel.Importers;
 using Igneel.Rendering;
-using Igneel.Rendering.Effects;
+using Igneel.Scenering.Effects;
 using Igneel.Windows.Forms;
 using System;
 using System.Collections.Generic;
@@ -13,6 +13,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Igneel.Scenering.Assets;
 
 namespace D3D9Testing.Techniques
 {
@@ -40,7 +41,7 @@ namespace D3D9Testing.Techniques
                 if (d.ShowDialog() == DialogResult.OK)
                 {
                     SceneTests.InitializeScene();
-                    content = ContentImporter.Import(Engine.Scene, d.FileName);
+                    content = ContentImporter.Import(SceneManager.Scene, d.FileName);
                 }
             }
             return content;
@@ -51,20 +52,20 @@ namespace D3D9Testing.Techniques
         {         
                     SceneTests.InitializeScene();
             
-                    //Engine.PushTechnique<DefferedLigthing<DefferedLightingEffect>>();
-                    //Engine.Shadow.Enable = true;
-                    //Engine.Shadow.ShadowMapping.Enable = true;
+                    //RenderManager.PushTechnique<DefferedLigthing<DefferedLightingEffect>>();
+                    //EngineState.Shadow.Enable = true;
+                    //EngineState.Shadow.ShadowMapping.Enable = true;
                     //Deffered.DrawGBuffers<DefferedShadowRender>();
 
-                   // var content = ContentImporter.Import(Engine.Scene, @"C:\Users\ansel\Documents\3dsmax\export\shadowScene.DAE");
+                   // var content = ContentImporter.Import(SceneManager.Scene, @"C:\Users\ansel\Documents\3dsmax\export\shadowScene.DAE");
                     var content = ImportContent();
                     if(content == null)
                         return;
 
-                    if (Engine.Scene.Physics != null)
-                        Engine.Scene.Physics.Enable = true;
+                    if (SceneManager.Scene.Physics != null)
+                        SceneManager.Scene.Physics.Enable = true;
 
-                    if (Engine.Scene.Lights.Count == 0)
+                    if (SceneManager.Scene.Lights.Count == 0)
                     {
                         var light = new Light()
                         {
@@ -74,16 +75,16 @@ namespace D3D9Testing.Techniques
                             Enable = true
                         };
 
-                        Engine.Scene.Create("DirectionalLight0", new LightInstance(light),
+                        SceneManager.Scene.Create("DirectionalLight0", new LightInstance(light),
                             localRotationEuler:new Euler(0, Numerics.ToRadians(70), 0));                           
 
-                        LightInstance.CreateShadowMapForAllLights(Engine.Scene);
+                        LightInstance.CreateShadowMapForAllLights(SceneManager.Scene);
                     }
-                    technique = Engine.Scene.Lights.Where(x => x.Node.Technique is ShadowMapTechnique).Select(x => (ShadowMapTechnique)x.Node.Technique).FirstOrDefault();
+                    technique = SceneManager.Scene.Lights.Where(x => x.Node.Technique is ShadowMapTechnique).Select(x => (ShadowMapTechnique)x.Node.Technique).FirstOrDefault();
                     if (technique == null)
                     {
-                        LightInstance.CreateShadowMapForAllLights(Engine.Scene);
-                        technique = Engine.Scene.Lights.Where(x => x.Node.Technique is ShadowMapTechnique).Select(x => (ShadowMapTechnique)x.Node.Technique).FirstOrDefault();
+                        LightInstance.CreateShadowMapForAllLights(SceneManager.Scene);
+                        technique = SceneManager.Scene.Lights.Where(x => x.Node.Technique is ShadowMapTechnique).Select(x => (ShadowMapTechnique)x.Node.Technique).FirstOrDefault();
                     }
                     targetCamera = technique.Camera;
                     technique.KernelSize = 3;      
@@ -95,12 +96,12 @@ namespace D3D9Testing.Techniques
                     //targetCamera.CommitChanges();
                     technique.Bias = 0.9e-2f;                  
 
-                    Engine.Scene.AmbientLight.GroundColor = new Vector3(0, 0, 0);
-                    Engine.Scene.AmbientLight.SkyColor = new Vector3(0.2f, 0.2f, 0.2f);
-                    //Engine.Lighting.Reflection.UseDefaultTechnique = true;
+                    SceneManager.Scene.AmbientLight.GroundColor = new Vector3(0, 0, 0);
+                    SceneManager.Scene.AmbientLight.SkyColor = new Vector3(0.2f, 0.2f, 0.2f);
+                    //EngineState.Lighting.Reflection.UseDefaultTechnique = true;
                   
                     Engine.Presenter.Rendering += Presenter_Rendering;
-                    Engine.Scene.Dynamics.Add(new Dynamic(x =>
+                    SceneManager.Scene.Dynamics.Add(new Dynamic(x =>
                     {
                         if (Engine.KeyBoard.IsKeyPressed(Igneel.Input.Keys.D1))
                             technique.KernelSize = 3;
@@ -120,15 +121,15 @@ namespace D3D9Testing.Techniques
         {
             SceneTests.InitializeScene();
             var content = ImportContent();
-            content.OnAddToScene(Engine.Scene);
+            content.OnAddToScene(SceneManager.Scene);
 
-            //ContentImporter.Import(Engine.Scene, @"C:\Users\ansel\Documents\3dsmax\export\nissan2.DAE");
-            //ContentImporter.Import(Engine.Scene, @"C:\Users\ansel\Documents\3dsmax\export\talia.DAE");            
+            //ContentImporter.Import(SceneManager.Scene, @"C:\Users\ansel\Documents\3dsmax\export\nissan2.DAE");
+            //ContentImporter.Import(SceneManager.Scene, @"C:\Users\ansel\Documents\3dsmax\export\talia.DAE");            
 
-            if (Engine.Scene.Physics != null)
-                Engine.Scene.Physics.Enable = true;
+            if (SceneManager.Scene.Physics != null)
+                SceneManager.Scene.Physics.Enable = true;
 
-            if (Engine.Scene.Lights.Count == 0)
+            if (SceneManager.Scene.Lights.Count == 0)
             {
                 var light = new Light()
                 {
@@ -138,20 +139,20 @@ namespace D3D9Testing.Techniques
                     Enable = true
                 };
 
-                Engine.Scene.Create("DirectionalLight0", new LightInstance(light),
+                SceneManager.Scene.Create("DirectionalLight0", new LightInstance(light),
                     localRotationEuler: new Euler(0, Numerics.ToRadians(70), 0));                
             }
-            LightInstance.CreateShadowMapForAllLights(Engine.Scene);
-            technique = Engine.Scene.Lights.Where(x => x.Node.Technique is ShadowMapTechnique).Select(x => (ShadowMapTechnique)x.Node.Technique).FirstOrDefault();
+            LightInstance.CreateShadowMapForAllLights(SceneManager.Scene);
+            technique = SceneManager.Scene.Lights.Where(x => x.Node.Technique is ShadowMapTechnique).Select(x => (ShadowMapTechnique)x.Node.Technique).FirstOrDefault();
             targetCamera = technique.Camera;
 
             technique.Bias = 0.9e-2f;
 
-            Engine.Scene.AmbientLight.GroundColor = new Vector3(0, 0, 0);
-            Engine.Scene.AmbientLight.SkyColor = new Vector3(0.2f, 0.2f, 0.2f);
+            SceneManager.Scene.AmbientLight.GroundColor = new Vector3(0, 0, 0);
+            SceneManager.Scene.AmbientLight.SkyColor = new Vector3(0.2f, 0.2f, 0.2f);
 
             Engine.Presenter.Rendering += Presenter_Rendering;
-            Engine.Scene.Dynamics.Add(new Dynamic(x =>
+            SceneManager.Scene.Dynamics.Add(new Dynamic(x =>
             {
                 if (Engine.KeyBoard.IsKeyPressed(Igneel.Input.Keys.D1))
                     technique.KernelSize = 3;
@@ -170,18 +171,18 @@ namespace D3D9Testing.Techniques
             SceneTests.InitializeScene();
             
             //var content = ImportContent();
-            var content = ContentImporter.Import(Engine.Scene, @"C:\Users\ansel\Documents\3dsmax\export\shadowScene.DAE");
+            var content = ContentImporter.Import(SceneManager.Scene, @"C:\Users\ansel\Documents\3dsmax\export\shadowScene.DAE");
 
-            Engine.Shadow.ShadowMapping.PCFBlurSize = 5;
-            content.OnAddToScene(Engine.Scene);
+            EngineState.Shadow.ShadowMapping.PCFBlurSize = 5;
+            content.OnAddToScene(SceneManager.Scene);
 
-            //ContentImporter.Import(Engine.Scene, @"C:\Users\ansel\Documents\3dsmax\export\nissan2.DAE");
-            //ContentImporter.Import(Engine.Scene, @"C:\Users\ansel\Documents\3dsmax\export\talia.DAE");            
+            //ContentImporter.Import(SceneManager.Scene, @"C:\Users\ansel\Documents\3dsmax\export\nissan2.DAE");
+            //ContentImporter.Import(SceneManager.Scene, @"C:\Users\ansel\Documents\3dsmax\export\talia.DAE");            
 
-            if (Engine.Scene.Physics != null)
-                Engine.Scene.Physics.Enable = true;
+            if (SceneManager.Scene.Physics != null)
+                SceneManager.Scene.Physics.Enable = true;
 
-            //if (Engine.Scene.Lights.Count == 0)
+            //if (SceneManager.Scene.Lights.Count == 0)
             //{
             //    var light = new Light()
             //    {
@@ -191,21 +192,21 @@ namespace D3D9Testing.Techniques
             //        Enable = true
             //    };
 
-            //    Engine.Scene.Create("DirectionalLight0", new LightInstance(light),
+            //    SceneManager.Scene.Create("DirectionalLight0", new LightInstance(light),
             //        localRotationEuler: new Euler(0, Numerics.ToRadians(70), 0));
             //}
-            LightInstance.CreateShadowMapForAllLights(Engine.Scene);
-            technique = Engine.Scene.Lights.Where(x => x.Node.Technique is ShadowMapTechnique).Select(x => (ShadowMapTechnique)x.Node.Technique).FirstOrDefault();
+            LightInstance.CreateShadowMapForAllLights(SceneManager.Scene);
+            technique = SceneManager.Scene.Lights.Where(x => x.Node.Technique is ShadowMapTechnique).Select(x => (ShadowMapTechnique)x.Node.Technique).FirstOrDefault();
             targetCamera = technique.Camera;
 
             technique.Bias = 0.9e-2f;
 
-            Engine.Scene.AmbientLight.GroundColor = new Vector3(0, 0, 0);
-            Engine.Scene.AmbientLight.SkyColor = new Vector3(0.2f, 0.2f, 0.2f);
+            SceneManager.Scene.AmbientLight.GroundColor = new Vector3(0, 0, 0);
+            SceneManager.Scene.AmbientLight.SkyColor = new Vector3(0.2f, 0.2f, 0.2f);
 
-            Engine.Shadow.ShadowMapping.PCFBlurSize = 3;
+            EngineState.Shadow.ShadowMapping.PCFBlurSize = 3;
             var edgeTechnique = new EdgeShadowFilteringTechnique();
-            Engine.PushTechnique(edgeTechnique);
+            RenderManager.PushTechnique(edgeTechnique);
             bool debug = true;
 
             if (debug)
@@ -231,7 +232,7 @@ namespace D3D9Testing.Techniques
                 {
                     presenter.Begin(new Color4(Color.Aqua.ToArgb()));
 
-                    var device = Engine.Graphics;
+                    var device = GraphicDeviceFactory.Device;
                     device.PS.SamplerStacks[0].Push(SamplerState.Linear);                    
                     device.Blend = SceneTechnique.NoBlend;
 
@@ -269,17 +270,17 @@ namespace D3D9Testing.Techniques
         {
             if (rastState == null)
             {
-                rastState = Engine.Graphics.CreateRasterizerState(new RasterizerDesc(true)
+                rastState = GraphicDeviceFactory.Device.CreateRasterizerState(new RasterizerDesc(true)
                 {
                     Fill = FillMode.Wireframe,
                     Cull = CullMode.None
                 });
             }
-            var device = Engine.Graphics;
+            var device = GraphicDeviceFactory.Device;
             var effect = Service.Require<RenderMeshIdEffect>();            
 
             effect.U.World = translation * targetCamera.InvViewProjection;
-            effect.U.ViewProj = Engine.Scene.ActiveCamera.ViewProj;
+            effect.U.ViewProj = SceneManager.Scene.ActiveCamera.ViewProj;
             effect.U.gId = new Vector4(1);
 
             device.RasterizerStack.Push(rastState);

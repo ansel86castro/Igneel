@@ -1,5 +1,6 @@
 ﻿using Igneel;
 using Igneel.Rendering;
+using Igneel.Scenering;
 using Igneel.Windows.Forms;
 using System;
 using System.Collections.Generic;
@@ -68,16 +69,16 @@ namespace D3D9Testing
 
         private void enableShadowsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Engine.Shadow.Enable = !Engine.Shadow.Enable;
+            EngineState.Shadow.Enable = !EngineState.Shadow.Enable;
             enablePhysicsToolStripMenuItem.Checked = !enablePhysicsToolStripMenuItem.Checked;
         }
 
         private void enablePhysicsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (Engine.PhyScene != null)
+            if (SceneManager.Scene.Physics != null)
             {
                 enablePhysicsToolStripMenuItem.Checked = !enablePhysicsToolStripMenuItem.Checked;
-                Engine.PhyScene.Enable = !Engine.PhyScene.Enable;
+                SceneManager.Scene.Physics.Enable = !SceneManager.Scene.Physics.Enable;
             }
         }
 

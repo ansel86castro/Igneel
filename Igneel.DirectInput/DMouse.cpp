@@ -3,7 +3,7 @@
 
 namespace IgneelDirectInput {
 
-	DMouse::DMouse(IDirectInput8* input, WindowContext^ context, HANDLE hEvent)
+	DMouse::DMouse(IDirectInput8* input, InputContext^ context, HANDLE hEvent)
 		:Mouse(context)
 	{
 		LPDIRECTINPUTDEVICE8 device;

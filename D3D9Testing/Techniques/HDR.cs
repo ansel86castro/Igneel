@@ -2,7 +2,8 @@
 using Igneel.Graphics;
 using Igneel.Importers;
 using Igneel.Rendering;
-using Igneel.Rendering.Effects;
+using Igneel.Scenering;
+using Igneel.Scenering.Effects;
 using Igneel.Windows.Forms;
 using System;
 using System.Collections.Generic;
@@ -26,36 +27,36 @@ namespace D3D9Testing.Techniques
                 if (d.ShowDialog() == DialogResult.OK)
                 {
                     SceneTests.InitializeScene();
-                     Engine.Shadow.ShadowMapping.Bias = 0.9e-2f;
+                     EngineState.Shadow.ShadowMapping.Bias = 0.9e-2f;
 
-                    ContentImporter.Import(Engine.Scene, d.FileName);                   
-                    //var content = ContentImporter.Import(Engine.Scene, @"C:\Users\ansel\Documents\3dsmax\export\shadowScene.DAE");
+                    ContentImporter.Import(SceneManager.Scene, d.FileName);                   
+                    //var content = ContentImporter.Import(SceneManager.Scene, @"C:\Users\ansel\Documents\3dsmax\export\shadowScene.DAE");
 
-                    if (Engine.Scene.Physics != null)
-                        Engine.Scene.Physics.Enable = true;
-                    var light = Engine.Scene.Lights.FirstOrDefault();
+                    if (SceneManager.Scene.Physics != null)
+                        SceneManager.Scene.Physics.Enable = true;
+                    var light = SceneManager.Scene.Lights.FirstOrDefault();
                     if (light != null)
                     {
                        light.Instance.Intensity = 3;
                        //light.Instance.Specular = new Vector3(5, 5, 5);
                     }                
 
-                    Engine.Scene.AmbientLight.GroundColor = new Vector3(0, 0, 0);
-                    Engine.Scene.AmbientLight.SkyColor = new Vector3(1f, 1f, 1f);
-                    Engine.Lighting.HDR.Enable = true;
-                    Engine.Lighting.HDR.EnableBlueShift = false;
-                    Engine.Lighting.HDR.GlareType = Igneel.Rendering.GlareLibType.DISABLE;
-                    Engine.Lighting.HDR.MiddleGray = 0.5f;
-                    Engine.Lighting.HDR.BrightThreshold = 0.8f;
-                    Engine.Lighting.HDR.GaussianMultiplier = 0.4f;
-                    Engine.Lighting.HDR.GaussianDeviation = 0.8f;
-                    Engine.Lighting.HDR.StarBlendFactor = 0.2f;
-                    Engine.Lighting.HDR.CalculateEyeAdaptation = true;
-                    Engine.Lighting.TransparencyEnable = true;
-                    Engine.Lighting.HDR.Technique.ComputeSamples();
+                    SceneManager.Scene.AmbientLight.GroundColor = new Vector3(0, 0, 0);
+                    SceneManager.Scene.AmbientLight.SkyColor = new Vector3(1f, 1f, 1f);
+                    EngineState.Lighting.HDR.Enable = true;
+                    EngineState.Lighting.HDR.EnableBlueShift = false;
+                    EngineState.Lighting.HDR.GlareType = Igneel.Rendering.GlareLibType.DISABLE;
+                    EngineState.Lighting.HDR.MiddleGray = 0.5f;
+                    EngineState.Lighting.HDR.BrightThreshold = 0.8f;
+                    EngineState.Lighting.HDR.GaussianMultiplier = 0.4f;
+                    EngineState.Lighting.HDR.GaussianDeviation = 0.8f;
+                    EngineState.Lighting.HDR.StarBlendFactor = 0.2f;
+                    EngineState.Lighting.HDR.CalculateEyeAdaptation = true;
+                    EngineState.Lighting.TransparencyEnable = true;
+                    EngineState.Lighting.HDR.Technique.ComputeSamples();
 
-                    Engine.Lighting.Reflection.UseDefaultTechnique = true;
-                    Engine.Lighting.Reflection.Enable = false;
+                    EngineState.Lighting.Reflection.UseDefaultTechnique = true;
+                    EngineState.Lighting.Reflection.Enable = false;
 
                     Form form  = new Form();
                     form.SuspendLayout();
@@ -77,8 +78,8 @@ namespace D3D9Testing.Techniques
                     
                     var untranformed = Service.Require<RenderQuadEffect>();
                     var sprite = Service.Require<Sprite>();
-                    var device = Engine.Graphics;
-                    var hdrTechinique = Engine.Lighting.HDR.Technique;
+                    var device = GraphicDeviceFactory.Device;
+                    var hdrTechinique = EngineState.Lighting.HDR.Technique;
 
                     SwapChainPresenter presenter = canvas.CreateSwapChainPresenter();
 
@@ -86,7 +87,7 @@ namespace D3D9Testing.Techniques
                     desc.Usage = ResourceUsage.Staging;
                     desc.CPUAccessFlags = CpuAccessFlags.Read;
                     desc.BindFlags = BindFlags.None;
-                    Texture2D tex = Engine.Graphics.CreateTexture2D(desc);
+                    Texture2D tex = GraphicDeviceFactory.Device.CreateTexture2D(desc);
 
                     Action renderAction = () =>
                     {
@@ -106,7 +107,7 @@ namespace D3D9Testing.Techniques
                         //sprite.SetTrasform(untranformed, new Igneel.Rectangle(0, 0, width, height), Matrix.Identity);                           
                         //sprite.DrawQuad(untranformed);
 
-                        Engine.Graphics.PS.SetSampler(0, SamplerState.Point);
+                        GraphicDeviceFactory.Device.PS.SetSampler(0, SamplerState.Point);
 
                         for (int i = 0; i < textures.GetLength(0); i++)
                         {

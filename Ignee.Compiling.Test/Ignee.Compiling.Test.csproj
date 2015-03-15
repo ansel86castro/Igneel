@@ -91,9 +91,9 @@
       <Project>{cab901c0-7a4e-4f0f-b27d-2b5e73548329}</Project>
       <Name>Ignee.Compiling</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Igneel\Igneel.csproj">
-      <Project>{daf07c37-563a-4be2-bb47-32147dfe12dc}</Project>
-      <Name>Igneel</Name>
+    <ProjectReference Include="..\Igneel.Shared\Igneel.Shared.csproj">
+      <Project>{23b14551-20d5-437f-bc17-ba70ea50184d}</Project>
+      <Name>Igneel.Shared</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

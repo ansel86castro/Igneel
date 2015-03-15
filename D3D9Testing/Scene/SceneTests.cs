@@ -1,18 +1,19 @@
 ﻿using Igneel;
-using Igneel.Components;
+using Igneel.Scenering;
 using Igneel.Controllers;
 using Igneel.Design;
 using Igneel.Graphics;
 using Igneel.Input;
 using Igneel.Rendering;
 using Igneel.Rendering.Bindings;
-using Igneel.Rendering.Effects;
+using Igneel.Scenering.Effects;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Igneel.Scenering.Bindings;
 
 namespace D3D9Testing
 {
@@ -58,7 +59,7 @@ namespace D3D9Testing
             scene.AmbientLight.GroundColor = new Vector3(0.5f);           
 
             Engine.BackColor = new Color4(Color.LightBlue.ToArgb());
-            Engine.Scene = scene;
+            SceneManager.Scene = scene;
 
             Engine.BackColor =new Color4(Color.LightBlue.ToArgb());
             SceneNode camera = CreateCamera(scene); 
@@ -96,9 +97,9 @@ namespace D3D9Testing
 
         public static void InitializeScene(out Scene scene, out SceneNode camera)
         {
-            if (Engine.Scene != null)
+            if (SceneManager.Scene != null)
             {
-                Engine.Scene.Remove();                           
+                SceneManager.Scene.Remove();                           
             }
             scene = CreateScene();
             camera = CreateCamera(scene);
@@ -117,7 +118,7 @@ namespace D3D9Testing
             }
 
             Engine.BackColor =new Color4(Color.LightBlue.ToArgb());
-            Engine.Scene = scene;
+            SceneManager.Scene = scene;
             return scene;
         }
 
@@ -134,7 +135,7 @@ namespace D3D9Testing
             var offset = 100;
             var fov = Numerics.PIover3;
             Vector3 pos = new Vector3(0, offset, -offset);
-            float aspect = (float)Engine.Graphics.BackBuffer.Width / (float)Engine.Graphics.BackBuffer.Height;
+            float aspect = (float)GraphicDeviceFactory.Device.BackBuffer.Width / (float)GraphicDeviceFactory.Device.BackBuffer.Height;
 
             var controller = new FPController()
                     {
@@ -146,7 +147,7 @@ namespace D3D9Testing
                                                Engine.KeyBoard.IsKeyPressed(Keys.LALT))
                     };
 
-            var camera =  Engine.Scene.Create("camera1",
+            var camera =  SceneManager.Scene.Create("camera1",
                 Camera.FromOrientation("camera1", zn: zn, zf: zf).SetPerspective(fov, aspect),
                 localPosition: pos,
                 localRotation: new Euler(0, Numerics.ToRadians(30), 0).ToMatrix());
@@ -176,8 +177,8 @@ namespace D3D9Testing
                 vertexes[i] = new VertexPositionColor(builder.Vertices[i].Position, new Color4(1, 1, 0, 0));
             }
 
-            vb = Engine.Graphics.CreateVertexBuffer(data: builder.Vertices);
-            ib = Engine.Graphics.CreateIndexBuffer(data: builder.Indices);            
+            vb = GraphicDeviceFactory.Device.CreateVertexBuffer(data: builder.Vertices);
+            ib = GraphicDeviceFactory.Device.CreateIndexBuffer(data: builder.Indices);            
             mat.Diffuse = new Vector3(1, 1, 1);
             mat.SpecularIntensity = 0;
             mat.EmisiveIntensity = 0;
@@ -186,7 +187,7 @@ namespace D3D9Testing
 
             SetRender<SceneTechnique, BasicMeshEffect>((box, render) =>
             {
-                var device = Engine.Graphics;
+                var device = GraphicDeviceFactory.Device;
                 var effect = render.Effect;
 
                 //effect.Constants.gId = new Vector4(1, 1, 0, 0);

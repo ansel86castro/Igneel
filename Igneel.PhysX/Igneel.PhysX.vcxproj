@@ -131,8 +131,20 @@
     <Image Include="app.ico" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Igneel\Igneel.csproj">
-      <Project>{daf07c37-563a-4be2-bb47-32147dfe12dc}</Project>
+    <ProjectReference Include="..\Igneel.Assets\Igneel.Assets.csproj">
+      <Project>{c7c6af7b-9770-45b7-9105-877c4a5dced0}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\Igneel.Core\Igneel.Core.csproj">
+      <Project>{fe38226c-e9e7-4461-ad14-b14369255a9c}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\Igneel.Math\Igneel.Math.csproj">
+      <Project>{ac47c0d4-b22a-4ced-b06b-50b828d56b07}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\Igneel.Physics\Igneel.Physics.csproj">
+      <Project>{7d76eb73-4742-45c7-84a6-f50b9961d874}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\Igneel.Shared\Igneel.Shared.csproj">
+      <Project>{23b14551-20d5-437f-bc17-ba70ea50184d}</Project>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

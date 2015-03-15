@@ -49,7 +49,7 @@ namespace IgneelDirectInput {
 
 	Keyboard^ DInputManager::CreateKeyboard(IInputContext^ context)
 	{
-		WindowContext^ wc = static_cast<WindowContext^>(context);
+		InputContext^ wc = static_cast<InputContext^>(context);
 		auto handle = EnsureHanlesCapasity(_nbHandles + 1);
 		auto kb = gcnew DKeyBoard(input, wc , handle);			
 		devices->Add(kb);
@@ -58,7 +58,7 @@ namespace IgneelDirectInput {
 
 	Mouse^ DInputManager::CreateMouse(IInputContext^ context)
 	{
-		WindowContext^ wc = static_cast<WindowContext^>(context);
+		InputContext^ wc = static_cast<InputContext^>(context);
 		auto handle = EnsureHanlesCapasity(_nbHandles + 1);
 		auto device =  gcnew DMouse(input, wc, handle);				
 		devices->Add(device);

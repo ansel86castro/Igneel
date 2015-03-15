@@ -1,5 +1,5 @@
 ﻿using Igneel.Graphics;
-using Igneel.Services;
+using Igneel.Scenering;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -48,7 +48,7 @@ namespace Igneel.Windows.Wpf
                 int width = double.IsNaN(canvas.Width) ? 100:(int)canvas.Width;
                 int height = double.IsNaN(canvas.Height) ? 100 : (int)canvas.Height;
 
-                Engine.InitializeEngine(new WindowContext(interopHelper.Handle), new GraphicDeviceDesc
+                Engine.InitializeEngine(new InputContext(interopHelper.Handle), new GraphicDeviceDesc
                 {
                     Adapter = 0,
                     DriverType = GraphicDeviceType.Hardware,
@@ -102,11 +102,11 @@ namespace Igneel.Windows.Wpf
 
         void canvas_Resize(object sender, EventArgs e)
         {
-            Engine.Graphics.ResizeBackBuffer((int)canvas.Width, (int)canvas.Height);
-            if (Engine.Scene != null)
+            GraphicDeviceFactory.Device.ResizeBackBuffer((int)canvas.Width, (int)canvas.Height);
+            if (SceneManager.Scene != null)
             {
-                Engine.Scene.ActiveCamera.AspectRatio = (float)canvas.Width / (float)canvas.Height;
-                Engine.Scene.ActiveCamera.CommitChanges();
+                SceneManager.Scene.ActiveCamera.AspectRatio = (float)canvas.Width / (float)canvas.Height;
+                SceneManager.Scene.ActiveCamera.CommitChanges();
             }
         }        
 

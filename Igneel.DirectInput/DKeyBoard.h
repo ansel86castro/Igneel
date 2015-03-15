@@ -15,7 +15,7 @@ namespace IgneelDirectInput {
 		Byte* buffer;
 		bool pooled;
 	public:
-		DKeyBoard(IDirectInput8* input, WindowContext^ context, HANDLE hEvent);
+		DKeyBoard(IDirectInput8* input, InputContext^ context, HANDLE hEvent);
 
 		OVERRIDE( bool IsKeyPressed(Keys key) );
 

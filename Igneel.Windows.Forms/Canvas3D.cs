@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using Igneel.Components;
+using Igneel.Scenering;
 using Igneel.Rendering;
 using Igneel.Graphics;
 
@@ -57,7 +57,7 @@ namespace Igneel.Windows.Forms
             var scene = this.scene;
             var camera = this.camera;
             if (scene == null)
-                scene = Engine.Scene;
+                scene = SceneManager.Scene;
             if (camera == null && scene != null)
                 camera = scene.ActiveCamera;
 

@@ -1,6 +1,6 @@
 ﻿using Igneel;
 using Igneel.Animations;
-using Igneel.Components;
+using Igneel.Scenering;
 using Igneel.IA;
 using Igneel.Input;
 using Igneel.Physics;
@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Igneel.Scenering.Animations;
 
 namespace D3D9Testing
 {
