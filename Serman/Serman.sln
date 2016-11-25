@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Serman", "Serman\Serman.csproj", "{9BFA8018-A099-4FEE-A572-222BBAA90643}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Serman.Tests", "Serman.Tests\Serman.Tests.csproj", "{9AF45482-6D5E-4687-A620-684C840F06C1}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9BFA8018-A099-4FEE-A572-222BBAA90643}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9BFA8018-A099-4FEE-A572-222BBAA90643}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9BFA8018-A099-4FEE-A572-222BBAA90643}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9BFA8018-A099-4FEE-A572-222BBAA90643}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9AF45482-6D5E-4687-A620-684C840F06C1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9AF45482-6D5E-4687-A620-684C840F06C1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9AF45482-6D5E-4687-A620-684C840F06C1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9AF45482-6D5E-4687-A620-684C840F06C1}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

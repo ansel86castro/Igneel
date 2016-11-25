@@ -1,0 +1,648 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="IgneelEngineResourcesModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityContainer Name="IgneelEngineResourcesModelStoreContainer">
+          <EntitySet Name="Content" EntityType="IgneelEngineResourcesModel.Store.Content" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="Folder" EntityType="IgneelEngineResourcesModel.Store.Folder" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="Resource" EntityType="IgneelEngineResourcesModel.Store.Resource" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="ResourceType" EntityType="IgneelEngineResourcesModel.Store.ResourceType" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="SceneResource" EntityType="IgneelEngineResourcesModel.Store.SceneResource" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="User" EntityType="IgneelEngineResourcesModel.Store.User" store:Type="Tables" Schema="dbo" />
+          <AssociationSet Name="FK_Content_ContentId" Association="IgneelEngineResourcesModel.Store.FK_Content_ContentId">
+            <End Role="Resource" EntitySet="Resource" />
+            <End Role="Content" EntitySet="Content" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Folder_ParentId" Association="IgneelEngineResourcesModel.Store.FK_Folder_ParentId">
+            <End Role="Folder" EntitySet="Folder" />
+            <End Role="Folder1" EntitySet="Folder" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Folders_CreateUser" Association="IgneelEngineResourcesModel.Store.FK_Folders_CreateUser">
+            <End Role="User" EntitySet="User" />
+            <End Role="Folder" EntitySet="Folder" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Folders_UpdateUser" Association="IgneelEngineResourcesModel.Store.FK_Folders_UpdateUser">
+            <End Role="User" EntitySet="User" />
+            <End Role="Folder" EntitySet="Folder" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Resources_CreateUserId" Association="IgneelEngineResourcesModel.Store.FK_Resources_CreateUserId">
+            <End Role="User" EntitySet="User" />
+            <End Role="Resource" EntitySet="Resource" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Resources_FolderId" Association="IgneelEngineResourcesModel.Store.FK_Resources_FolderId">
+            <End Role="Folder" EntitySet="Folder" />
+            <End Role="Resource" EntitySet="Resource" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Resources_ResourceTypeId" Association="IgneelEngineResourcesModel.Store.FK_Resources_ResourceTypeId">
+            <End Role="ResourceType" EntitySet="ResourceType" />
+            <End Role="Resource" EntitySet="Resource" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Resources_UpdateUserId" Association="IgneelEngineResourcesModel.Store.FK_Resources_UpdateUserId">
+            <End Role="User" EntitySet="User" />
+            <End Role="Resource" EntitySet="Resource" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ResourceType_DefaultFolderId" Association="IgneelEngineResourcesModel.Store.FK_ResourceType_DefaultFolderId">
+            <End Role="Folder" EntitySet="Folder" />
+            <End Role="ResourceType" EntitySet="ResourceType" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SceneResource_PrototipeId" Association="IgneelEngineResourcesModel.Store.FK_SceneResource_PrototipeId">
+            <End Role="Resource" EntitySet="Resource" />
+            <End Role="SceneResource" EntitySet="SceneResource" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SceneResource_ResourceId" Association="IgneelEngineResourcesModel.Store.FK_SceneResource_ResourceId">
+            <End Role="Resource" EntitySet="Resource" />
+            <End Role="SceneResource" EntitySet="SceneResource" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SceneResource_SceneId" Association="IgneelEngineResourcesModel.Store.FK_SceneResource_SceneId">
+            <End Role="Resource" EntitySet="Resource" />
+            <End Role="SceneResource" EntitySet="SceneResource" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Content">
+          <Key>
+            <PropertyRef Name="ResourceId" />
+          </Key>
+          <Property Name="ResourceId" Type="int" Nullable="false" />
+          <Property Name="Data" Type="varbinary(max)" />
+        </EntityType>
+        <EntityType Name="Folder">
+          <Key>
+            <PropertyRef Name="FolderId" />
+          </Key>
+          <Property Name="FolderId" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="varchar" Nullable="false" MaxLength="50" />
+          <Property Name="LastUpdatedDate" Type="datetime" Nullable="false" />
+          <Property Name="CreateUserId" Type="int" Nullable="false" />
+          <Property Name="UpdateUserId" Type="int" Nullable="false" />
+          <Property Name="ParentId" Type="int" />
+        </EntityType>
+        <EntityType Name="Resource">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="nvarchar" MaxLength="256" />
+          <Property Name="ResourceTypeId" Type="int" />
+          <Property Name="FolderId" Type="int" Nullable="false" />
+          <Property Name="CreateUserId" Type="int" />
+          <Property Name="UpdateUserId" Type="int" />
+          <Property Name="LastUpdateDate" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ResourceType">
+          <Key>
+            <PropertyRef Name="ResourceTypeId" />
+          </Key>
+          <Property Name="ResourceTypeId" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="nvarchar" Nullable="false" MaxLength="50" />
+          <Property Name="DefaultFolderId" Type="int" />
+        </EntityType>
+        <EntityType Name="SceneResource">
+          <Key>
+            <PropertyRef Name="ResourceId" />
+            <PropertyRef Name="SceneId" />
+          </Key>
+          <Property Name="ResourceId" Type="int" Nullable="false" />
+          <Property Name="SceneId" Type="int" Nullable="false" />
+          <Property Name="PrototipeId" Type="int" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="UserId" />
+          </Key>
+          <Property Name="UserId" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="UserName" Type="nvarchar" Nullable="false" MaxLength="50" />
+          <Property Name="Email" Type="nvarchar" MaxLength="256" />
+          <Property Name="Password" Type="nvarchar" Nullable="false" MaxLength="256" />
+          <Property Name="LastUpdateDate" Type="datetime" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Content_ContentId">
+          <End Role="Resource" Type="IgneelEngineResourcesModel.Store.Resource" Multiplicity="1" />
+          <End Role="Content" Type="IgneelEngineResourcesModel.Store.Content" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Resource">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Content">
+              <PropertyRef Name="ResourceId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Folder_ParentId">
+          <End Role="Folder" Type="IgneelEngineResourcesModel.Store.Folder" Multiplicity="0..1" />
+          <End Role="Folder1" Type="IgneelEngineResourcesModel.Store.Folder" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Folder">
+              <PropertyRef Name="FolderId" />
+            </Principal>
+            <Dependent Role="Folder1">
+              <PropertyRef Name="ParentId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Folders_CreateUser">
+          <End Role="User" Type="IgneelEngineResourcesModel.Store.User" Multiplicity="1" />
+          <End Role="Folder" Type="IgneelEngineResourcesModel.Store.Folder" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="Folder">
+              <PropertyRef Name="CreateUserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Folders_UpdateUser">
+          <End Role="User" Type="IgneelEngineResourcesModel.Store.User" Multiplicity="1" />
+          <End Role="Folder" Type="IgneelEngineResourcesModel.Store.Folder" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="Folder">
+              <PropertyRef Name="UpdateUserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Resources_CreateUserId">
+          <End Role="User" Type="IgneelEngineResourcesModel.Store.User" Multiplicity="0..1" />
+          <End Role="Resource" Type="IgneelEngineResourcesModel.Store.Resource" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="Resource">
+              <PropertyRef Name="CreateUserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Resources_FolderId">
+          <End Role="Folder" Type="IgneelEngineResourcesModel.Store.Folder" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="Resource" Type="IgneelEngineResourcesModel.Store.Resource" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Folder">
+              <PropertyRef Name="FolderId" />
+            </Principal>
+            <Dependent Role="Resource">
+              <PropertyRef Name="FolderId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Resources_ResourceTypeId">
+          <End Role="ResourceType" Type="IgneelEngineResourcesModel.Store.ResourceType" Multiplicity="0..1" />
+          <End Role="Resource" Type="IgneelEngineResourcesModel.Store.Resource" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ResourceType">
+              <PropertyRef Name="ResourceTypeId" />
+            </Principal>
+            <Dependent Role="Resource">
+              <PropertyRef Name="ResourceTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Resources_UpdateUserId">
+          <End Role="User" Type="IgneelEngineResourcesModel.Store.User" Multiplicity="0..1" />
+          <End Role="Resource" Type="IgneelEngineResourcesModel.Store.Resource" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="Resource">
+              <PropertyRef Name="UpdateUserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ResourceType_DefaultFolderId">
+          <End Role="Folder" Type="IgneelEngineResourcesModel.Store.Folder" Multiplicity="0..1" />
+          <End Role="ResourceType" Type="IgneelEngineResourcesModel.Store.ResourceType" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Folder">
+              <PropertyRef Name="FolderId" />
+            </Principal>
+            <Dependent Role="ResourceType">
+              <PropertyRef Name="DefaultFolderId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SceneResource_PrototipeId">
+          <End Role="Resource" Type="IgneelEngineResourcesModel.Store.Resource" Multiplicity="0..1" />
+          <End Role="SceneResource" Type="IgneelEngineResourcesModel.Store.SceneResource" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Resource">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="SceneResource">
+              <PropertyRef Name="PrototipeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SceneResource_ResourceId">
+          <End Role="Resource" Type="IgneelEngineResourcesModel.Store.Resource" Multiplicity="1" />
+          <End Role="SceneResource" Type="IgneelEngineResourcesModel.Store.SceneResource" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Resource">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="SceneResource">
+              <PropertyRef Name="ResourceId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SceneResource_SceneId">
+          <End Role="Resource" Type="IgneelEngineResourcesModel.Store.Resource" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="SceneResource" Type="IgneelEngineResourcesModel.Store.SceneResource" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Resource">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="SceneResource">
+              <PropertyRef Name="SceneId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="IgneelEngineResourcesModel" Alias="Self" p1:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:p1="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="IgneelEngineResourcesEntities" p1:LazyLoadingEnabled="true">
+          <EntitySet Name="Contents" EntityType="IgneelEngineResourcesModel.Content" />
+          <EntitySet Name="Folders" EntityType="IgneelEngineResourcesModel.Folder" />
+          <EntitySet Name="Resources" EntityType="IgneelEngineResourcesModel.Resource" />
+          <EntitySet Name="ResourceTypes" EntityType="IgneelEngineResourcesModel.ResourceType" />
+          <EntitySet Name="SceneResources" EntityType="IgneelEngineResourcesModel.SceneResource" />
+          <EntitySet Name="Users" EntityType="IgneelEngineResourcesModel.User" />
+          <AssociationSet Name="FK_Content_ContentId" Association="IgneelEngineResourcesModel.FK_Content_ContentId">
+            <End Role="Resource" EntitySet="Resources" />
+            <End Role="Content" EntitySet="Contents" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Folder_ParentId" Association="IgneelEngineResourcesModel.FK_Folder_ParentId">
+            <End Role="Folder" EntitySet="Folders" />
+            <End Role="Folder1" EntitySet="Folders" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Folders_CreateUser" Association="IgneelEngineResourcesModel.FK_Folders_CreateUser">
+            <End Role="User" EntitySet="Users" />
+            <End Role="Folder" EntitySet="Folders" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Folders_UpdateUser" Association="IgneelEngineResourcesModel.FK_Folders_UpdateUser">
+            <End Role="User" EntitySet="Users" />
+            <End Role="Folder" EntitySet="Folders" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Resources_FolderId" Association="IgneelEngineResourcesModel.FK_Resources_FolderId">
+            <End Role="Folder" EntitySet="Folders" />
+            <End Role="Resource" EntitySet="Resources" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ResourceType_DefaultFolderId" Association="IgneelEngineResourcesModel.FK_ResourceType_DefaultFolderId">
+            <End Role="Folder" EntitySet="Folders" />
+            <End Role="ResourceType" EntitySet="ResourceTypes" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Resources_CreateUserId" Association="IgneelEngineResourcesModel.FK_Resources_CreateUserId">
+            <End Role="User" EntitySet="Users" />
+            <End Role="Resource" EntitySet="Resources" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Resources_ResourceTypeId" Association="IgneelEngineResourcesModel.FK_Resources_ResourceTypeId">
+            <End Role="ResourceType" EntitySet="ResourceTypes" />
+            <End Role="Resource" EntitySet="Resources" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Resources_UpdateUserId" Association="IgneelEngineResourcesModel.FK_Resources_UpdateUserId">
+            <End Role="User" EntitySet="Users" />
+            <End Role="Resource" EntitySet="Resources" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SceneResource_PrototipeId" Association="IgneelEngineResourcesModel.FK_SceneResource_PrototipeId">
+            <End Role="Resource" EntitySet="Resources" />
+            <End Role="SceneResource" EntitySet="SceneResources" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SceneResource_ResourceId" Association="IgneelEngineResourcesModel.FK_SceneResource_ResourceId">
+            <End Role="Resource" EntitySet="Resources" />
+            <End Role="SceneResource" EntitySet="SceneResources" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SceneResource_SceneId" Association="IgneelEngineResourcesModel.FK_SceneResource_SceneId">
+            <End Role="Resource" EntitySet="Resources" />
+            <End Role="SceneResource" EntitySet="SceneResources" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Content">
+          <Key>
+            <PropertyRef Name="ResourceId" />
+          </Key>
+          <Property Type="Int32" Name="ResourceId" Nullable="false" />
+          <Property Type="Binary" Name="Data" MaxLength="Max" FixedLength="false" />
+          <NavigationProperty Name="Resource" Relationship="IgneelEngineResourcesModel.FK_Content_ContentId" FromRole="Content" ToRole="Resource" />
+        </EntityType>
+        <EntityType Name="Folder">
+          <Key>
+            <PropertyRef Name="FolderId" />
+          </Key>
+          <Property Type="Int32" Name="FolderId" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="String" Name="Name" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Type="DateTime" Name="LastUpdatedDate" Nullable="false" Precision="3" />
+          <Property Type="Int32" Name="CreateUserId" Nullable="false" />
+          <Property Type="Int32" Name="UpdateUserId" Nullable="false" />
+          <Property Type="Int32" Name="ParentId" />
+          <NavigationProperty Name="Folder1" Relationship="IgneelEngineResourcesModel.FK_Folder_ParentId" FromRole="Folder" ToRole="Folder1" />
+          <NavigationProperty Name="Folder2" Relationship="IgneelEngineResourcesModel.FK_Folder_ParentId" FromRole="Folder1" ToRole="Folder" />
+          <NavigationProperty Name="User" Relationship="IgneelEngineResourcesModel.FK_Folders_CreateUser" FromRole="Folder" ToRole="User" />
+          <NavigationProperty Name="User1" Relationship="IgneelEngineResourcesModel.FK_Folders_UpdateUser" FromRole="Folder" ToRole="User" />
+          <NavigationProperty Name="Resources" Relationship="IgneelEngineResourcesModel.FK_Resources_FolderId" FromRole="Folder" ToRole="Resource" />
+          <NavigationProperty Name="ResourceTypes" Relationship="IgneelEngineResourcesModel.FK_ResourceType_DefaultFolderId" FromRole="Folder" ToRole="ResourceType" />
+        </EntityType>
+        <EntityType Name="Resource">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Type="Int32" Name="Id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="String" Name="Name" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Type="Int32" Name="ResourceTypeId" />
+          <Property Type="Int32" Name="FolderId" Nullable="false" />
+          <Property Type="Int32" Name="CreateUserId" />
+          <Property Type="Int32" Name="UpdateUserId" />
+          <Property Type="DateTime" Name="LastUpdateDate" Nullable="false" Precision="3" />
+          <NavigationProperty Name="Content" Relationship="IgneelEngineResourcesModel.FK_Content_ContentId" FromRole="Resource" ToRole="Content" />
+          <NavigationProperty Name="Folder" Relationship="IgneelEngineResourcesModel.FK_Resources_FolderId" FromRole="Resource" ToRole="Folder" />
+          <NavigationProperty Name="User" Relationship="IgneelEngineResourcesModel.FK_Resources_CreateUserId" FromRole="Resource" ToRole="User" />
+          <NavigationProperty Name="ResourceType" Relationship="IgneelEngineResourcesModel.FK_Resources_ResourceTypeId" FromRole="Resource" ToRole="ResourceType" />
+          <NavigationProperty Name="User1" Relationship="IgneelEngineResourcesModel.FK_Resources_UpdateUserId" FromRole="Resource" ToRole="User" />
+          <NavigationProperty Name="SceneResources" Relationship="IgneelEngineResourcesModel.FK_SceneResource_PrototipeId" FromRole="Resource" ToRole="SceneResource" />
+          <NavigationProperty Name="SceneResources1" Relationship="IgneelEngineResourcesModel.FK_SceneResource_ResourceId" FromRole="Resource" ToRole="SceneResource" />
+          <NavigationProperty Name="SceneResources2" Relationship="IgneelEngineResourcesModel.FK_SceneResource_SceneId" FromRole="Resource" ToRole="SceneResource" />
+        </EntityType>
+        <EntityType Name="ResourceType">
+          <Key>
+            <PropertyRef Name="ResourceTypeId" />
+          </Key>
+          <Property Type="Int32" Name="ResourceTypeId" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="String" Name="Name" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="Int32" Name="DefaultFolderId" />
+          <NavigationProperty Name="Folder" Relationship="IgneelEngineResourcesModel.FK_ResourceType_DefaultFolderId" FromRole="ResourceType" ToRole="Folder" />
+          <NavigationProperty Name="Resources" Relationship="IgneelEngineResourcesModel.FK_Resources_ResourceTypeId" FromRole="ResourceType" ToRole="Resource" />
+        </EntityType>
+        <EntityType Name="SceneResource">
+          <Key>
+            <PropertyRef Name="ResourceId" />
+            <PropertyRef Name="SceneId" />
+          </Key>
+          <Property Type="Int32" Name="ResourceId" Nullable="false" />
+          <Property Type="Int32" Name="SceneId" Nullable="false" />
+          <Property Type="Int32" Name="PrototipeId" />
+          <NavigationProperty Name="Resource" Relationship="IgneelEngineResourcesModel.FK_SceneResource_PrototipeId" FromRole="SceneResource" ToRole="Resource" />
+          <NavigationProperty Name="Resource1" Relationship="IgneelEngineResourcesModel.FK_SceneResource_ResourceId" FromRole="SceneResource" ToRole="Resource" />
+          <NavigationProperty Name="Resource2" Relationship="IgneelEngineResourcesModel.FK_SceneResource_SceneId" FromRole="SceneResource" ToRole="Resource" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="UserId" />
+          </Key>
+          <Property Type="Int32" Name="UserId" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="String" Name="UserName" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Email" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="Password" Nullable="false" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Type="DateTime" Name="LastUpdateDate" Nullable="false" Precision="3" />
+          <NavigationProperty Name="Folders" Relationship="IgneelEngineResourcesModel.FK_Folders_CreateUser" FromRole="User" ToRole="Folder" />
+          <NavigationProperty Name="Folders1" Relationship="IgneelEngineResourcesModel.FK_Folders_UpdateUser" FromRole="User" ToRole="Folder" />
+          <NavigationProperty Name="Resources" Relationship="IgneelEngineResourcesModel.FK_Resources_CreateUserId" FromRole="User" ToRole="Resource" />
+          <NavigationProperty Name="Resources1" Relationship="IgneelEngineResourcesModel.FK_Resources_UpdateUserId" FromRole="User" ToRole="Resource" />
+        </EntityType>
+        <Association Name="FK_Content_ContentId">
+          <End Type="IgneelEngineResourcesModel.Resource" Role="Resource" Multiplicity="1" />
+          <End Type="IgneelEngineResourcesModel.Content" Role="Content" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Resource">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Content">
+              <PropertyRef Name="ResourceId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Folder_ParentId">
+          <End Type="IgneelEngineResourcesModel.Folder" Role="Folder" Multiplicity="0..1" />
+          <End Type="IgneelEngineResourcesModel.Folder" Role="Folder1" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Folder">
+              <PropertyRef Name="FolderId" />
+            </Principal>
+            <Dependent Role="Folder1">
+              <PropertyRef Name="ParentId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Folders_CreateUser">
+          <End Type="IgneelEngineResourcesModel.User" Role="User" Multiplicity="1" />
+          <End Type="IgneelEngineResourcesModel.Folder" Role="Folder" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="Folder">
+              <PropertyRef Name="CreateUserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Folders_UpdateUser">
+          <End Type="IgneelEngineResourcesModel.User" Role="User" Multiplicity="1" />
+          <End Type="IgneelEngineResourcesModel.Folder" Role="Folder" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="Folder">
+              <PropertyRef Name="UpdateUserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Resources_FolderId">
+          <End Type="IgneelEngineResourcesModel.Folder" Role="Folder" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="IgneelEngineResourcesModel.Resource" Role="Resource" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Folder">
+              <PropertyRef Name="FolderId" />
+            </Principal>
+            <Dependent Role="Resource">
+              <PropertyRef Name="FolderId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ResourceType_DefaultFolderId">
+          <End Type="IgneelEngineResourcesModel.Folder" Role="Folder" Multiplicity="0..1" />
+          <End Type="IgneelEngineResourcesModel.ResourceType" Role="ResourceType" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Folder">
+              <PropertyRef Name="FolderId" />
+            </Principal>
+            <Dependent Role="ResourceType">
+              <PropertyRef Name="DefaultFolderId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Resources_CreateUserId">
+          <End Type="IgneelEngineResourcesModel.User" Role="User" Multiplicity="0..1" />
+          <End Type="IgneelEngineResourcesModel.Resource" Role="Resource" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="Resource">
+              <PropertyRef Name="CreateUserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Resources_ResourceTypeId">
+          <End Type="IgneelEngineResourcesModel.ResourceType" Role="ResourceType" Multiplicity="0..1" />
+          <End Type="IgneelEngineResourcesModel.Resource" Role="Resource" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ResourceType">
+              <PropertyRef Name="ResourceTypeId" />
+            </Principal>
+            <Dependent Role="Resource">
+              <PropertyRef Name="ResourceTypeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Resources_UpdateUserId">
+          <End Type="IgneelEngineResourcesModel.User" Role="User" Multiplicity="0..1" />
+          <End Type="IgneelEngineResourcesModel.Resource" Role="Resource" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="UserId" />
+            </Principal>
+            <Dependent Role="Resource">
+              <PropertyRef Name="UpdateUserId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SceneResource_PrototipeId">
+          <End Type="IgneelEngineResourcesModel.Resource" Role="Resource" Multiplicity="0..1" />
+          <End Type="IgneelEngineResourcesModel.SceneResource" Role="SceneResource" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Resource">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="SceneResource">
+              <PropertyRef Name="PrototipeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SceneResource_ResourceId">
+          <End Type="IgneelEngineResourcesModel.Resource" Role="Resource" Multiplicity="1" />
+          <End Type="IgneelEngineResourcesModel.SceneResource" Role="SceneResource" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Resource">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="SceneResource">
+              <PropertyRef Name="ResourceId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SceneResource_SceneId">
+          <End Type="IgneelEngineResourcesModel.Resource" Role="Resource" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="IgneelEngineResourcesModel.SceneResource" Role="SceneResource" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Resource">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="SceneResource">
+              <PropertyRef Name="SceneId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="IgneelEngineResourcesModelStoreContainer" CdmEntityContainer="IgneelEngineResourcesEntities">
+          <EntitySetMapping Name="Contents">
+            <EntityTypeMapping TypeName="IgneelEngineResourcesModel.Content">
+              <MappingFragment StoreEntitySet="Content">
+                <ScalarProperty Name="Data" ColumnName="Data" />
+                <ScalarProperty Name="ResourceId" ColumnName="ResourceId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Folders">
+            <EntityTypeMapping TypeName="IgneelEngineResourcesModel.Folder">
+              <MappingFragment StoreEntitySet="Folder">
+                <ScalarProperty Name="ParentId" ColumnName="ParentId" />
+                <ScalarProperty Name="UpdateUserId" ColumnName="UpdateUserId" />
+                <ScalarProperty Name="CreateUserId" ColumnName="CreateUserId" />
+                <ScalarProperty Name="LastUpdatedDate" ColumnName="LastUpdatedDate" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="FolderId" ColumnName="FolderId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Resources">
+            <EntityTypeMapping TypeName="IgneelEngineResourcesModel.Resource">
+              <MappingFragment StoreEntitySet="Resource">
+                <ScalarProperty Name="LastUpdateDate" ColumnName="LastUpdateDate" />
+                <ScalarProperty Name="UpdateUserId" ColumnName="UpdateUserId" />
+                <ScalarProperty Name="CreateUserId" ColumnName="CreateUserId" />
+                <ScalarProperty Name="FolderId" ColumnName="FolderId" />
+                <ScalarProperty Name="ResourceTypeId" ColumnName="ResourceTypeId" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ResourceTypes">
+            <EntityTypeMapping TypeName="IgneelEngineResourcesModel.ResourceType">
+              <MappingFragment StoreEntitySet="ResourceType">
+                <ScalarProperty Name="DefaultFolderId" ColumnName="DefaultFolderId" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="ResourceTypeId" ColumnName="ResourceTypeId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SceneResources">
+            <EntityTypeMapping TypeName="IgneelEngineResourcesModel.SceneResource">
+              <MappingFragment StoreEntitySet="SceneResource">
+                <ScalarProperty Name="PrototipeId" ColumnName="PrototipeId" />
+                <ScalarProperty Name="SceneId" ColumnName="SceneId" />
+                <ScalarProperty Name="ResourceId" ColumnName="ResourceId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Users">
+            <EntityTypeMapping TypeName="IgneelEngineResourcesModel.User">
+              <MappingFragment StoreEntitySet="User">
+                <ScalarProperty Name="LastUpdateDate" ColumnName="LastUpdateDate" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="UserName" ColumnName="UserName" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="True" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

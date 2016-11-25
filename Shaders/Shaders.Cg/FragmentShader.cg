@@ -1,0 +1,32 @@
+// This is C2E2f_passthru from "The Cg Tutorial" (Addison-Wesley, ISBN
+// 0321194969) by Randima Fernando and Mark J. Kilgard.  See page 53.
+#include "Common.cgi"
+
+//struct SimpleVSInput
+//{
+//    float3 Position : POSITION;
+//	float3 Normal	: NORMAL;
+//	float2 TexCoord : TEXCOORD0;
+//	float Occ		: TEXCOORD1;	
+//};
+
+struct C3E2v_Output {
+  float4 position : POSITION;
+  float3 color    : COLOR;
+  float2 texCoord : TEXCOORD0;
+};
+
+struct C2E2f_Output {
+  float4 color : COLOR;
+};
+
+C2E2f_Output main( C3E2v_Output input )
+{
+  SimpleVSInput ouput;
+  ouput.Occ = input.color.r;
+  C2E2f_Output OUT;
+  OUT.color = float4(input.color, 1);
+  OUT.color *= ouput.Occ;
+
+  return OUT;
+}

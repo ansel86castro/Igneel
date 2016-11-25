@@ -1,0 +1,13 @@
+﻿#region ResourceDatabase.Save()
+
+//check if this is not a clone resource.
+//The resource is a cloned resource if it is liked with a Scene in the SceneResource Table
+//and its prototipeId column is not null. The prototipe if the resource from which it was cloned
+//
+var cloneResource =
+    _dbContext.SceneResources.FirstOrDefault(
+        x => x.ResourceId == dbResource.Id && x.PrototipeId != null);
+
+if(cloneResource!=null)
+
+#endregion

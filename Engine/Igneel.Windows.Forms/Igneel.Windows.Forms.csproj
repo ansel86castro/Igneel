@@ -1,0 +1,106 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{A3D5D202-89FE-4E14-A91C-5F822799D92B}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Igneel.Windows.Forms</RootNamespace>
+    <AssemblyName>Igneel.Windows.Forms</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Canvas3D.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Canvas3D.Designer.cs">
+      <DependentUpon>Canvas3D.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormPickService.cs" />
+    <Compile Include="IgneelFormsApp.cs" />
+    <Compile Include="Native.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Service Include="{94E38DFF-614B-4cbd-B67C-F211BB35CE8B}" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Igneel.Animations\Igneel.Animations.csproj">
+      <Project>{e466ab9b-9457-422e-bba7-0aa52f9535d3}</Project>
+      <Name>Igneel.Animations</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Igneel.Assets\Igneel.Assets.csproj">
+      <Project>{c7c6af7b-9770-45b7-9105-877c4a5dced0}</Project>
+      <Name>Igneel.Assets</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Igneel.Graphics\Igneel.Graphics.csproj">
+      <Project>{2a7c0792-7f47-4b07-a665-56ab6bf15f71}</Project>
+      <Name>Igneel.Graphics</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Igneel.Input\Igneel.Input.csproj">
+      <Project>{606fdb3f-628e-4d48-9735-3a6f54f1b010}</Project>
+      <Name>Igneel.Input</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Igneel.Math\Igneel.Math.csproj">
+      <Project>{ac47c0d4-b22a-4ced-b06b-50b828d56b07}</Project>
+      <Name>Igneel.Math</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Igneel.Physics\Igneel.Physics.csproj">
+      <Project>{7d76eb73-4742-45c7-84a6-f50b9961d874}</Project>
+      <Name>Igneel.Physics</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Igneel.Rendering\Igneel.Rendering.csproj">
+      <Project>{185f3662-2f7f-4945-9156-9aab127281ab}</Project>
+      <Name>Igneel.Rendering</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Igneel\Igneel.csproj">
+      <Project>{228f60e4-4aaa-44f9-9a85-334192bd1897}</Project>
+      <Name>Igneel</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Igneel.Shared\Igneel.Shared.csproj">
+      <Project>{23b14551-20d5-437f-bc17-ba70ea50184d}</Project>
+      <Name>Igneel.Shared</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Igneel.Windows\Igneel.Windows.csproj">
+      <Project>{8b1a1553-d47c-4a98-ad2c-11f3b38bc74a}</Project>
+      <Name>Igneel.Windows</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

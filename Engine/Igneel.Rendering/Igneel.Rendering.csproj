@@ -1,0 +1,113 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{185F3662-2F7F-4945-9156-9AAB127281AB}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Igneel.Rendering</RootNamespace>
+    <AssemblyName>Igneel.Rendering</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="ClrRuntime">
+      <HintPath>..\Igneel\bin\Debug\ClrRuntime.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="BindableTechnique.cs" />
+    <Compile Include="Bindings\Binding.cs" />
+    <Compile Include="Bindings\CallbackBindEventArg.cs" />
+    <Compile Include="Bindings\CallbackRenderBinding.cs" />
+    <Compile Include="Effects\EffectPassDesc.cs" />
+    <Compile Include="Effects\TechniqueDesc.cs" />
+    <Compile Include="Renders\GraphicMaterial.cs" />
+    <Compile Include="Bindings\ITechniqueBinding.cs" />
+    <Compile Include="Effects\DynamicMapping.cs" />
+    <Compile Include="Effects\Effect.cs" />
+    <Compile Include="Effects\EffectPass.cs" />
+    <Compile Include="Renders\IComponentRender.cs" />
+    <Compile Include="Renders\IShadingBinder.cs" />
+    <Compile Include="Renders\IVisualMaterial.cs" />
+    <Compile Include="Renders\PixelClipping.cs" />
+    <Compile Include="Renders\RegistratorAttribute.cs" />
+    <Compile Include="Bindings\RenderBinding.cs" />
+    <Compile Include="Renders\RenderExtensors.cs" />
+    <Compile Include="RenderManager\IRenderRegistry.cs" />
+    <Compile Include="RenderManager\RenderManager.cs" />
+    <Compile Include="Renders\IRenderRegistrator.cs" />
+    <Compile Include="Utilities\NotAvailableException.cs" />
+    <Compile Include="Presenters\GraphicPresenter.cs" />
+    <Compile Include="Presenters\MultyViewPresenter.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Renders\Registrator.cs" />
+    <Compile Include="RenderManager\RenderRegistry.cs" />
+    <Compile Include="RenderManager\RenderStack.cs" />
+    <Compile Include="RenderManager\TechniqueRegistry.cs" />
+    <Compile Include="RenderManager\TrCache.cs" />
+    <Compile Include="Utilities\RenderTextureCube.cs" />
+    <Compile Include="RenderManager\Utilities.cs" />
+    <Compile Include="Bindings\IRenderBinding.cs" />
+    <Compile Include="Renders\Render.cs" />
+    <Compile Include="Utilities\RenderTexture2D.cs" />
+    <Compile Include="Utilities\SpriteRender.cs" />
+    <Compile Include="Technique.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Recorte.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Igneel.Assets\Igneel.Assets.csproj">
+      <Project>{c7c6af7b-9770-45b7-9105-877c4a5dced0}</Project>
+      <Name>Igneel.Assets</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Igneel.Graphics\Igneel.Graphics.csproj">
+      <Project>{2a7c0792-7f47-4b07-a665-56ab6bf15f71}</Project>
+      <Name>Igneel.Graphics</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Igneel.Math\Igneel.Math.csproj">
+      <Project>{ac47c0d4-b22a-4ced-b06b-50b828d56b07}</Project>
+      <Name>Igneel.Math</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Igneel.Shared\Igneel.Shared.csproj">
+      <Project>{23b14551-20d5-437f-bc17-ba70ea50184d}</Project>
+      <Name>Igneel.Shared</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
