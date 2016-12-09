@@ -1,0 +1,43 @@
+// vs_4_0 output by Cg compiler
+// cgc version 3.1.0013, build date Apr 18 2012
+// command line args: -profile vs_4_0
+// source file: E:\Projects\Igneel\Shaders\Shaders.Cg\VertexShader.cg
+//vendor NVIDIA Corporation
+//version 3.1.0.13
+//profile vs_4_0
+//program main
+//var float2 position : $vin.POSITION : POSITION : 0 : 1
+//var float4 main.position : $vout.POSITION :  : -1 : 1
+//var float3 main.color : $vout.COLOR :  : -1 : 1
+
+#pragma pack_matrix(row_major)
+
+struct C2E1v_Output {
+    float4 _position1 : POSITION;
+    float3 _color : COLOR0;
+};
+
+struct X1X {
+    float3 _COL0 : COLOR0;
+    float4 _POSITION : SV_Position;
+};
+
+static float3 _r0003;
+static X1X cout;
+
+ // main procedure, the original name was main
+X1X main(in float2 _position : POSITION)
+{
+
+    C2E1v_Output _OUT;
+
+    _OUT._position1 = float4(_position.x, _position.y,  0.00000000000000000E000f,  1.00000000000000000E000f);
+    _OUT._color = float3( 0.00000000000000000E000f,  1.00000000000000000E000f, _position.x);
+    _r0003 = _OUT._color.x*_position.xyy;
+    _r0003 = _r0003 + _OUT._color.y*_position.xxy;
+    _r0003 = _r0003 + _OUT._color.z*float3(  0.00000000000000000E000f,  1.00000000000000000E000f,  0.00000000000000000E000f);
+    _OUT._color = _r0003;
+    cout._POSITION = _OUT._position1;
+    cout._COL0 = _OUT._color;
+    return cout;
+} // main end

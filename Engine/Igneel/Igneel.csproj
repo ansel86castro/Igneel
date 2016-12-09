@@ -1,0 +1,264 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{228F60E4-4AAA-44F9-9A85-334192BD1897}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Igneel</RootNamespace>
+    <AssemblyName>Igneel</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="ClrRuntime">
+      <HintPath>..\Igneel\bin\Debug\ClrRuntime.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Animations\FrameAnimationManager.cs" />
+    <Compile Include="Components\TransparencyChecker.cs" />
+    <Compile Include="Components\Lights\ShaderDirectionalLight.cs" />
+    <Compile Include="Components\Lights\ShaderPointLight.cs" />
+    <Compile Include="Rendering\Bindings\ShaderInterfaces\IAmbientMap.cs" />
+    <Compile Include="Rendering\Bindings\ShaderInterfaces\ICameraMap.cs" />
+    <Compile Include="Rendering\Bindings\ShaderInterfaces\IClipPlaneMap.cs" />
+    <Compile Include="Rendering\Bindings\ShaderInterfaces\IEnvironmentMap.cs" />
+    <Compile Include="Rendering\Bindings\ShaderInterfaces\IHemisphericalAmbientMap.cs" />
+    <Compile Include="Rendering\Bindings\ShaderInterfaces\IIdMap.cs" />
+    <Compile Include="Rendering\Bindings\ShaderInterfaces\ILightMap.cs" />
+    <Compile Include="Rendering\Bindings\ShaderInterfaces\IMeshMaterialMap.cs" />
+    <Compile Include="Rendering\Bindings\ShaderInterfaces\IPlanarReflecionMap.cs" />
+    <Compile Include="Rendering\Bindings\ShaderInterfaces\IProjectionMap.cs" />
+    <Compile Include="Rendering\Bindings\ShaderInterfaces\ISkinMap.cs" />
+    <Compile Include="Rendering\Bindings\ShaderInterfaces\ISkyDomeMap.cs" />
+    <Compile Include="Rendering\Bindings\ShaderInterfaces\IViewMap.cs" />
+    <Compile Include="Rendering\Bindings\ShaderInterfaces\IViewProjectionMap.cs" />
+    <Compile Include="Rendering\Bindings\ShaderInterfaces\IWorldMap.cs" />
+    <Compile Include="Components\Particles\ParticleEmitter.cs" />
+    <Compile Include="Components\Particles\ParticleVertex.cs" />
+    <Compile Include="Components\Particles\Particle.cs" />
+    <Compile Include="Components\SurfaceMaterial.cs" />
+    <Compile Include="Components\LayerSurface.cs" />
+    <Compile Include="Components\Lights\ShaderLight.cs" />
+    <Compile Include="Components\Terrain\TerrainMaterial.cs" />
+    <Compile Include="Components\Terrain\TerrainSectionTester.cs" />
+    <Compile Include="Components\Terrain\HeightFieldSection.cs" />
+    <Compile Include="Components\Terrain\HeightFieldVertex.cs" />
+    <Compile Include="Engine.cs" />
+    <Compile Include="IgneelApplication.cs" />
+    <Compile Include="IPickingService.cs" />
+    <Compile Include="Rendering\Bindings\ShaderInterfaces\PixelClippingMap.cs" />
+    <Compile Include="Rendering\GraphicRender.cs" />
+    <Compile Include="Rendering\FrameSkinRender.cs" />
+    <Compile Include="Rendering\IFrameSkinRender.cs" />
+    <Compile Include="Rendering\Techniques\HitTesting\SceneHitTestRender.cs" />
+    <Compile Include="Rendering\Techniques\HitTesting\IHitTestRender.cs" />
+    <Compile Include="Rendering\Techniques\HitTesting\HitTestResult.cs" />
+    <Compile Include="Rendering\Techniques\HitTesting\HitTestId.cs" />
+    <Compile Include="SceneComponents\IFrameMesh.cs" />
+    <Compile Include="SceneManagement\NonCulledRegion.cs" />
+    <Compile Include="SceneManagement\UnitOfMeasure.cs" />
+    <Compile Include="SceneManagement\UOMType.cs" />
+    <Compile Include="Services\HitTestService.cs" />
+    <Compile Include="Utilities\BoneInfo.cs" />
+    <Compile Include="Animations\FrameAnimationController.cs" />
+    <Compile Include="SceneComponents\BillBoard.cs" />
+    <Compile Include="Rendering\Bindings\CameraBinding.cs" />
+    <Compile Include="Rendering\Bindings\PixelClippingBinding.cs" />
+    <Compile Include="Rendering\Bindings\TechniqueBinding.cs" />
+    <Compile Include="Rendering\Bindings\ISyncronizableBinding.cs" />
+    <Compile Include="Rendering\Bindings\HitTestIdBinding.cs" />
+    <Compile Include="Rendering\Bindings\LightBinding.cs" />
+    <Compile Include="Rendering\Bindings\MeshMaterialBinding.cs" />
+    <Compile Include="Rendering\Bindings\SceneNodeBindings.cs" />
+    <Compile Include="Rendering\Bindings\SkinBinding.cs" />
+    <Compile Include="Rendering\Bindings\SkyDomeBinding.cs" />
+    <Compile Include="Rendering\Bindings\ClipSceneTechniqueBinding.cs" />
+    <Compile Include="Rendering\Bindings\EnvironmentMapBinding.cs" />
+    <Compile Include="Rendering\Bindings\LigthingShadowed.cs" />
+    <Compile Include="Rendering\Bindings\ReflectionMapBinding.cs" />
+    <Compile Include="SceneComponents\Camera.cs" />
+    <Compile Include="SceneComponents\FrameMesh.cs" />
+    <Compile Include="SceneComponents\IMaterialContainer.cs" />
+    <Compile Include="SceneManagement\ListCuller.cs" />
+    <Compile Include="SceneManagement\QuadTree.cs" />
+    <Compile Include="States\EngineState.cs" />
+    <Compile Include="States\HDR.cs" />
+    <Compile Include="States\Lighting.cs" />
+    <Compile Include="States\PRT.cs" />
+    <Compile Include="States\ReflectionState.cs" />
+    <Compile Include="States\SSAO.cs" />
+    <Compile Include="States\PhysicState.cs" />
+    <Compile Include="States\DeferredLighting.cs" />
+    <Compile Include="States\DeferredLightingState.cs" />
+    <Compile Include="States\DephtOfField.cs" />
+    <Compile Include="States\Fog.cs" />
+    <Compile Include="States\LensFlare.cs" />
+    <Compile Include="States\MotionBlur.cs" />
+    <Compile Include="States\ShadingState.cs" />
+    <Compile Include="States\ShadowMapState.cs" />
+    <Compile Include="States\ShadowState.cs" />
+    <Compile Include="Utilities\Extensions.cs" />
+    <Compile Include="SceneManagement\IBoundable.cs" />
+    <Compile Include="SceneManagement\ICullable.cs" />
+    <Compile Include="SceneManagement\ICuller.cs" />
+    <Compile Include="SceneComponents\IRenderable.cs" />
+    <Compile Include="Components\MeshSkin.cs" />
+    <Compile Include="SceneManagement\GraphicSubmit.cs" />
+    <Compile Include="Effects\BillboardEffect.cs" />
+    <Compile Include="Effects\CheckTransparenceEffect.cs" />
+    <Compile Include="Effects\DefferedLightingEffect.cs" />
+    <Compile Include="Effects\HDREffect.cs" />
+    <Compile Include="Effects\HeightFieldEffect.cs" />
+    <Compile Include="Effects\MeshEffects.cs" />
+    <Compile Include="Effects\ParticleSystemEffect.cs" />
+    <Compile Include="Effects\RenderQuadEffect.cs" />
+    <Compile Include="Effects\ShadowEdgeEffect.cs" />
+    <Compile Include="Effects\SkinnedEffect.cs" />
+    <Compile Include="SceneManagement\BoundInfo.cs" />
+    <Compile Include="SceneComponents\ComponentInstance.cs" />
+    <Compile Include="SceneManagement\IComponentInstance.cs" />
+    <Compile Include="SceneManagement\ICullRegion.cs" />
+    <Compile Include="SceneComponents\IGraphicsProvider.cs" />
+    <Compile Include="SceneManagement\IFrameComponent.cs" />
+    <Compile Include="SceneComponents\ISceneComponent.cs" />
+    <Compile Include="SceneComponents\GraphicObject.cs" />
+    <Compile Include="SceneManagement\ICullingTest.cs" />
+    <Compile Include="SceneComponents\IGraphicObject.cs" />
+    <Compile Include="SceneComponents\FrameComponent.cs" />
+    <Compile Include="Components\IShadingInput.cs" />
+    <Compile Include="Components\Lights\GlobalLigth.cs" />
+    <Compile Include="Components\Lights\Light.cs" />
+    <Compile Include="SceneComponents\FrameLight.cs" />
+    <Compile Include="SceneComponents\MaterialCollection.cs" />
+    <Compile Include="Components\Mesh.cs" />
+    <Compile Include="Components\BasicMaterial.cs" />
+    <Compile Include="Components\MeshPart.cs" />
+    <Compile Include="SceneComponents\FrameSkin.cs" />
+    <Compile Include="SceneComponents\FrameComponentColletion.cs" />
+    <Compile Include="SceneManagement\NodeType.cs" />
+    <Compile Include="SceneManagement\OrientedBox.cs" />
+    <Compile Include="SceneComponents\ParticleSystem.cs" />
+    <Compile Include="Rendering\Presenters\SingleViewPresenter.cs" />
+    <Compile Include="Rendering\Presenters\SwapChainPresenter.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Rendering\BillBoardRender.cs" />
+    <Compile Include="Rendering\BindableFrameTechnique.cs" />
+    <Compile Include="Rendering\RelayRender.cs" />
+    <Compile Include="Rendering\IGraphicRender.cs" />
+    <Compile Include="Rendering\FrameTechnique.cs" />
+    <Compile Include="Rendering\FrameMeshRender.cs" />
+    <Compile Include="Rendering\MeshRenderRegistrator.cs" />
+    <Compile Include="Rendering\Pendings\ParticleSystemRender.cs" />
+    <Compile Include="Rendering\ParticleSystemRender.cs" />
+    <Compile Include="Rendering\Registrator.cs" />
+    <Compile Include="Rendering\ActorRender.cs" />
+    <Compile Include="Rendering\ShapeRender.cs" />
+    <Compile Include="Rendering\Pendings\SkyDomeRender.cs" />
+    <Compile Include="Rendering\Pendings\HeightFieldRegistrator.cs" />
+    <Compile Include="Rendering\Pendings\HeightFieldRender.cs" />
+    <Compile Include="Rendering\Pendings\WaterRender.cs" />
+    <Compile Include="SceneManagement\Scene.cs" />
+    <Compile Include="SceneManagement\SceneManager.cs" />
+    <Compile Include="SceneManagement\Frame.cs" />
+    <Compile Include="SceneManagement\SceneState.cs" />
+    <Compile Include="SceneManagement\SceneStateTriggers.cs" />
+    <Compile Include="SceneComponents\ScreenDecal.cs" />
+    <Compile Include="SceneComponents\SkyDome.cs" />
+    <Compile Include="Rendering\Techniques\DefferedLigthing.cs" />
+    <Compile Include="Rendering\Techniques\GlareDef.cs" />
+    <Compile Include="Rendering\Techniques\HDRTechnique.cs" />
+    <Compile Include="Rendering\Techniques\HitTesting\HitTestTechnique.cs" />
+    <Compile Include="Rendering\Techniques\CubeMapTechique.cs" />
+    <Compile Include="Rendering\Techniques\EnvironmentMapTechinique.cs" />
+    <Compile Include="Rendering\Techniques\PlaneReflectionTechnique.cs" />
+    <Compile Include="Rendering\Techniques\ShadowMapTechinique.cs" />
+    <Compile Include="Rendering\Techniques\PhysicTechniques.cs" />
+    <Compile Include="Rendering\Techniques\DefaultTechnique.cs" />
+    <Compile Include="Rendering\Techniques\EdgeShadowFilteringTechnique.cs" />
+    <Compile Include="Rendering\Techniques\SceneShadowMapping.cs" />
+    <Compile Include="SceneComponents\HeightField.cs" />
+    <Compile Include="Utilities\ActorTagProcessor.cs" />
+    <Compile Include="Utilities\Assert.cs" />
+    <Compile Include="Utilities\CharacterControllerTagProcessor.cs" />
+    <Compile Include="Utilities\EnvironmentMapTagProcessor.cs" />
+    <Compile Include="Utilities\ReflectiveMapTagProcessor.cs" />
+    <Compile Include="Utilities\ShadowMapTagProcessor.cs" />
+    <Compile Include="Utilities\TagProcessor.cs" />
+    <Compile Include="SceneComponents\Water.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="PhysicsTag.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Igneel.Animations\Igneel.Animations.csproj">
+      <Project>{e466ab9b-9457-422e-bba7-0aa52f9535d3}</Project>
+      <Name>Igneel.Animations</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Igneel.Assets\Igneel.Assets.csproj">
+      <Project>{c7c6af7b-9770-45b7-9105-877c4a5dced0}</Project>
+      <Name>Igneel.Assets</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Igneel.Graphics\Igneel.Graphics.csproj">
+      <Project>{2a7c0792-7f47-4b07-a665-56ab6bf15f71}</Project>
+      <Name>Igneel.Graphics</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Igneel.Input\Igneel.Input.csproj">
+      <Project>{606fdb3f-628e-4d48-9735-3a6f54f1b010}</Project>
+      <Name>Igneel.Input</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Igneel.Math\Igneel.Math.csproj">
+      <Project>{ac47c0d4-b22a-4ced-b06b-50b828d56b07}</Project>
+      <Name>Igneel.Math</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Igneel.Physics\Igneel.Physics.csproj">
+      <Project>{7d76eb73-4742-45c7-84a6-f50b9961d874}</Project>
+      <Name>Igneel.Physics</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Igneel.Rendering\Igneel.Rendering.csproj">
+      <Project>{185f3662-2f7f-4945-9156-9aab127281ab}</Project>
+      <Name>Igneel.Rendering</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Igneel.Shared\Igneel.Shared.csproj">
+      <Project>{23b14551-20d5-437f-bc17-ba70ea50184d}</Project>
+      <Name>Igneel.Shared</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

@@ -1,0 +1,144 @@
+// ps_4_0 output by Cg compiler
+// cgc version 3.1.0013, build date Apr 18 2012
+// command line args: -profile ps_4_0
+// source file: E:\Projects\Igneel\Shaders\Shaders.Cg\FragmentShader.cg
+//vendor NVIDIA Corporation
+//version 3.1.0.13
+//profile ps_4_0
+//program main
+//var float3 input.color : $vin.COLOR :  : 0 : 1
+//var float2 input.texCoord : $vin.TEXCOORD0 :  : 0 : 0
+//var float4 main.color : $vout.COLOR : COLOR : -1 : 1
+
+#pragma pack_matrix(row_major)
+
+struct SimpleVSInput {
+    float3 _Position : SV_Position;
+    float3 _Normal : NORMAL;
+    float2 _TexCoord : TEXCOORD0;
+    float _Occ : TEXCOORD1;
+};
+
+struct SimpleVSOutput {
+    float4 _PositionH : SV_POSITION;
+    float3 _PositionW : TEXCOORD0;
+    float3 _NormalW : TEXCOORD1;
+    float2 _TexCoord1 : TEXCOORD2;
+    float _Occ1 : TEXCOORD3;
+    float4 _ScreenPosition : TEXCOORD4;
+};
+
+struct BumpVSInput {
+    float3 _Position1 : SV_Position;
+    float3 _Tangent : TANGENT;
+    float3 _Normal1 : NORMAL;
+    float2 _TexCoord2 : TEXCOORD0;
+    float _Occ2 : TEXCOORD1;
+};
+
+struct BumpVSOutput {
+    float4 _PositionH1 : SV_POSITION;
+    float3 _PositionW1 : TEXCOORD0;
+    float3 _NormalW1 : TEXCOORD1;
+    float3 _TangentW : TEXCOORD2;
+    float3 _BinormalW : TEXCOORD3;
+    float2 _TexCoord3 : TEXCOORD4;
+    float _Occ3 : TEXCOORD5;
+    float4 _ScreenPosition1 : TEXCOORD6;
+};
+
+struct SMVSOutput {
+    float4 _PositionH2 : SV_POSITION;
+    float3 _PositionW2 : TEXCOORD0;
+    float3 _NormalW2 : TEXCOORD1;
+    float2 _TexCoord4 : TEXCOORD2;
+    float4 _PositionL : TEXCOORD3;
+    float _Occ4 : TEXCOORD4;
+    float4 _ScreenCoord : TEXCOORD5;
+};
+
+struct SMBumpVSOutput {
+    float4 _PositionH3 : SV_POSITION;
+    float3 _PositionW3 : TEXCOORD0;
+    float3 _NormalW3 : TEXCOORD1;
+    float3 _TangentW1 : TEXCOORD2;
+    float3 _BinormalW1 : TEXCOORD3;
+    float2 _TexCoord5 : TEXCOORD4;
+    float4 _PositionL1 : TEXCOORD5;
+    float _Occ5 : TEXCOORD6;
+    float4 _ScreenCoord1 : TEXCOORD7;
+};
+
+struct SMVSOutputSoft {
+    float4 _PositionH4 : SV_POSITION;
+    float3 _PositionW4 : TEXCOORD0;
+    float3 _NormalW4 : TEXCOORD1;
+    float2 _TexCoord6 : TEXCOORD2;
+    float4 _ScreenCoord2 : TEXCOORD3;
+    float _Occ6 : TEXCOORD4;
+    float4 _ReflSamplingPos : TEXCOORD5;
+};
+
+struct SMBumpVSOutputSoft {
+    float4 _PositionH5 : SV_POSITION;
+    float3 _PositionW5 : TEXCOORD0;
+    float3 _NormalW5 : TEXCOORD1;
+    float3 _TangentW2 : TEXCOORD2;
+    float3 _BinormalW2 : TEXCOORD3;
+    float2 _TexCoord7 : TEXCOORD4;
+    float4 _ScreenCoord3 : TEXCOORD5;
+    float _Occ7 : TEXCOORD6;
+    float4 _ReflSamplingPos1 : TEXCOORD7;
+};
+
+struct CubeSMVSOutput {
+    float4 _PositionH6 : SV_POSITION;
+    float3 _PositionW6 : TEXCOORD0;
+    float3 _NormalW6 : TEXCOORD1;
+    float2 _TexCoord8 : TEXCOORD2;
+    float3 _LightDir : TEXCOORD3;
+    float _Distance : TEXCOORD4;
+    float _Occ8 : TEXCOORD5;
+};
+
+struct CubeBumpVSOutput {
+    float4 _PositionH7 : SV_POSITION;
+    float3 _PositionW7 : TEXCOORD0;
+    float3 _NormalW7 : TEXCOORD1;
+    float3 _TangentW3 : TEXCOORD2;
+    float3 _BinormalW3 : TEXCOORD3;
+    float2 _TexCoord9 : TEXCOORD4;
+    float3 _LightDir1 : TEXCOORD5;
+    float _Distance1 : TEXCOORD6;
+    float _Occ9 : TEXCOORD7;
+};
+
+struct C3E2v_Output {
+    float4 _position : SV_Position;
+    float3 _color1 : COLOR0;
+    float2 _texCoord : TEXCOORD0;
+};
+
+struct C2E2f_Output {
+    float4 _color : SV_Target;
+};
+
+struct X1X {
+    float3 _COL0 : COLOR0;
+    float4 _POSITION : SV_Position;
+    float2 _TEXCOORD0 : TEXCOORD0;
+};
+
+
+ // main procedure, the original name was main
+C2E2f_Output main( in X1X cin)
+{
+
+    C3E2v_Output _input;
+    C2E2f_Output _OUT;
+
+    _input._color1 = cin._COL0;
+    _OUT._color = float4(_input._color1.x, _input._color1.y, _input._color1.z,  1.00000000000000000E000f);
+    _OUT._color = _OUT._color*_input._color1.x;
+    return _OUT;
+} // main end

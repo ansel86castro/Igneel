@@ -1,0 +1,72 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Shaders">
+      <UniqueIdentifier>{6c69c6a2-6a05-4d3a-a5cd-f8b23da5bc17}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Headers">
+      <UniqueIdentifier>{a8875d9a-3107-44b6-a8b8-b5928b4bbc6c}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="VertexShader.cg">
+      <Filter>Shaders</Filter>
+    </CustomBuild>
+    <CustomBuild Include="PixelShader.cg">
+      <Filter>Shaders</Filter>
+    </CustomBuild>
+    <CustomBuild Include="CgVertexShader.cg">
+      <Filter>Shaders</Filter>
+    </CustomBuild>
+    <CustomBuild Include="FragmentShader.cg">
+      <Filter>Shaders</Filter>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Common.cgi">
+      <Filter>Headers</Filter>
+    </None>
+    <None Include="Globals.cgi">
+      <Filter>Headers</Filter>
+    </None>
+    <None Include="Transform.cgi">
+      <Filter>Headers</Filter>
+    </None>
+    <None Include="Deffered.cgi">
+      <Filter>Headers</Filter>
+    </None>
+    <None Include="HDRCommon.cgi">
+      <Filter>Headers</Filter>
+    </None>
+    <None Include="Lighting.cgi">
+      <Filter>Headers</Filter>
+    </None>
+    <None Include="LightingBase.cgi">
+      <Filter>Headers</Filter>
+    </None>
+    <None Include="LigthingShadowed.cgi">
+      <Filter>Headers</Filter>
+    </None>
+    <None Include="Luminance.cgi">
+      <Filter>Headers</Filter>
+    </None>
+    <None Include="Shadowing.cgi">
+      <Filter>Headers</Filter>
+    </None>
+    <None Include="ShadowMapTransform.cgi">
+      <Filter>Headers</Filter>
+    </None>
+    <None Include="Skinned.cgi">
+      <Filter>Headers</Filter>
+    </None>
+    <None Include="SkinnedShadowed.cgi">
+      <Filter>Headers</Filter>
+    </None>
+    <None Include="TransformLighting.cgi">
+      <Filter>Headers</Filter>
+    </None>
+  </ItemGroup>
+</Project>

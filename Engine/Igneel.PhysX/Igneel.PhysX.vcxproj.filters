@@ -1,0 +1,154 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Scene">
+      <UniqueIdentifier>{9f73e688-23c4-4e08-a6c7-5e24845d6708}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Engine">
+      <UniqueIdentifier>{0657cf7f-3725-4d01-8c7f-d7c426dbff03}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shared">
+      <UniqueIdentifier>{3ced3498-6722-42e5-8511-0d24eb0cdb66}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Actor">
+      <UniqueIdentifier>{81448cbc-a50e-4a32-bf7b-7683e6c36bc7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shapes">
+      <UniqueIdentifier>{40bb55e5-7640-4b77-980c-f2bdd4c83f7f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="CharacterController">
+      <UniqueIdentifier>{36dc09c4-2c9f-4deb-af89-917cf570b0c7}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Igneel.PhysX.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Stdafx.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Common.h">
+      <Filter>Shared</Filter>
+    </ClInclude>
+    <ClInclude Include="PhysicManager.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="XScene.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="OutputStream.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="XMaterial.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="XActor.h">
+      <Filter>Actor</Filter>
+    </ClInclude>
+    <ClInclude Include="Shape.h">
+      <Filter>Shapes</Filter>
+    </ClInclude>
+    <ClInclude Include="XTriangleMesh.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Stream.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="XSweepCache.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="XControllerManager.h">
+      <Filter>CharacterController</Filter>
+    </ClInclude>
+    <ClInclude Include="UserAllocator.h">
+      <Filter>Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="XController.h">
+      <Filter>CharacterController</Filter>
+    </ClInclude>
+    <ClInclude Include="ReportBridges.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Igneel.PhysX.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AssemblyInfo.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Stdafx.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Common.cpp">
+      <Filter>Shared</Filter>
+    </ClCompile>
+    <ClCompile Include="PhysicManager.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="XScene.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="OutputStream.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="XMaterial.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="XActor.cpp">
+      <Filter>Actor</Filter>
+    </ClCompile>
+    <ClCompile Include="Shape.cpp">
+      <Filter>Shapes</Filter>
+    </ClCompile>
+    <ClCompile Include="XTriangleMesh.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Stream.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="XSweepCache.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="XControllerManager.cpp">
+      <Filter>CharacterController</Filter>
+    </ClCompile>
+    <ClCompile Include="UserAllocator.cpp">
+      <Filter>Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="XController.cpp">
+      <Filter>CharacterController</Filter>
+    </ClCompile>
+    <ClCompile Include="ReportBridges.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="app.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="app.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+  </ItemGroup>
+</Project>

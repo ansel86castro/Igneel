@@ -1,0 +1,205 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="DeviceManager">
+      <UniqueIdentifier>{ffd180df-59bf-4a2a-bd92-acd3ad34a578}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GraphicDevice">
+      <UniqueIdentifier>{85c938ef-41eb-4cf4-8212-864f9e2dedc2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="InputAssembler">
+      <UniqueIdentifier>{37efbc64-de26-4333-ab21-1a540602e0d6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Textures">
+      <UniqueIdentifier>{6ac863c3-a375-40f2-829f-3167061db3c5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="OutputMerge">
+      <UniqueIdentifier>{aa81c946-e293-4e06-a469-65f298a5ad73}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="RasterizerStage">
+      <UniqueIdentifier>{d4cc5eb1-68ff-4d72-ba78-cf84a8f0095f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shaders">
+      <UniqueIdentifier>{8c0fa32f-0282-4133-8b1c-fbc6ebc0f4fe}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Igneel.D3D10.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Stdafx.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DeviceManager.h">
+      <Filter>DeviceManager</Filter>
+    </ClInclude>
+    <ClInclude Include="GraphicDevice.h">
+      <Filter>GraphicDevice</Filter>
+    </ClInclude>
+    <ClInclude Include="GraphicBuffer10.h">
+      <Filter>InputAssembler</Filter>
+    </ClInclude>
+    <ClInclude Include="SamplerState10.h">
+      <Filter>GraphicDevice</Filter>
+    </ClInclude>
+    <ClInclude Include="Texture1D10.h">
+      <Filter>Textures</Filter>
+    </ClInclude>
+    <ClInclude Include="Texture2D10.h">
+      <Filter>Textures</Filter>
+    </ClInclude>
+    <ClInclude Include="Texture3D10.h">
+      <Filter>Textures</Filter>
+    </ClInclude>
+    <ClInclude Include="InputLayout.h">
+      <Filter>InputAssembler</Filter>
+    </ClInclude>
+    <ClInclude Include="Utils.h">
+      <Filter>GraphicDevice</Filter>
+    </ClInclude>
+    <ClInclude Include="RenderTarget.h">
+      <Filter>OutputMerge</Filter>
+    </ClInclude>
+    <ClInclude Include="SwapChain.h">
+      <Filter>OutputMerge</Filter>
+    </ClInclude>
+    <ClInclude Include="BlendState.h">
+      <Filter>OutputMerge</Filter>
+    </ClInclude>
+    <ClInclude Include="DepthStencilState.h">
+      <Filter>OutputMerge</Filter>
+    </ClInclude>
+    <ClInclude Include="RasterizerState.h">
+      <Filter>RasterizerStage</Filter>
+    </ClInclude>
+    <ClInclude Include="ShaderProgram.h">
+      <Filter>Shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="Shaders.h">
+      <Filter>Shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="ShaderStages.h">
+      <Filter>Shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="IResouceContainer.h">
+      <Filter>Textures</Filter>
+    </ClInclude>
+    <ClInclude Include="D3DUniformSetter.h">
+      <Filter>Shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="ConstantBuffer.h">
+      <Filter>Shaders</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Igneel.D3D10.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AssemblyInfo.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Stdafx.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DeviceManager.cpp">
+      <Filter>DeviceManager</Filter>
+    </ClCompile>
+    <ClCompile Include="GraphicDevice.cpp">
+      <Filter>GraphicDevice</Filter>
+    </ClCompile>
+    <ClCompile Include="GraphicBuffer10.cpp">
+      <Filter>InputAssembler</Filter>
+    </ClCompile>
+    <ClCompile Include="SamplerState10.cpp">
+      <Filter>GraphicDevice</Filter>
+    </ClCompile>
+    <ClCompile Include="Texture1D10.cpp">
+      <Filter>Textures</Filter>
+    </ClCompile>
+    <ClCompile Include="Texture2D10.cpp">
+      <Filter>Textures</Filter>
+    </ClCompile>
+    <ClCompile Include="Texture3D10.cpp">
+      <Filter>Textures</Filter>
+    </ClCompile>
+    <ClCompile Include="InputLayout.cpp">
+      <Filter>InputAssembler</Filter>
+    </ClCompile>
+    <ClCompile Include="GraphicDevice.IA.cpp">
+      <Filter>InputAssembler</Filter>
+    </ClCompile>
+    <ClCompile Include="Utils.cpp">
+      <Filter>GraphicDevice</Filter>
+    </ClCompile>
+    <ClCompile Include="GraphicDevice.OutputMerge.cpp">
+      <Filter>OutputMerge</Filter>
+    </ClCompile>
+    <ClCompile Include="RenderTarget.cpp">
+      <Filter>OutputMerge</Filter>
+    </ClCompile>
+    <ClCompile Include="SwapChain.cpp">
+      <Filter>OutputMerge</Filter>
+    </ClCompile>
+    <ClCompile Include="BlendState.cpp">
+      <Filter>OutputMerge</Filter>
+    </ClCompile>
+    <ClCompile Include="DepthStencilState.cpp">
+      <Filter>OutputMerge</Filter>
+    </ClCompile>
+    <ClCompile Include="RasterizerState.cpp">
+      <Filter>RasterizerStage</Filter>
+    </ClCompile>
+    <ClCompile Include="GraphicDevice.Rasterizer.cpp">
+      <Filter>RasterizerStage</Filter>
+    </ClCompile>
+    <ClCompile Include="ShaderProgram.cpp">
+      <Filter>Shaders</Filter>
+    </ClCompile>
+    <ClCompile Include="Shaders.cpp">
+      <Filter>Shaders</Filter>
+    </ClCompile>
+    <ClCompile Include="ShaderStages.cpp">
+      <Filter>Shaders</Filter>
+    </ClCompile>
+    <ClCompile Include="IResourceContainer.cpp">
+      <Filter>Textures</Filter>
+    </ClCompile>
+    <ClCompile Include="D3DUniformSetter.cpp">
+      <Filter>Shaders</Filter>
+    </ClCompile>
+    <ClCompile Include="ConstantBuffer.cpp">
+      <Filter>Shaders</Filter>
+    </ClCompile>
+    <ClCompile Include="GraphicDevice.Shader.cpp">
+      <Filter>Shaders</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="app.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="app.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+  </ItemGroup>
+</Project>

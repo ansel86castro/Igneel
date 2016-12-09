@@ -1,0 +1,42 @@
+// ps_4_0 output by Cg compiler
+// cgc version 3.1.0013, build date Apr 18 2012
+// command line args: -profile ps_4_0
+// source file: E:\Projects\Igneel\Shaders\Shaders.Cg\PixelShader.cg
+//vendor NVIDIA Corporation
+//version 3.1.0.13
+//profile ps_4_0
+//program main
+//var float3 input.color : $vin.COLOR :  : 0 : 1
+//var float2 input.texCoord : $vin.TEXCOORD0 :  : 0 : 0
+//var float4 main.color : $vout.COLOR : COLOR : -1 : 1
+
+#pragma pack_matrix(row_major)
+
+struct C3E2v_Output {
+    float4 _position : SV_Position;
+    float3 _color1 : COLOR0;
+    float2 _texCoord : TEXCOORD0;
+};
+
+struct C2E2f_Output {
+    float4 _color : SV_Target;
+};
+
+struct X1X {
+    float3 _COL0 : COLOR0;
+    float4 _POSITION : SV_Position;
+    float2 _TEXCOORD0 : TEXCOORD0;
+};
+
+
+ // main procedure, the original name was main
+C2E2f_Output main( in X1X cin)
+{
+
+    C3E2v_Output _input;
+    C2E2f_Output _OUT;
+
+    _input._color1 = cin._COL0;
+    _OUT._color = float4(_input._color1.x, _input._color1.y, _input._color1.z,  1.00000000000000000E000f);
+    return _OUT;
+} // main end

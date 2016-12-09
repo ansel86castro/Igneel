@@ -1,0 +1,84 @@
+﻿<Window x:Class="ForgeEditor.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:Controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"        
+        xmlns:views="clr-namespace:ForgeEditor.Views"        
+        xmlns:Apex="clr-namespace:Apex.Controls;assembly=Apex"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:res="clr-namespace:ForgeEditor.res"
+        xmlns:c="clr-namespace:Igneel.Windows.Wpf;assembly=Igneel.Windows.Wpf"
+        Title="{x:Static res:Strings.ForgeEditor}" Height="425" Width="1024"
+        ResizeMode="CanResizeWithGrip"       >
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro.Resources;component/Icons.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/FlatSlider.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition />
+            <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
+        
+        <!--- Menu -->
+        <Menu >
+            <MenuItem Header="File">
+                <MenuItem Header="Load File" Command="{Binding Path=LoadFileCommand}" />
+            </MenuItem>
+
+            <MenuItem Header="Edit">
+
+            </MenuItem>
+
+            <MenuItem Header="View" Click="MenuItem_Click_1" Height="1">
+
+            </MenuItem>
+        </Menu>
+
+        <!--Tools -->
+        <ToolBar Grid.Row="1">
+            <ToggleButton Content="Translate" IsChecked="{Binding EnableTranslate}"/>
+            <ToggleButton Content="Rotate" IsChecked="{Binding EnableRotate}"/>
+            <ToggleButton Content="Scale" IsChecked="{Binding EnableScale}"/>
+        </ToolBar>
+            
+        <!-- Content -->
+        <Grid Grid.Row="2" >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" MinWidth="320"/>
+                <ColumnDefinition Width="auto" MinWidth="260" />             
+            </Grid.ColumnDefinitions>
+           
+             <Border BorderThickness="2" BorderBrush="Cyan">
+                <c:Canvas3D Name="Canvas"  />
+            </Border>
+
+            <GridSplitter Grid.Column="1" Background="LightGray" Width="2" Margin="-1,0,0,0" ShowsPreview="True" HorizontalAlignment="Left"/>
+            <Grid Grid.Column="1" Margin="2,0,0,0" >                
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="auto" />
+                </Grid.ColumnDefinitions>
+                <Controls:MetroContentControl Name="ObjectEditor"  >
+                    <views:SceneTreeView x:Name="SceneTreeView" />
+                </Controls:MetroContentControl>           
+            </Grid>
+       
+        </Grid>
+        
+        <!--Footer-->
+        <StatusBar Grid.Row="3"  VerticalAlignment="Bottom">
+            <StatusBarItem>
+                <StackPanel Orientation="Horizontal">
+                <TextBlock>FPS:</TextBlock>
+                <TextBlock Name="FPS" />
+                </StackPanel>
+            </StatusBarItem>
+        </StatusBar>
+    </Grid>
+</Window>

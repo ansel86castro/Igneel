@@ -1,0 +1,163 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{2A7C0792-7F47-4B07-A665-56AB6BF15F71}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Igneel.Graphics</RootNamespace>
+    <AssemblyName>Igneel.Graphics</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="ClrRuntime">
+      <HintPath>..\Igneel\bin\Debug\ClrRuntime.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="BufferView.cs" />
+    <Compile Include="Exceptions.cs" />
+    <Compile Include="GraphicDevice\Adapter.cs" />
+    <Compile Include="GraphicDevice\Enums.cs" />
+    <Compile Include="GraphicDevice\GraphicDevice.cs" />
+    <Compile Include="GraphicDevice\GraphicDeviceDesc.cs" />
+    <Compile Include="GraphicDevice\GraphicDeviceFactory.cs" />
+    <Compile Include="GraphicsExceptions.cs" />
+    <Compile Include="GraphicStates\BlendState.cs" />
+    <Compile Include="GraphicStates\DepthStencilState.cs" />
+    <Compile Include="GraphicStates\GraphicDevice.States.cs" />
+    <Compile Include="GraphicStates\PipelineState.cs" />
+    <Compile Include="GraphicStates\RasterizerState.cs" />
+    <Compile Include="GraphicStates\SamplerState.cs" />
+    <Compile Include="GraphicStates\StateStack.cs" />
+    <Compile Include="InputAssembler\Enums.cs" />
+    <Compile Include="InputAssembler\GraphicDevice.InputAssemblerStage.cs" />
+    <Compile Include="InputAssembler\InputLayout.cs" />
+    <Compile Include="InputAssembler\VertexElement.cs" />
+    <Compile Include="OutputMerge\DepthStencilDesc.cs" />
+    <Compile Include="OutputMerge\Enums.cs" />
+    <Compile Include="OutputMerge\GraphicDevice.OutputMergeStage.cs" />
+    <Compile Include="OutputMerge\SwapChain.cs" />
+    <Compile Include="Platform\GraphicContext.cs" />
+    <Compile Include="Platform\GraphicFont.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Rasterizer\Enums.cs" />
+    <Compile Include="Rasterizer\GraphicDevice.RasterizerStateStage.cs" />
+    <Compile Include="Rasterizer\ViewPort.cs" />
+    <Compile Include="Resources\Enums.cs" />
+    <Compile Include="Resources\GraphicBuffer.cs" />
+    <Compile Include="Resources\GraphicFont.cs" />
+    <Compile Include="Resources\ISurface.cs" />
+    <Compile Include="Resources\RenderTarget.cs" />
+    <Compile Include="Resources\Resources.cs" />
+    <Compile Include="Resources\ShaderBuffer.cs" />
+    <Compile Include="Resources\Structs.cs" />
+    <Compile Include="Resources\Texture.cs" />
+    <Compile Include="Resources\Texture1D.cs" />
+    <Compile Include="Resources\Texture2D.cs" />
+    <Compile Include="Resources\Texture3D.cs" />
+    <Compile Include="Shaders\ShaderVariables\BoolArrayVariable.cs" />
+    <Compile Include="Shaders\ShaderVariables\BoolVariable.cs" />
+    <Compile Include="Shaders\ShaderVariables\EffectVariable.cs" />
+    <Compile Include="Shaders\ShaderVariables\FloatArrayVariable.cs" />
+    <Compile Include="Shaders\ShaderVariables\FloatVariable.cs" />
+    <Compile Include="Shaders\ShaderVariables\IntArrayVariable.cs" />
+    <Compile Include="Shaders\ShaderVariables\IntVariable.cs" />
+    <Compile Include="Shaders\ShaderVariables\MatrixArrayVariable.cs" />
+    <Compile Include="Shaders\ShaderVariables\MatrixVariable.cs" />
+    <Compile Include="Shaders\ShaderVariables\RangeVariable.cs" />
+    <Compile Include="Shaders\ShaderVariables\ResourceVariable.cs" />
+    <Compile Include="Shaders\ShaderVariables\ResourceVariableArray.cs" />
+    <Compile Include="Shaders\ShaderVariables\Sampler.cs" />
+    <Compile Include="Shaders\ShaderVariables\SamplerArray.cs" />
+    <Compile Include="Shaders\ShaderVariables\SamplerExtensions.cs" />
+    <Compile Include="Shaders\ShaderVariables\SamplerStateVariable.cs" />
+    <Compile Include="Shaders\ShaderVariables\SamplerStateVariableArray.cs" />
+    <Compile Include="Shaders\ShaderVariables\SamplerVariable.cs" />
+    <Compile Include="Shaders\ShaderVariables\SamplerVariableArray.cs" />
+    <Compile Include="Shaders\ShaderVariables\SArray.cs" />
+    <Compile Include="Shaders\ShaderVariables\ShaderVariable.cs" />
+    <Compile Include="Shaders\ShaderVariables\ShaderVariableArray.cs" />
+    <Compile Include="Shaders\ShaderVariables\Vector4ArrayVariable.cs" />
+    <Compile Include="Shaders\ShaderVariables\Vector4Variable.cs" />
+    <Compile Include="Shaders\Enums.cs" />
+    <Compile Include="Shaders\GraphicDevice.Shaders.cs" />
+    <Compile Include="Shaders\IShaderFactory.cs" />
+    <Compile Include="Shaders\IShaderRepository.cs" />
+    <Compile Include="Shaders\IShaderStage.cs" />
+    <Compile Include="Shaders\IUniformSetter.cs" />
+    <Compile Include="Shaders\ShaderCode.cs" />
+    <Compile Include="Shaders\ShaderMacro.cs" />
+    <Compile Include="Shaders\ShaderProgram.cs" />
+    <Compile Include="Shaders\ShaderProgramDesc.cs" />
+    <Compile Include="Shaders\ShaderReflection.cs" />
+    <Compile Include="Shaders\Shaders.cs" />
+    <Compile Include="Shaders\ShaderStage.cs" />
+    <Compile Include="Shaders\ShaderTypes.cs" />
+    <Compile Include="Shaders\StreamOutDeclaration.cs" />
+    <Compile Include="Shapes\ArrowBuilder.cs" />
+    <Compile Include="Shapes\BoxBuilder.cs" />
+    <Compile Include="Shapes\CapsuleBuilder.cs" />
+    <Compile Include="Shapes\CircleBuilder.cs" />
+    <Compile Include="Shapes\FrameBuilder.cs" />
+    <Compile Include="Shapes\ConeBuilder.cs" />
+    <Compile Include="Shapes\CylindreBuilder.cs" />
+    <Compile Include="Shapes\DomeBuilder.cs" />
+    <Compile Include="Shapes\ShapeBuilder.cs" />
+    <Compile Include="Shapes\SphereBuilder.cs" />
+    <Compile Include="Structs.cs" />
+    <Compile Include="VertexComponents.cs" />
+    <Compile Include="VertexDescriptor.cs" />
+    <Compile Include="Vertices.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Igneel.Assets\Igneel.Assets.csproj">
+      <Project>{c7c6af7b-9770-45b7-9105-877c4a5dced0}</Project>
+      <Name>Igneel.Assets</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Igneel.Math\Igneel.Math.csproj">
+      <Project>{ac47c0d4-b22a-4ced-b06b-50b828d56b07}</Project>
+      <Name>Igneel.Math</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Igneel.Shared\Igneel.Shared.csproj">
+      <Project>{23b14551-20d5-437f-bc17-ba70ea50184d}</Project>
+      <Name>Igneel.Shared</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

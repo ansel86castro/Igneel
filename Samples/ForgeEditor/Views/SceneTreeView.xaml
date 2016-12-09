@@ -1,0 +1,70 @@
+﻿<UserControl
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:Custom="http://metro.mahapps.com/winfx/xaml/controls" 
+             xmlns:input="clr-namespace:System.Windows.Input;assembly=PresentationCore"
+             x:Class="ForgeEditor.Views.SceneTreeView" 
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+    <UserControl.Resources>        
+        <input:RoutedUICommand x:Key="ShowFrames" />
+        <input:RoutedUICommand x:Key="ShowCameras" />
+        <input:RoutedUICommand x:Key="ShowLights" />
+        <input:RoutedUICommand x:Key="ShowMeshes" />
+        <input:RoutedUICommand x:Key="ShowPhysics" />
+        <input:RoutedUICommand x:Key="PingView" />
+        <input:RoutedUICommand x:Key="CloseView" />
+    </UserControl.Resources>
+    <UserControl.CommandBindings>
+        <CommandBinding Command="{StaticResource ShowFrames}" Executed="OnShowFrames" CanExecute="IsSceneAvailable" />
+        <CommandBinding Command="{StaticResource ShowCameras}" Executed="OnShowShowCameras"  CanExecute="IsSceneAvailable"/>
+        <CommandBinding Command="{StaticResource ShowLights}" Executed="OnShowLights" CanExecute="IsSceneAvailable" />
+        <CommandBinding Command="{StaticResource ShowMeshes}" Executed="OnShowMeshes" CanExecute="IsSceneAvailable" />
+        <CommandBinding Command="{StaticResource ShowPhysics}" Executed="OnShowPhysics" CanExecute="IsSceneAvailable" />
+        <CommandBinding Command="{StaticResource PingView}" Executed="OnPingView" />
+        <CommandBinding Command="{StaticResource CloseView}" Executed="OnCloseView" />        
+    </UserControl.CommandBindings>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="11*"/>
+            <ColumnDefinition Width="9*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <Grid Background="DarkGray" Grid.ColumnSpan="2" >
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" >
+                <Button HorizontalAlignment="Right" Background="Transparent" Padding="0" Command="{StaticResource PingView}" Style="{StaticResource MetroFlatButton}">               
+                    <Image Source="/ForgeEditor;component/res/ic_action_pin.png" Stretch="Uniform" Width="16" Height="16" RenderTransformOrigin="0.5,0.5" >
+                        <Image.RenderTransform>
+                            <TransformGroup>
+                                <ScaleTransform/>
+                                <SkewTransform/>
+                                <RotateTransform Angle="45"/>
+                                <TranslateTransform/>
+                            </TransformGroup>
+                        </Image.RenderTransform>
+                    </Image>              
+            </Button>
+                <Button HorizontalAlignment="Right" Background="Transparent" Padding="0" Command="{StaticResource CloseView}" Margin="2,0,0,0" Style="{StaticResource MetroFlatButton}">                
+                    <Image Source="/ForgeEditor;component/res/ic_action_cancel.png" Stretch="Uniform" Width="16" Height="16" />
+            </Button>
+        </StackPanel>
+        </Grid>
+        <StackPanel Grid.Row="1" Orientation="Horizontal" Name="ToolBar" Grid.ColumnSpan="2">
+            <ToggleButton Content="Frames"  Command="{StaticResource ShowFrames}" Margin="6 0 0 0" Name="Frames" />
+            <ToggleButton Content="Cameras" Command="{StaticResource ShowCameras}" Margin="6 0 0 0" Name="Cameras"/>
+            <ToggleButton Content="Lights"  Command="{StaticResource ShowLights}" Margin="6 0 0 0" Name="Lights"/>
+            <ToggleButton Content="Meshes"  Command="{StaticResource ShowMeshes}" Margin="6 0 0 0" Name="Meshes"/>
+            <ToggleButton Content="Physics" Command="{StaticResource ShowPhysics}" Margin="6 0 0 0" Name="Physics"/>
+        </StackPanel>
+
+        <TreeView Grid.Row="2" x:Name="TreeView" SelectedItemChanged="TreeView_SelectedItemChanged" Grid.ColumnSpan="2">
+        </TreeView>
+
+    </Grid>
+</UserControl>

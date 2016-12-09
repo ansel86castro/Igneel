@@ -1,0 +1,161 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Igneel.Graphics.GraphicDevice">
+    <Position X="0.5" Y="0.5" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <NestedTypes>
+      <Struct Name="Igneel.Graphics.GraphicDevice.BufferBind" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Graphics\InputAssembler\GraphicDevice.InputAssemblerStage.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Struct>
+      <Struct Name="Igneel.Graphics.GraphicDevice.RenderStackValue" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Graphics\OutputMerge\GraphicDevice.OutputMergeStage.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Struct>
+      <Class Name="Igneel.Graphics.GraphicDevice.StateStack&lt;T&gt;" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Graphics\Shaders\GraphicDevice.Shaders.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="Igneel.Graphics.GraphicDevice.ShaderStages&lt;T&gt;" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Graphics\Shaders\GraphicDevice.Shaders.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>BJHDF6Ac9GrMjlootCxUkCNQoWLDQASodRpjxEBWaYU=</HashCode>
+      <FileName>Graphics\GraphicDevice\GraphicDevice.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Igneel.Graphics.GraphicDeviceDesc" Collapsed="true">
+    <Position X="2.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAIACAAAAIAAIAAAAAAAAAAAIAAAAABAiAIAAA=</HashCode>
+      <FileName>Graphics\GraphicDevice\GraphicDeviceDesc.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Igneel.Graphics.GraphicDeviceFactory" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="4" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAA=</HashCode>
+      <FileName>Graphics\GraphicDevice\GraphicDeviceFactory.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Igneel.Graphics.SamplerState" Collapsed="true">
+    <Position X="2.5" Y="1.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAgAAAAgAAAAAAAAACAAAAQAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Graphics\GraphicDevice\SamplerState.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Igneel.Graphics.InputLayout" Collapsed="true">
+    <Position X="6.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Graphics\InputAssembler\InputLayout.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Igneel.Graphics.SwapChain">
+    <Position X="6.25" Y="1.5" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+      <Compartment Name="Properties" Collapsed="true" />
+      <Compartment Name="Methods" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAACAAAhAAACAAAAAAAIAAAAAAAAAAQAABAAA=</HashCode>
+      <FileName>Graphics\OutputMerge\SwapChain.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Struct Name="Igneel.Graphics.DeviceInfo" Collapsed="true">
+    <Position X="0.5" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAABAAAAGAgAAgAAAAAAAAAAAAwAIBCEQAIAAAAgAA=</HashCode>
+      <FileName>Graphics\GraphicDevice\Adapter.cs</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="Igneel.Graphics.SOInitialization" Collapsed="true">
+    <Position X="4" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAAA=</HashCode>
+      <FileName>Graphics\GraphicDevice\GraphicDevice.cs</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="Igneel.Graphics.SamplerDesc" Collapsed="true">
+    <Position X="2.25" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IAAAAAAgQACAAAAgQAAAAAACABAAAAAABAAAAAAAAYA=</HashCode>
+      <FileName>Graphics\GraphicDevice\SamplerState.cs</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="Igneel.Graphics.DisplayMode" Collapsed="true">
+    <Position X="6.25" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAABAAAAAgAAAAAAEAAAAgAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Graphics\OutputMerge\SwapChain.cs</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Struct Name="Igneel.Graphics.SwapChainDesc" Collapsed="true">
+    <Position X="6.25" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAEIAAAIAAAAAAAAAAAAAAAAAACAAAAAAAABAAAIAAA=</HashCode>
+      <FileName>Graphics\OutputMerge\SwapChain.cs</FileName>
+    </TypeIdentifier>
+  </Struct>
+  <Enum Name="Igneel.Graphics.Filter" Collapsed="true">
+    <Position X="2.25" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAgAAAABQFIAAAAAAYAAAAIEQAAAAIBIEgCBAAA=</HashCode>
+      <FileName>Graphics\GraphicDevice\Enums.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="Igneel.Graphics.TextureAddressMode" Collapsed="true">
+    <Position X="4" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAgAAABAAAAAAAAAEAAAAAAgAAAAAAAAAACAAAAAAA=</HashCode>
+      <FileName>Graphics\GraphicDevice\Enums.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="Igneel.Graphics.FormatSupport" Collapsed="true">
+    <Position X="4" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gBAgAAAQAAAAAAAAdABBEAQAAAACQQIAABBACAEAUCA=</HashCode>
+      <FileName>Graphics\GraphicDevice\Enums.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="Igneel.Graphics.GraphicDeviceType" Collapsed="true">
+    <Position X="0.5" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAEAACAAAEAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Graphics\GraphicDevice\Enums.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="Igneel.Graphics.VertexProcessing" Collapsed="true">
+    <Position X="0.5" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAEAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Graphics\GraphicDevice\Enums.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="Igneel.Graphics.ClearFlags" Collapsed="true">
+    <Position X="0.5" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAQAAAAAAAACAAAAAAAAAAAIABAAEAAAA=</HashCode>
+      <FileName>Graphics\GraphicDevice\Enums.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Enum Name="Igneel.Graphics.PresentionInterval" Collapsed="true">
+    <Position X="2.25" Y="4.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAEAAAIAAAAAAAAAAAAAgAAAgAAIA=</HashCode>
+      <FileName>Graphics\GraphicDevice\Enums.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

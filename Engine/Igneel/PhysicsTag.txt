@@ -1,0 +1,14 @@
+﻿Physic tags descriptions
+
+[] : optional tag
+
+__a[d][k][b_nodeName]__  : create actor from scene node
+
+d: create dynamic actor
+k: kept node in scene else remove it
+b: node binding
+nodeName :name of the node to bind
+
+
+Notes:
+for create a wheell shape, you need to create a cylindre and rotate it -90 degrees arount Z-axis( Y-axis in 3DMAX)

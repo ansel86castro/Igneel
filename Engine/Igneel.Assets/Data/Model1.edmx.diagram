@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="fa0c167afec746978e24168d78ca4bb9" Name="Diagram1" ZoomLevel="82">
+        <EntityTypeShape EntityType="IgneelEngineResourcesModel.Content" Width="1.5" PointX="4.625" PointY="9.375" />
+        <EntityTypeShape EntityType="IgneelEngineResourcesModel.Folder" Width="1.5" PointX="9.949490490345978" PointY="27.825068024836977" />
+        <EntityTypeShape EntityType="IgneelEngineResourcesModel.Resource" Width="1.5" PointX="4.6562518256978374" PointY="19.100633913232308" />
+        <EntityTypeShape EntityType="IgneelEngineResourcesModel.ResourceType" Width="1.5" PointX="4.9489978295513417" PointY="11.280781572349733" />
+        <EntityTypeShape EntityType="IgneelEngineResourcesModel.SceneResource" Width="1.5" PointX="0.5" PointY="16.375" />
+        <EntityTypeShape EntityType="IgneelEngineResourcesModel.User" Width="1.5" PointX="6.25" PointY="16.25" />
+        <AssociationConnector Association="IgneelEngineResourcesModel.FK_Content_ContentId" />
+        <AssociationConnector Association="IgneelEngineResourcesModel.FK_Folder_ParentId" />
+        <AssociationConnector Association="IgneelEngineResourcesModel.FK_Folders_CreateUser" />
+        <AssociationConnector Association="IgneelEngineResourcesModel.FK_Folders_UpdateUser" />
+        <AssociationConnector Association="IgneelEngineResourcesModel.FK_Resources_FolderId" />
+        <AssociationConnector Association="IgneelEngineResourcesModel.FK_ResourceType_DefaultFolderId" />
+        <AssociationConnector Association="IgneelEngineResourcesModel.FK_Resources_CreateUserId" />
+        <AssociationConnector Association="IgneelEngineResourcesModel.FK_Resources_ResourceTypeId" />
+        <AssociationConnector Association="IgneelEngineResourcesModel.FK_Resources_UpdateUserId" />
+        <AssociationConnector Association="IgneelEngineResourcesModel.FK_SceneResource_PrototipeId" />
+        <AssociationConnector Association="IgneelEngineResourcesModel.FK_SceneResource_ResourceId" />
+        <AssociationConnector Association="IgneelEngineResourcesModel.FK_SceneResource_SceneId" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

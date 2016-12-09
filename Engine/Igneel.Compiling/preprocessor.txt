@@ -1,0 +1,180 @@
+grammar preprocess;
+
+options {
+	language='CSharp';
+	k=3;
+}
+tokens{	
+	INCLUDE   = 'include';
+	IFDEFINE  = 'ifdef';
+	IFNDEFINE = 'ifndef';	
+	ELIF	  = 'elif';	
+	ENDIF	  = 'endif';
+	DEFINE    = 'define';
+	UNDEFINE  = 'undef';
+}
+
+@header{
+using System.Collections.Generic;	
+using Igneel.Compiling;
+using Igneel.Compiling.Declarations;
+using Igneel.Compiling.Expressions;
+using Igneel.Compiling.Statements;
+using Igneel.Compiling.Preprocessors;
+using System.Text;
+}
+
+@lexer::namespace {
+	Igneel.Compiling.Parser
+}
+
+@parser::namespace {
+	Igneel.Compiling.Parser
+}
+
+@parser::members {
+	
+}
+
+file	returns[List<PrepNode> n = new List<PrepNode>()]
+	: (l=code{n.AddRange(l);} | WS? p=preprocessor{n.Add(p);})? 
+	  (t=NL{if(n.Count==0)
+	  		n.Add(new CodeBlock{Content = t.Text}); 
+	  	else 
+	  		n[n.Count-1].NewLine = t.Text;
+	  } 
+	  (l=code{n.AddRange(l);} | WS? p=preprocessor{n.Add(p);})?)*  EOF
+	;
+
+preprocessor returns[PrepNode n]
+@init{
+ConditionalCompilation.Directive dir = ConditionalCompilation.Directive.Def;
+}
+	: '#' WS?
+	  (  'define' WS id=ID WS? (v=ID | v=NUMBER)? { n = new Define{Simbol=id.Text, Value = v!=null?v.Text:null}; } 
+	    |'include' WS i=INCLUDE_FILE{ n=new Include{Filename=i.Text}; }
+	    | ('ifndef'{dir = ConditionalCompilation.Directive.Ndef;}
+	      |'ifdef'{dir = ConditionalCompilation.Directive.Def;}) WS id=ID WS? t=NL {
+	      				var s = new SelectionPreprocesor();	      				
+	    				var cn = new ConditionalCompilation{Simbol = id.Text};
+	    				cn.Condition = dir;
+	    				cn.NewLine=t.Text;
+	    				s.Nodes.Add(cn);
+	    				n = s;} 
+	    		(c=content{cn.Nodes.AddRange(c);} )+ 
+	      (WS? '#elif' WS id=ID{ cn = new ConditionalCompilation{Simbol = id.Text}; s.Nodes.Add(cn); } WS? t=NL{cn.NewLine=t.Text;} 
+			(c=content{cn.Nodes.AddRange(c);} )+ )*
+	      (WS? '#else' WS? t=NL { cn = new ConditionalCompilation(); s.Nodes.Add(cn); cn.NewLine=t.Text; } 
+			(c=content{cn.Nodes.AddRange(c);} )+ )?
+	      WS? '#endif' WS?
+	  )
+	;
+	
+content	returns[List<PrepNode>n]
+	:l=code{ n = l;} t=NL{n[n.Count-1].NewLine = t.Text;}	  
+	| WS? p=preprocessor{n = new List<PrepNode>(1){p};} t=NL{n[n.Count-1].NewLine = t.Text;}
+	;	
+    
+//line returns[List<PrepNode> n = new List<PrepNode>()]
+//	: l=code{n = l;} t=NL{l[l.Count-1].NewLine = t.Text;}
+//	;
+code returns[List<PrepNode> n = new List<PrepNode>(2)]
+@init{
+StringBuilder sb = new StringBuilder();
+}
+	: ( t=ID {sb.Append(t.Text);}
+	    |t=WS {sb.Append(t.Text);}
+	    |t=SIMBOL {sb.Append(t.Text);}
+	    |t=NUMBER {sb.Append(t.Text);}
+	    |t=STRING_LITERAL {sb.Append(t.Text);}  
+	    | c=comment{
+	          if(sb.Length > 0)
+	          {
+	          	n.Add(new CodeBlock{Content = sb.ToString()});
+	          	sb.Clear();
+	          }
+	          n.Add(c);
+	      }
+	  )+{
+	  	n.Add(new CodeBlock{Content = sb.ToString()});
+	  }
+	;
+	
+comment returns[PrepNode n]
+	: t=COMMENT { n = new Comment{Content = t.Text}; }
+	| t=LINE_COMMENT { n = new Comment{Content = t.Text}; }
+	;	
+ID  
+    :	(LETTER | '_') (LETTER | '0'..'9' | '_')*
+    ;
+    
+NUMBER	: '0'..'9' ('.' '0'..'9'+)? EXPONENT? ('f' | 'F')?
+	;
+		
+WS  :   (' '| '\t')+
+    ;	
+    
+NL :'\r' '\n'? | '\n'
+   ;
+
+SIMBOL	:					
+	 	| '<'
+		| '>'
+		| '!'
+	 	| '*'
+	 	| '/'
+	 	| '+'		
+	 	| '-'
+	 	| '|'
+	 	| '&'
+		| '^'
+		| '.'
+	 	| ','
+	 	| ';'
+	 	| ':'
+	 	| '['
+	 	| ']'
+	 	| '('
+		| ')'
+		| '{'
+		| '}'
+		| '='	
+	;
+			
+INCLUDE_FILE 	
+	  : '<' ( ' ' | '!' | '#' ..';' | '=' | '?' .. '[' | ']' .. '\u00FF')+ '>'
+     	|   '"' ( ' ' | '!' | '#' ..';' | '=' | '?' .. '[' | ']' .. '\u00FF')+ '"'
+     	;   
+fragment 
+LETTER
+	:   ('a'..'z'|'A'..'Z')
+	;		
+	 
+ fragment
+ STRING_LITERAL
+    :  '"' ( EscapeSequence | ~('\\'|'"') )* '"'
+    ;
+    
+fragment
+EscapeSequence
+    :   '\\' ('b'|'t'|'n'|'f'|'r'|'\"'|'\''|'\\')
+    |   OctalEscape
+    ;
+fragment
+OctalEscape
+    :   '\\' ('0'..'3') ('0'..'7') ('0'..'7')
+    |   '\\' ('0'..'7') ('0'..'7')
+    |   '\\' ('0'..'7')
+    ;
+  
+COMMENT
+    : 
+       '/*' ( options {greedy=false;} : . )* '*/'
+    ;
+LINE_COMMENT
+	:'//' ~('\n'|'\r')*  	
+	;
+
+fragment EXPONENT 
+	: ('e'|'E') ( '+' | '-')? '0'..'9'+
+	;

@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="Igneel.Graphics.GraphicDevice">
+    <Position X="0.5" Y="0.5" Width="2.25" />
+    <NestedTypes>
+      <Struct Name="Igneel.Graphics.GraphicDevice.BufferBind" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Graphics\InputAssembler\GraphicDevice.InputAssemblerStage.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Struct>
+      <Struct Name="Igneel.Graphics.GraphicDevice.RenderStackValue" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Graphics\OutputMerge\GraphicDevice.OutputMergeStage.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Struct>
+      <Class Name="Igneel.Graphics.GraphicDevice.StateStack&lt;T&gt;" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Graphics\Shaders\GraphicDevice.Shaders.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>ANHDp6AWbGqEDlootahUESBhouIDQBSoVQIARERGKYE=</HashCode>
+      <FileName>Graphics\GraphicDevice\GraphicDevice.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

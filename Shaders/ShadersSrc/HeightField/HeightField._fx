@@ -1,0 +1,111 @@
+#include "../Include/TransformLighting.fxh"
+
+int DESCRIPTION
+<
+	string ShaderModel = "3.0";
+	string Version = "1.0.0";
+	int NumberOfLights = 1;		
+	bool SupportAmbient = true;	
+	bool SupportHemispherical = true;
+	bool SupportSurfaceInfo = true;			
+>;
+
+bool enableClipping		: ENABLE_CLIPPING = false;
+float4 clipPlane		: CLIP_PLANE = {0,0,0,0}; //plane in Homogenius Space
+float2 offset;
+
+sampler2D layers[4] : register(s0);
+sampler2D blendLayer : register(s4);
+
+struct BlendVSOutput
+{
+	float4 PositionH 	 :POSITION;
+	float3 PositionW 	 :TEXCOORD0;
+	float3 NormalW	 	 :TEXCOORD1;
+	float2 TexCoord	  	 :TEXCOORD2;
+	float2 BlendCoord :TEXCOORD3;
+	float Occ		     :TEXCOORD4;	
+};
+
+//************************* Simple Phong Per Pixel Lighting **************************************
+
+BlendVSOutput SimpleVS(float2 position  : POSITION0,
+					  float height      : POSITION1, 
+					  float3 normal	    : NORMAL, 								  
+					  float2 texCoord   : TEXCOORD0,								 								  
+					  float2 blendCoord :TEXCOORD1)
+{
+	float3 pos;
+    BlendVSOutput output = (BlendVSOutput)0;
+	
+    pos.xz = position + offset;
+	pos.y = height;
+	
+	Transform(float4(pos, 1), normal, output.PositionH, output.PositionW, output.NormalW);	
+	
+	output.TexCoord = texCoord;
+	output.BlendCoord = blendCoord;	
+    return output;
+}
+
+float4 SimplePS(BlendVSOutput input, uniform int nbLayers, uniform bool hemisphere ):COLOR0
+{
+	clip(dot(clipPlane, input.PositionW));
+
+	float4 diffuse = float4(0,0,0,1);
+	
+	float4 fblend = nbLayers > 1 ? tex2D(blendLayer, input.BlendCoord) : float4(1,1,1,1);
+	
+	float blendWeights[4] = (float[4])fblend;
+	[unroll]
+	for(int i = 0; i < nbLayers; ++i)
+	{
+		diffuse.rgb += tex2D(layers[i] , input.TexCoord) * blendWeights[i];
+	}
+		
+	diffuse.rgb = nbLayers > 0 ? diffuse.rgb * surface.Diffuse :surface.Diffuse;	
+	
+	// float4 diffuse = tex2D(layers[0] , input.TexCoord);
+	
+	return PhongShading(input.PositionW, input.NormalW, input.Occ, diffuse,float4(surface.Specular, 1),
+						float4(surface.Emisive,1), 1, hemisphere, 1);
+}
+
+
+int numerLayers = 0;
+
+PixelShader simplePSHemi[5] = {     
+									compile ps_3_0 SimplePS(0 , true),	
+									compile ps_3_0 SimplePS(1 , true),
+									compile ps_3_0 SimplePS(2 , true),
+									compile ps_3_0 SimplePS(3 , true),
+									compile ps_3_0 SimplePS(4 , true)
+							  };
+							  
+PixelShader simplePSAmb[5] = {      
+									compile ps_3_0 SimplePS(0 , false),	
+									compile ps_3_0 SimplePS(1 , false),
+									compile ps_3_0 SimplePS(2 , false),
+									compile ps_3_0 SimplePS(3 , false),
+									compile ps_3_0 SimplePS(4 , false)
+							  };			
+
+technique PhongShading_Ambient
+{
+    pass Pass1
+    {
+        // TODO: set renderstates here.					
+        VertexShader = compile vs_1_1 SimpleVS();
+        PixelShader = (simplePSAmb[numerLayers]);
+    }
+}						
+
+technique PhongShading_Hemi
+{
+    pass Pass1
+    {
+        // TODO: set renderstates here.					
+        VertexShader = compile vs_1_1 SimpleVS();
+        PixelShader = (simplePSHemi[numerLayers]);
+    }
+}						  
