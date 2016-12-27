@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -9,13 +9,14 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>ForgeEditor</RootNamespace>
     <AssemblyName>ForgeEditor</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <WarningLevel>4</WarningLevel>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
+    <PlatformTarget>x86</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -222,10 +223,6 @@
     <ProjectReference Include="..\..\Engine\Igneel.Physics\Igneel.Physics.csproj">
       <Project>{7d76eb73-4742-45c7-84a6-f50b9961d874}</Project>
       <Name>Igneel.Physics</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Engine\Igneel.PhysX\Igneel.PhysX.vcxproj">
-      <Project>{e5bba35a-934c-4eee-9661-1856d75bd17e}</Project>
-      <Name>Igneel.PhysX</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Engine\Igneel.Rendering\Igneel.Rendering.csproj">
       <Project>{185f3662-2f7f-4945-9156-9aab127281ab}</Project>

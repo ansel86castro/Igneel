@@ -31,7 +31,7 @@ namespace ForgeEditor
         public static void Init(MainWindow window, Canvas3D mainCanvas)
         {
             Service.Set<GraphicDeviceFactory>(new IgneelD3D10.GraphicManager10());
-            Service.Set<PhysicManager>(new Igneel.PhysX.PXPhysicManager());
+           // Service.Set<PhysicManager>(new Igneel.PhysX.PXPhysicManager());
             Service.Set<Igneel.Input.InputManager>(new IgneelDirectInput.DInputManager());
 
             ShaderRepository.SetupD3D10_SM40(_shaderRepositoryDir);
