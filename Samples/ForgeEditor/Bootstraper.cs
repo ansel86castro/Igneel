@@ -66,8 +66,7 @@ namespace ForgeEditor
             EngineState.Lighting.Reflection.Enable = true;
             EngineState.Lighting.TransparencyEnable = true;
             EngineState.Shading.BumpMappingEnable = true;
-
-            //Engine.BackColor = new Color4(Color.LightBlue.ToArgb());
+ 
 
             InitializeRendering();
             InitializeServices();
