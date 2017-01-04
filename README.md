@@ -79,8 +79,7 @@ In order to compile the code you must download and install the DirectXSDK at htt
 
 		   
 			private void CreateDevice()
-			{
-				
+			{				
 				//Setup the shader model and directory
 				ShaderRepository.SetupD3D10_SM40("Shaders");
 
@@ -89,6 +88,7 @@ In order to compile the code you must download and install the DirectXSDK at htt
 
 				//Use the GraphicDeviceFactory to create the CreateDevice passing the WindowContext
 				//with presentation settings
+
 				device = devFactory.CreateDevice(new GraphicDeviceDesc(new WindowContext(Handle)
 					{
 						BackBufferWidth = Width,
@@ -100,6 +100,7 @@ In order to compile the code you must download and install the DirectXSDK at htt
 						Presentation = PresentionInterval.Default
 					}
 				));
+
 
 				//Creates a shader program holding the code for the vertex and pixel shader
 				//specify the IA input layout by using the vertex struct
@@ -130,6 +131,7 @@ In order to compile the code you must download and install the DirectXSDK at htt
 					new TriangleVertex(new Vector3(-1, -1, 0), Color4.Red)
 				};
 
+
 				//Create the vertex buffer specifing the data array
 				vertexBuffer = device.CreateVertexBuffer(data: data);
 
@@ -149,6 +151,7 @@ In order to compile the code you must download and install the DirectXSDK at htt
 				device.SetRenderTarget(device.BackBuffer, device.BackDepthBuffer);
 
 				//Specify the render viewport
+
 				device.ViewPort = new ViewPort(0, 0, Width, Height);
 
 				//Clear the render target and depth stencil buffers
@@ -162,6 +165,7 @@ In order to compile the code you must download and install the DirectXSDK at htt
 				device.Program = shaderProgram;
 				
 				//Send the transforms to the shader using the input mapping
+
 				input.WorldViewProj = world * view * projection;
 
 				//Draw the geometry
@@ -169,6 +173,7 @@ In order to compile the code you must download and install the DirectXSDK at htt
 
 				//finally present the render target to the screen.
 				//This will call the default SwapChain.Present() 
+
 				device.Present();
 			}
 
