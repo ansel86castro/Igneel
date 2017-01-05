@@ -33,6 +33,7 @@ namespace Igneel.Components
         OrientedBox _box;
         Sphere _sphere;
         AABB _aabb;
+        IAPrimitive primitive = IAPrimitive.TriangleList;
       
         private IntPtr _vbStream, _ibStream;      
 
@@ -528,10 +529,12 @@ namespace Igneel.Components
         {
             if (disposing)
             {
-                _vb.Dispose();
-                _ib.Dispose();
+                if (_vb != null)
+                    _vb.Dispose();
+                if (_ib != null)
+                    _ib.Dispose();
             }
-        }            
+        }     
 
         public TriangleMesh CreateTriangleMesh()
         {

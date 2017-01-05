@@ -644,7 +644,7 @@ namespace Igneel.Importers.Collada
             int texOffset = vd.OffsetOf(IASemantic.TextureCoordinate, 0);
             int vertexAttrStride = 0;
 
-            string[] tags = new string[] { "polygons", "triangles" };
+            string[] tags = new string[] { "polygons", "triangles", "polylist", "trifans", "tristrips" };
 
             fixed (byte* pVertexData = vertexData)
             {
@@ -653,171 +653,224 @@ namespace Igneel.Importers.Collada
                     foreach (var polygonos in element.GetElementsByTag(tags[itag]))
                     {
                         int count = int.Parse(polygonos.GetAttribute("count"));
-                        if (count > 0)
+                        if (count == 0)
+                            continue;
+
+                        int startVertex = int.MaxValue;
+                        int vertexCount = 0;
+                        int startIndex = indicesList.Count;
+
+                        #region Pick Material Slots
+
+                        int materialIndex = 0;
+                        string materialSlotName = polygonos.GetAttribute("material");
+                        if (materialSlotName != null)
                         {
-                            int startVertex = int.MaxValue;
-                            int vertexCount = 0;
-                            int startIndex = indicesList.Count;
-
-                            #region Pick Material Slots
-
-                            int materialIndex = 0;
-                            string materialSlotName = polygonos.GetAttribute("material");
-                            if (materialSlotName != null)
+                            materialIndex = materialSlots.IndexOf(materialSlotName);
+                            if (materialIndex < 0)
                             {
-                                materialIndex = materialSlots.IndexOf(materialSlotName);
-                                if (materialIndex < 0)
-                                {
-                                    materialIndex = materialSlots.Count;
-                                    materialSlots.Add(materialSlotName);
-                                }
-                            }                            
+                                materialIndex = materialSlots.Count;
+                                materialSlots.Add(materialSlotName);
+                            }
+                        }
 
-                            #endregion
+                        #endregion
 
-                            #region Pick Inputs
+                        #region Pick Inputs
 
-                            if (inputs == null)
+                        if (inputs == null)
+                        {
+                            var inputList = new List<Input>();
+                            foreach (var input in polygonos.GetElementsByTag("input"))
                             {
-                                var inputList = new List<Input>();
-                                foreach (var input in polygonos.GetElementsByTag("input"))
+                                var source = ResolveElementByUrl(element, input.GetAttribute("source"));
+                                var _input = new Input
                                 {
-                                    var source = ResolveElementByUrl(element, input.GetAttribute("source"));
-                                    var _input = new Input
-                                    {
-                                        Semantic = input.GetAttribute("semantic"),
-                                        Offset = int.Parse(input.GetAttribute("offset")),
-                                        UsageIndex = int.Parse(input.GetAttribute("set") ?? "0"),
-                                        Definition = source.Object as InputCollection,
-                                        Source = source.Object as Source
-                                    };
-                                    inputList.Add(_input);
-                                    if (_input.Semantic == "VERTEX")
-                                    {
-                                        positionInput = _input.Definition.GetInput("POSITION", _input.Offset);
-                                        normalInput = _input.Definition.GetInput("NORMAL", _input.Offset);
-                                        texCoordInput = _input.Definition.GetInput("TEXCOORD", _input.Offset);
+                                    Semantic = input.GetAttribute("semantic"),
+                                    Offset = int.Parse(input.GetAttribute("offset")),
+                                    UsageIndex = int.Parse(input.GetAttribute("set") ?? "0"),
+                                    Definition = source.Object as InputCollection,
+                                    Source = source.Object as Source
+                                };
+                                inputList.Add(_input);
+                                if (_input.Semantic == "VERTEX")
+                                {
+                                    positionInput = _input.Definition.GetInput("POSITION", _input.Offset);
+                                    normalInput = _input.Definition.GetInput("NORMAL", _input.Offset);
+                                    texCoordInput = _input.Definition.GetInput("TEXCOORD", _input.Offset);
 
-                                    }
-                                    else if (_input.Semantic == "NORMAL")
-                                        normalInput = _input;
-                                    else if (_input.Semantic == "TEXCOORD" && _input.UsageIndex == 0)
-                                        texCoordInput = _input;                                    
                                 }
-
-                                positionInput.Source.Lock();
-                                if (normalInput.Source != null)
-                                    normalInput.Source.Lock();
-                                if (texCoordInput.Source != null)
-                                    texCoordInput.Source.Lock();
-
-                                inputList.Sort((x, y) => x.Offset.CompareTo(y.Offset));
-                                inputs = inputList.ToArray();
-                                vertexAttrStride = inputs.Length;
+                                else if (_input.Semantic == "NORMAL")
+                                    normalInput = _input;
+                                else if (_input.Semantic == "TEXCOORD" && _input.UsageIndex == 0)
+                                    texCoordInput = _input;
                             }
 
-                            #endregion
+                            positionInput.Source.Lock();
+                            if (normalInput.Source != null)
+                                normalInput.Source.Lock();
+                            if (texCoordInput.Source != null)
+                                texCoordInput.Source.Lock();
 
-                            #region Create Layers
-                            int pIndex = 0;
-                            foreach (var p in polygonos.GetElementsByTag("p"))
+                            inputList.Sort((x, y) => x.Offset.CompareTo(y.Offset));
+                            inputs = inputList.ToArray();
+                            vertexAttrStride = inputs.Length;
+                        }
+
+                        #endregion
+
+                        #region Create Layers 
+                        List<int> tesselateList = new List<int>();
+
+                        var vcount = itag == 2 ? polygonos.GetElementByTag("vcount") : null;                        
+
+                        foreach (var p in polygonos.GetElementsByTag("p"))
+                        {                            
+                            var polyIndices = ParseIntArray(p.Value);
+                            int polyVerticesCount = polyIndices.Length / vertexAttrStride;                            
+
+                            for (int tVertex = 0; tVertex < polyVerticesCount; tVertex++)
                             {
-                                pIndex++;
-                                var polyIndices = ParseIntArray(p.Value);
-                                int polyVerticesCount = polyIndices.Length / vertexAttrStride;
-                                int posIdx, normalIdx, texCIdx, iStart;
-                                int polygon = 0;
-                                int lastVertexIndex = 0;
-                                int index;
+                                var iStart = tVertex * vertexAttrStride;
+                                var posIdx = polyIndices[iStart + positionInput.Offset];
+                                var normalIdx = (normalInput.Source != null) ? polyIndices[iStart + normalInput.Offset] : -1;
+                                var texCIdx = (texCoordInput.Source != null) ? polyIndices[iStart + texCoordInput.Offset] : -1;
 
-                                if (itag == 0)
+                                var index = vertexBuilder.GetVertexIndex(posIdx, normalIdx, texCIdx);
+
+                                if (index < 0)
                                 {
-                                    #region Pick Last Vertex Index
+                                    #region Copy Vertex Attributes
 
-                                    iStart = (polyVerticesCount - 1) * vertexAttrStride;
-                                    posIdx = polyIndices[iStart + positionInput.Offset];
-                                    normalIdx = (normalInput.Source != null) ? polyIndices[iStart + normalInput.Offset] : -1;
-                                    texCIdx = (texCoordInput.Source != null) ? polyIndices[iStart + texCoordInput.Offset] : -1;
+                                    Runtime.Copy((byte*)positionInput.Source.ArrayPointer + posIdx * 12, pVertexData + posOffset, 12);
+                                    if (normalIdx >= 0)
+                                        Runtime.Copy((byte*)normalInput.Source.ArrayPointer + normalIdx * 12, pVertexData + normalOffset, 12);
+                                    if (texCIdx >= 0)
+                                        Runtime.Copy((byte*)texCoordInput.Source.ArrayPointer + texCIdx * 8, pVertexData + texOffset, 8);
 
-                                    lastVertexIndex = vertexBuilder.GetVertexIndex(posIdx, normalIdx, texCIdx);
-                                    if (lastVertexIndex < 0)
-                                    {
-                                        #region Copy Vertex Attributes
-
-                                        Runtime.Copy((byte*)positionInput.Source.ArrayPointer + posIdx * 12, pVertexData + posOffset, 12);
-                                        if (normalIdx >= 0)
-                                            Runtime.Copy((byte*)normalInput.Source.ArrayPointer + normalIdx * 12, pVertexData + normalOffset, 12);
-                                        if (texCIdx >= 0)
-                                            Runtime.Copy((byte*)texCoordInput.Source.ArrayPointer + texCIdx * 8, pVertexData + texOffset, 8);
-
-                                        #endregion
-
-                                        lastVertexIndex = vertexBuilder.WriteVertex(vertexData, posIdx, normalIdx, texCIdx);
-                                        vertexCount++;
-                                    }
-
-                                    startVertex = Math.Min(startVertex, lastVertexIndex);
+                                    index = vertexBuilder.WriteVertex(vertexData, posIdx, normalIdx, texCIdx);
+                                    vertexCount++;
 
                                     #endregion
-
-                                    polyVerticesCount = polyVerticesCount - 1;
                                 }
 
-                                for (int tVertex = 0; tVertex < polyVerticesCount; tVertex++)
+                                startVertex = Math.Min(startVertex, index);
+
+                                if (itag == 1)
                                 {
-                                    if (itag == 0 && polygon == 2)
-                                    {
-                                        indicesList.Add(lastVertexIndex);
-                                        indicesList.Add(indicesList[indicesList.Count - 2]);
-                                        polygon = 1;
-                                    }
-
-                                    iStart = tVertex * vertexAttrStride;
-                                    posIdx = polyIndices[iStart + positionInput.Offset];
-                                    normalIdx = (normalInput.Source != null) ? polyIndices[iStart + normalInput.Offset] : -1;
-                                    texCIdx = (texCoordInput.Source != null) ? polyIndices[iStart + texCoordInput.Offset] : -1;
-
-                                    index = vertexBuilder.GetVertexIndex(posIdx, normalIdx, texCIdx);
-                                    
-                                    if (index < 0)
-                                    {
-                                        #region Copy Vertex Attributes
-
-                                        Runtime.Copy((byte*)positionInput.Source.ArrayPointer + posIdx * 12, pVertexData + posOffset, 12);
-                                        if (normalIdx >= 0)
-                                            Runtime.Copy((byte*)normalInput.Source.ArrayPointer + normalIdx * 12, pVertexData + normalOffset, 12);
-                                        if (texCIdx >= 0)
-                                            Runtime.Copy((byte*)texCoordInput.Source.ArrayPointer + texCIdx * 8, pVertexData + texOffset, 8);
-
-                                        index = vertexBuilder.WriteVertex(vertexData, posIdx, normalIdx, texCIdx);
-                                        vertexCount++;
-
-                                        #endregion
-                                    }
-
-                                    startVertex = Math.Min(startVertex, index);
                                     indicesList.Add(index);
-                                    polygon++;
+                                }
+                                else
+                                {
+                                    tesselateList.Add(index);
                                 }
 
-                                if (itag == 0)
-                                    indicesList.Add(lastVertexIndex);
-
-                                //if (tempIndices != null)
-                                //{
-                                //    for (int i = 0; i < polyVerticesCount - 2; i++)
-                                //    {
-                                //        indicesList.Add(tempIndices[polyVerticesCount - 1]);
-                                //        indicesList.Add(tempIndices[i + 1]);
-                                //        indicesList.Add(tempIndices[i]);
-                                //    }
-                                //}
                             }
 
-                            #endregion
+                            //tesselate primitives
+                            switch (itag)
+                            {
+                                case 0:
+                                    //polygons   
+                                    indicesList.AddRange(TesselatePolygons(tesselateList));
+                                    break;
+                                case 2:
+                                    //polylist
+                                    indicesList.AddRange(TesselatePolylist(tesselateList, ParseIntArray(vcount.Value)));
+                                    break;
+                                case 3:
+                                    //trifans
+                                    break;
+                                case 4:
+                                    //tristrips
+                                    break;
+                            }
+                         
 
-                            layers.Add(new MeshPart(startIndex, (indicesList.Count - startIndex) / 3, startVertex, vertexCount) { MaterialIndex = materialIndex });
+                          
+                            //int polygon = 0;
+                            //int lastVertexIndex = 0;
+                            //int index;
+
+                            //if (itag == 0)
+                            //{
+                            //    #region Pick Last Vertex Index
+
+                            //    iStart = (polyVerticesCount - 1) * vertexAttrStride;
+                            //    posIdx = polyIndices[iStart + positionInput.Offset];
+                            //    normalIdx = (normalInput.Source != null) ? polyIndices[iStart + normalInput.Offset] : -1;
+                            //    texCIdx = (texCoordInput.Source != null) ? polyIndices[iStart + texCoordInput.Offset] : -1;
+
+                            //    lastVertexIndex = vertexBuilder.GetVertexIndex(posIdx, normalIdx, texCIdx);
+                            //    if (lastVertexIndex < 0)
+                            //    {
+                            //        #region Copy Vertex Attributes
+
+                            //        Runtime.Copy((byte*)positionInput.Source.ArrayPointer + posIdx * 12, pVertexData + posOffset, 12);
+                            //        if (normalIdx >= 0)
+                            //            Runtime.Copy((byte*)normalInput.Source.ArrayPointer + normalIdx * 12, pVertexData + normalOffset, 12);
+                            //        if (texCIdx >= 0)
+                            //            Runtime.Copy((byte*)texCoordInput.Source.ArrayPointer + texCIdx * 8, pVertexData + texOffset, 8);
+
+                            //        #endregion
+
+                            //        lastVertexIndex = vertexBuilder.WriteVertex(vertexData, posIdx, normalIdx, texCIdx);
+                            //        vertexCount++;
+                            //    }
+
+                            //    startVertex = Math.Min(startVertex, lastVertexIndex);
+
+                            //    #endregion
+
+                            //    polyVerticesCount = polyVerticesCount - 1;
+                            //}
+
+                            //for (int tVertex = 0; tVertex < polyVerticesCount; tVertex++)
+                            //{
+                            //    if (itag == 0 && polygon == 2)
+                            //    {
+                            //        indicesList.Add(lastVertexIndex);
+                            //        indicesList.Add(indicesList[indicesList.Count - 2]);
+                            //        polygon = 1;
+                            //    }
+
+                            //    iStart = tVertex * vertexAttrStride;
+                            //    posIdx = polyIndices[iStart + positionInput.Offset];
+                            //    normalIdx = (normalInput.Source != null) ? polyIndices[iStart + normalInput.Offset] : -1;
+                            //    texCIdx = (texCoordInput.Source != null) ? polyIndices[iStart + texCoordInput.Offset] : -1;
+
+                            //    index = vertexBuilder.GetVertexIndex(posIdx, normalIdx, texCIdx);
+
+                            //    if (index < 0)
+                            //    {
+                            //        #region Copy Vertex Attributes
+
+                            //        Runtime.Copy((byte*)positionInput.Source.ArrayPointer + posIdx * 12, pVertexData + posOffset, 12);
+                            //        if (normalIdx >= 0)
+                            //            Runtime.Copy((byte*)normalInput.Source.ArrayPointer + normalIdx * 12, pVertexData + normalOffset, 12);
+                            //        if (texCIdx >= 0)
+                            //            Runtime.Copy((byte*)texCoordInput.Source.ArrayPointer + texCIdx * 8, pVertexData + texOffset, 8);
+
+                            //        index = vertexBuilder.WriteVertex(vertexData, posIdx, normalIdx, texCIdx);
+                            //        vertexCount++;
+
+                            //        #endregion
+                            //    }
+
+                            //    startVertex = Math.Min(startVertex, index);
+                            //    indicesList.Add(index);
+                            //    polygon++;
+                            //}
+
+                            //if (itag == 0)
+                            //    indicesList.Add(lastVertexIndex);
+                         
                         }
+
+                        #endregion
+
+                        layers.Add(new MeshPart(startIndex, (indicesList.Count - startIndex) / 3, startVertex, vertexCount) { MaterialIndex = materialIndex });
+
                     }
                 }                
             }
@@ -870,15 +923,15 @@ namespace Igneel.Importers.Collada
                 }
             }            
 
-            mesh.CreateVertexBuffer(buffer, vertexBuilder.Count);           
+            mesh.CreateVertexBuffer(buffer, vertexBuilder.Count);
             #endregion
 
             #region Create IndexBuffer
 
             if (mesh.VertexCount > ushort.MaxValue)
             {
-                int[] indicesData = new int[indicesList.Count];
-                if (_zUp)
+                int[] indicesData = new int[indicesList.Count];              
+                if (GraphicDeviceFactory.Device.Rasterizer!=null && !GraphicDeviceFactory.Device.Rasterizer.State.FrontCounterClockwise)
                 {
                     for (int i = 0; i < indicesData.Length - 2; i += 3)
                     {
@@ -898,7 +951,7 @@ namespace Igneel.Importers.Collada
             else
             {
                 ushort[] indicesData = new ushort[indicesList.Count];
-                if (_zUp)
+                if (GraphicDeviceFactory.Device.Rasterizer != null && !GraphicDeviceFactory.Device.Rasterizer.State.FrontCounterClockwise)
                 {
                     for (int i = 0; i < indicesData.Length - 2; i += 3)
                     {
@@ -951,7 +1004,52 @@ namespace Igneel.Importers.Collada
                 Element = element,
                 Object = new CreateMeshResult { Mesh = mesh, VertexBuilder = vertexBuilder }
             };
-        }       
+        }
+
+        private List<int> TesselatePolygons(List<int> tesselateList)
+        {
+            List<int> triangles = new List<int>();
+
+            triangles.Add(tesselateList[0]);
+            triangles.Add(tesselateList[1]);
+            triangles.Add(tesselateList[2]);
+
+            for (int i = 3; i < tesselateList.Count; i++)
+            {
+                triangles.Add(tesselateList[0]);
+                triangles.Add(tesselateList[i-1]);
+                triangles.Add(tesselateList[i]);
+            }            
+            
+            return triangles;
+        }
+
+        private List<int> TesselatePolylist(List<int> tesselateList, int[]vcounts)
+        {
+            List<int> triangles = new List<int>();
+
+            int index = 0;
+            for (int ipoly = 0; ipoly < vcounts.Length; ipoly++)
+            {
+                var vcount = vcounts[ipoly];
+
+                triangles.Add(tesselateList[index + 0]);
+                triangles.Add(tesselateList[index + 1]);
+                triangles.Add(tesselateList[index + 2]);
+
+                for (int i = 3; i < vcount; i++)
+                {
+                    triangles.Add(tesselateList[index + 0]);
+                    triangles.Add(tesselateList[index + i - 1]);
+                    triangles.Add(tesselateList[index + i]);
+                }
+
+                index += vcount;
+
+            }           
+
+            return triangles;
+        }
 
         [ParserOf("source")]
         private ElementRef Parse_source(XElement element, object @params)

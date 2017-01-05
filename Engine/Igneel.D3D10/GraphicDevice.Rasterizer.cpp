@@ -71,7 +71,7 @@ namespace IgneelD3D10
 		rd.DepthBiasClamp= desc.DepthBiasClamp;
 		rd.DepthClipEnable = desc.DepthClipEnable;
 		rd.FillMode =  (D3D10_FILL_MODE)desc.Fill;
-		rd.FrontCounterClockwise = FALSE;
+		rd.FrontCounterClockwise = desc.FrontCounterClockwise;
 		rd.MultisampleEnable = desc.MultisampleEnable;
 		rd.ScissorEnable = desc.ScissorEnable;
 		rd.SlopeScaledDepthBias  =desc.SlopeScaledDepthBias;		

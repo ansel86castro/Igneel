@@ -19,6 +19,7 @@ namespace Igneel.Graphics
         public bool ScissorEnable;
         public bool MultisampleEnable;
         public bool AntialiasedLineEnable;
+        public bool FrontCounterClockwise;
 
         public RasterizerDesc(
             FillMode fill = FillMode.Solid,
@@ -29,7 +30,8 @@ namespace Igneel.Graphics
             bool depthClipEnable = true,
             bool scissorEnable = false,
             bool multisampleEnable = false,
-            bool antialiasedLineEnable = false)
+            bool antialiasedLineEnable = false,
+            bool frontCounterClockwise=false)
         {
             Fill = fill;
             Cull = cull;
@@ -40,6 +42,22 @@ namespace Igneel.Graphics
             ScissorEnable = scissorEnable;
             MultisampleEnable = multisampleEnable;
             AntialiasedLineEnable = antialiasedLineEnable;
+            FrontCounterClockwise = frontCounterClockwise;
+        }
+
+        public RasterizerDesc(
+          FillMode fill = FillMode.Solid,
+          CullMode cull = CullMode.Back,
+          int depthBias = 0,
+          float depthBiasClamp = 0,
+          float slopeScaledDepthBias = 0,
+          bool depthClipEnable = true,
+          bool scissorEnable = false,
+          bool multisampleEnable = false,
+          bool antialiasedLineEnable = false)
+            : this(fill, cull, depthBias, depthBiasClamp, slopeScaledDepthBias, depthClipEnable, scissorEnable, multisampleEnable, antialiasedLineEnable, false)
+        {
+
         }
 
         public RasterizerDesc(bool setDefaults)
@@ -53,6 +71,7 @@ namespace Igneel.Graphics
             ScissorEnable = false;
             MultisampleEnable = false;
             AntialiasedLineEnable = false;
+            FrontCounterClockwise = false;
         }
 
         public RasterizerDesc(RasterizerDesc other)
@@ -77,6 +96,7 @@ namespace Igneel.Graphics
             ScissorEnable = false;
             MultisampleEnable = false;
             AntialiasedLineEnable = false;
+            FrontCounterClockwise = false;
         }
 
         public RasterizerDesc Default

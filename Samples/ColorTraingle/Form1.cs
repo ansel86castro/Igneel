@@ -118,14 +118,13 @@ namespace ColorTraingle
             input = shaderProgram.Map<ProgramMapping>();          
 
             //Set pipeline states
-            blendState = device.CreateBlendState(new BlendDesc(blendEnable: true, srcBlend: Blend.SourceAlpha, destBlend: Blend.InverseSourceAlpha));
+            blendState = device.CreateBlendState(new BlendDesc(blendEnable: false, srcBlend: Blend.SourceAlpha, destBlend: Blend.InverseSourceAlpha));
             depthStenciState = device.CreateDepthStencilState(new DepthStencilStateDesc(depthFunc: Comparison.Less));
-            cullingState = device.CreateRasterizerState(new RasterizerDesc(cull: CullMode.None));
+            cullingState = device.CreateRasterizerState(new RasterizerDesc(cull: CullMode.Back));
 
             device.Blend = blendState;
             device.Rasterizer = cullingState;
             device.DepthTest = depthStenciState;
-
         }
 
 
