@@ -42,18 +42,19 @@ namespace Igneel.SceneComponents
            _ibStrips = _CreateTriangleStrips(xVerts, yVerts, stride);
            _visibleSections = new List<HeightFieldSection>(nbSectionsX * nbSectionsY);
 
-           //quadTree = new QuadTree<HeightFieldSection>(new RectangleF(extends.Minimum.X, extends.Maximum.Z,
-           //                                                           extends.Maximum.X - extends.Minimum.X,
-           //                                                           extends.Maximum.Z - extends.Minimum.Z),
-           //                                            (int)Math.Log(nbSectionsX * nbSectionsY, 4) - 1, tester);
-                                                
-           
-           _CreateGeometry(heightMap, nbSectionsX, nbSectionsY);
+            _quadTree = new QuadTree<HeightFieldSection>(new RectangleF(extends.Minimum.X, extends.Maximum.Z,
+                                                                       extends.Maximum.X - extends.Minimum.X,
+                                                                       extends.Maximum.Z - extends.Minimum.Z),
+                                                        (int)Math.Log(nbSectionsX * nbSectionsY, 4) - 1);
+
+
+            _CreateGeometry(heightMap, nbSectionsX, nbSectionsY);
 
            _sectionVertexCount = xVerts  * yVerts;
           
            _materials = new LayeredMaterial[] { new LayeredMaterial() { Name = "Dafault" } };
-           //BoundingSphere =quadTree.BoundSphere;            
+            
+           //BoundingSphere = _quadTree.BoundSphere;            
         }
 
         public int SectionVertexCount
@@ -92,15 +93,15 @@ namespace Igneel.SceneComponents
 
         public void UpdateVisibleSections(Camera camera)
         {
-            var points = camera.ViewFrustum.Corners;
-            for (int i = 0; i < points.Length; i++)
-            {
-                _tester.Points[i] = Vector3.Transform(points[i], _transform); 
-            }
+            //var points = camera.ViewFrustum.Corners;
+            //for (int i = 0; i < points.Length; i++)
+            //{
+            //    _tester.Points[i] = Vector3.Transform(points[i], _transform);
+            //}
 
-           Frustum.CreatePlanes(_tester.LocalFrustum, _tester.Points);
+            //Frustum.CreatePlanes(_tester.LocalFrustum, _tester.Points);
 
-            _quadTree.GetVisibleObjects(camera, _visibleSections);
+            //_quadTree.GetVisibleObjects(camera, _visibleSections);
         }
 
         public override int  SubmitGraphics(Scene scene, Frame node , ICollection<GraphicSubmit> collection)
@@ -214,6 +215,7 @@ namespace Igneel.SceneComponents
 
         private unsafe void _CreateGeometry(Texture2D heightMap, int nbSectionsX, int nbSectionsY)
         {
+          
             var sd = heightMap.Description;
             float dz = 1.0f / (float)sd.Height;
             float dx = 1.0f / (float)sd.Width;
@@ -352,6 +354,10 @@ namespace Igneel.SceneComponents
 
                         _sections[j, i] = section;
                         _quadTree.Add(section);
+
+                        //TODO remove this when enabling culling
+                        _visibleSections.Add(section);
+                       
                     }
                 }
 

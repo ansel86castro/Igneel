@@ -44,21 +44,7 @@ namespace Igneel.Graphics
             AntialiasedLineEnable = antialiasedLineEnable;
             FrontCounterClockwise = frontCounterClockwise;
         }
-
-        public RasterizerDesc(
-          FillMode fill = FillMode.Solid,
-          CullMode cull = CullMode.Back,
-          int depthBias = 0,
-          float depthBiasClamp = 0,
-          float slopeScaledDepthBias = 0,
-          bool depthClipEnable = true,
-          bool scissorEnable = false,
-          bool multisampleEnable = false,
-          bool antialiasedLineEnable = false)
-            : this(fill, cull, depthBias, depthBiasClamp, slopeScaledDepthBias, depthClipEnable, scissorEnable, multisampleEnable, antialiasedLineEnable, false)
-        {
-
-        }
+    
 
         public RasterizerDesc(bool setDefaults)
         {

@@ -51,16 +51,18 @@ namespace Igneel.Techniques
 
 
                 _noCullingRState = GraphicDeviceFactory.Device.CreateRasterizerState(new RasterizerDesc(true)
-                    {
-                        AntialiasedLineEnable = GraphicDeviceFactory.Device.Info.MSAA.Count > 1,
-                        MultisampleEnable = GraphicDeviceFactory.Device.Info.MSAA.Count > 1,
-                        Cull = CullMode.None,
-                    });
+                {
+                    AntialiasedLineEnable = GraphicDeviceFactory.Device.Info.MSAA.Count > 1,
+                    MultisampleEnable = GraphicDeviceFactory.Device.Info.MSAA.Count > 1,
+                    Cull = CullMode.None,
+                    Fill = ShadingState.Shading.FillMode
+                });
                 _defaultCullingRState = GraphicDeviceFactory.Device.CreateRasterizerState(new RasterizerDesc(true)
                 {
                     AntialiasedLineEnable = GraphicDeviceFactory.Device.Info.MSAA.Count > 1,
                     MultisampleEnable = GraphicDeviceFactory.Device.Info.MSAA.Count > 1,
                     Cull = CullMode.Back,
+                    Fill = ShadingState.Shading.FillMode
                 });
 
             }           

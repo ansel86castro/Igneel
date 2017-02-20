@@ -10,7 +10,7 @@ namespace Igneel.Components.Terrain
 {
     public class LayeredMaterial : SurfaceMaterial
     {
-        Texture2D[] _layers = new Texture2D[4];
+        Texture2D[] _layers;
         Texture2D _blendLayer;
         private bool _containsAlpha;
 

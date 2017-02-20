@@ -10,50 +10,40 @@ namespace Igneel.Rendering.Pendings
       
         public override void Draw(HeightField component)
         {
-            //var device = GraphicDeviceFactory.Device;
-            //var rm = Engine.RenderManager;                     
+            var device = GraphicDeviceFactory.Device;
 
-            //device.VertexDeclaration = component.VertDescriptor.VertexDeclaration;
-            //device.SetStreamSource(0, component.PositionUVBuffer, 0, 16);
-            //device.Indices = component.StripIndices;
+            device.PrimitiveTopology = IAPrimitive.TriangleStrip;
+            device.SetVertexBuffer(0, component.PositionUvBuffer, 0, 16);         
+            device.SetIndexBuffer(component.StripIndices, 0);
 
-            //var sections = component.VisibleSections;
-            //var materials = component.Materials;
-            //var _effect = effect.D3DEffect;
-            //var matBinding = GetBinding<LayeredMaterial>();
+            var sections = component.VisibleSections;
+            var materials = component.Materials;       
 
-            //var vertexCount = component.SectionVertexCount;
-            //var primitiveCount = component.SectionPrimitives;
+            var vertexCount = component.SectionVertexCount;
+            var primitiveCount = component.SectionPrimitives;
 
-            //Bind(component);
+            Bind(component);
 
-            //foreach (var section in component.VisibleSections)
-            //{
-            //    device.SetStreamSource(1, section.NormalHeightVb, 0, 24);
+            var effect = this.Effect;
+            effect.OnRender(this);
 
-            //    if (offset == null)
-            //        offset = effect.TryGetGlobalParameter("offset");
+            foreach (var section in component.VisibleSections)
+            {
+                device.SetVertexBuffer(1, section.NormalHeightVb, 0, 24);
 
-            //    if(offset!=null)
-            //        effect.SetValue(offset, section.Offset);
+                Bind(section);
+                Bind(materials[section.MaterialIndex]);
 
-            //    if (matBinding != null)
-            //        matBinding.Bind(materials[section.MaterialIndex]);
+                foreach (var pass in effect.Passes())
+                {
+                    effect.Apply(pass);
+                    device.DrawIndexed(primitiveCount * 3, 0, 0);
+                }
 
-            //    var passes = _effect.Begin(0);
-            //    for (int pass = 0; pass < passes; pass++)
-            //    {
-            //        _effect.BeginPass(pass);
+                effect.EndPasses();
 
-            //        device.DrawIndexedPrimitives(PrimitiveType.TriangleStrip, 0, 0, vertexCount, 0, primitiveCount);
-
-            //        _effect.EndPass();
-            //    }
-            //    _effect.End();
-
-            //    if (matBinding != null)
-            //        matBinding.UnBind(materials[section.MaterialIndex]);
-            //}
+                UnBind(materials[section.MaterialIndex]);
+            }
         }
       
     }

@@ -29,6 +29,9 @@
     <Filter Include="System\Mesh\PreFilterShadow">
       <UniqueIdentifier>{a46e7830-5cb4-4369-8dee-c36a3a193e9a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="System\Terrain">
+      <UniqueIdentifier>{8a3f05f9-cd7b-457e-919c-891bca6c5492}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Mesh_RenderDepthVS.hlsl">
@@ -186,6 +189,12 @@
     </FxCompile>
     <FxCompile Include="PixelShader.hlsl" />
     <FxCompile Include="VertexShader.hlsl" />
+    <FxCompile Include="TerrainPhongVS.hlsl">
+      <Filter>System\Terrain</Filter>
+    </FxCompile>
+    <FxCompile Include="TerrainPhongPS.hlsl">
+      <Filter>System\Terrain</Filter>
+    </FxCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="SkinnedShadowed.hlsli">

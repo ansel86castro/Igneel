@@ -21,7 +21,7 @@ namespace Igneel.Components
         {
             _renderTexture = new RenderTexture2D(1, 1, Format.R8G8B8A8_UNORM, Format.UNKNOWN, Multisampling.Disable, true);
 
-            _effect = Effect.GetEffect<CheckTransparenceEffect>(GraphicDeviceFactory.Device);
+            _effect = Effect.GetEffect<CheckTransparenceEffect>(GraphicDeviceFactory.Device) ;
             _sprite = Service.Require<Sprite>();
 
             _samState = GraphicDeviceFactory.Device.CreateSamplerState(new SamplerDesc(

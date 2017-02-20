@@ -2,11 +2,13 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Igneel.Components.Terrain
 {
+    [StructLayout(LayoutKind.Sequential)]
     public struct HeightFieldVertex
     {
         [VertexElement(IASemantic.Position, usageIndex: 0, stream: 0, offset: 0)]

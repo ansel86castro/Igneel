@@ -252,7 +252,6 @@ namespace Igneel.Assets
         {
             Data.Resource dbResource = null;
 
-            IResource resource = null;
             //Get the list of folders's names and in the Path. the resource's name 
             //is in the last position of the array
             var names = path.Split('/');

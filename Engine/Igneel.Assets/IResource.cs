@@ -8,7 +8,6 @@ namespace Igneel.Assets
         bool IsDesignOnly { get; set; }
 
         int Id { get; set; }
-
-        Asset CreateAsset(ResourceOperationContext context);
+      
     }
 }

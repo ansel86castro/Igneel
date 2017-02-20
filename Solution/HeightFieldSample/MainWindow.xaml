@@ -1,0 +1,29 @@
+﻿<Window x:Class="HeightFieldSample.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:HeightFieldSample"
+        mc:Ignorable="d"
+        xmlns:c="clr-namespace:Igneel.Windows.Wpf;assembly=Igneel.Windows.Wpf"
+        Title="MainWindow" Height="350" Width="525">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition  Height="auto" />
+        </Grid.RowDefinitions>
+
+        <c:Canvas3D Name="Canvas"  />
+
+        <!--Footer-->
+        <StatusBar Grid.Row="3"  VerticalAlignment="Bottom">
+            <StatusBarItem>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock>FPS:</TextBlock>
+                    <TextBlock Name="FPS" />
+                </StackPanel>
+            </StatusBarItem>
+        </StatusBar>
+        
+    </Grid>
+</Window>

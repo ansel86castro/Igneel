@@ -21,6 +21,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -47,6 +48,8 @@
     <Compile Include="Components\TransparencyChecker.cs" />
     <Compile Include="Components\Lights\ShaderDirectionalLight.cs" />
     <Compile Include="Components\Lights\ShaderPointLight.cs" />
+    <Compile Include="Rendering\Bindings\HeightFieldBinding.cs" />
+    <Compile Include="Rendering\Bindings\LayeredMaterialBinding.cs" />
     <Compile Include="Rendering\Bindings\ShaderInterfaces\IAmbientMap.cs" />
     <Compile Include="Rendering\Bindings\ShaderInterfaces\ICameraMap.cs" />
     <Compile Include="Rendering\Bindings\ShaderInterfaces\IClipPlaneMap.cs" />
@@ -68,7 +71,7 @@
     <Compile Include="Components\SurfaceMaterial.cs" />
     <Compile Include="Components\LayerSurface.cs" />
     <Compile Include="Components\Lights\ShaderLight.cs" />
-    <Compile Include="Components\Terrain\TerrainMaterial.cs" />
+    <Compile Include="Components\Terrain\LayeredMaterial.cs" />
     <Compile Include="Components\Terrain\TerrainSectionTester.cs" />
     <Compile Include="Components\Terrain\HeightFieldSection.cs" />
     <Compile Include="Components\Terrain\HeightFieldVertex.cs" />

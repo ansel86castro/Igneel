@@ -122,7 +122,7 @@ namespace IgneelD3D10
 
 	void Texture2D10::CreateStagingResource()
 	{
-		if(_desc.Usage == ResourceUsage::Default && _desc.CPUAccessFlags != CpuAccessFlags::None && _stagingTexture == NULL)
+		if(_desc.Usage == ResourceUsage::Default && _stagingTexture == NULL)
 		{
 			D3D10_TEXTURE2D_DESC td;
 			_texture->GetDesc(&td);

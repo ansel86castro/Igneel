@@ -3,7 +3,7 @@
 // but are changed infrequently
 
 #pragma once
-#include "NxPhysics.h"
+#include <PxPhysicsAPI.h>
 #include <vcclr.h>
 
 using namespace Igneel;
