@@ -126,7 +126,7 @@ namespace HeightFieldSample
 
             var camera = scene.Create("cameraNode",
                 Camera.FromOrientation("camera", zn: zn, zf: zf).SetPerspective(fov, aspect),
-                localPosition: new Vector3(0, 50, -30), 
+                localPosition: new Vector3(0, 200, -30), 
                 localRotation: new Euler(0, Numerics.ToRadians(60), 0).ToMatrix());
 
             camera.CommitChanges();
