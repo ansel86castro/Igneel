@@ -26,120 +26,80 @@ namespace HeightFieldSample
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window
-    {
-        static readonly string[] _shaderRepositoryDir =
-       {
-            //IGNEEL CORE SHADERS
-            "../../../../Shaders/Shaders.D3D10/Binaries/",
-         
-        };
+    {     
 
-        private float _fps;
-        private float _baseTime;
+        private float fps;
+        private float baseTime;
 
         public MainWindow()
         {
             InitializeComponent();
-
-            WindowState = System.Windows.WindowState.Maximized;
-
-            Loaded += MainWindow_Loaded;
         }
 
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
             Bootstraper.Init(this, Canvas);
 
-            Engine.Scene = CreateScene();
-            CreateCamera(Engine.Scene);
+            CreateScene();
+
+            CreateCamera();
+
             CreateTerrain();
-            CreateLight(Engine.Scene);
+
+            CreateLight();
 
             Engine.Presenter.Rendering += Presenter_Rendering;
+
             Engine.StartGameLoop();
         }
 
      
 
-        void Presenter_Rendering()
+        private void CreateScene()
         {
-            if (_fps == -1)
-            {
-                _fps = 0;
-                _baseTime = Engine.Time.Time;
-            }
-            else
-            {
-                float time = Engine.Time.Time;
-                if ((time - _baseTime) > 1.0f)
-                {
-                    Dispatcher.Invoke(delegate ()
-                    {
-                        FPS.Text = _fps.ToString();
-                    });
+            //Create a scene
+            //The scene is the primary container for all the graphic objects
+            var scene = new Scene("Default Scene");
 
-                    _fps = 0;
-                    _baseTime = time;
-                }
-                _fps++;
-            }
-     
-        }
-
-        protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
-        {
-            Engine.Presenter.Rendering -= Presenter_Rendering;
-            Engine.StopGameLoop();
-
-            base.OnClosing(e);
-        }
-
-        private Scene CreateScene()
-        {
-            var scene = new Scene("Default");
-
+            //Set scene hemispherical ambient colors
             scene.AmbientLight.SkyColor = new Vector3(0.8f);
             scene.AmbientLight.GroundColor = new Vector3(0.2f);
-
-            //Engine.BackColor = new Color4(System.Drawing.Color.LightBlue.ToArgb());
             
-            return scene;
+            //Set the engine scene
+            Engine.Scene = scene;            
         }
 
-        private Igneel.SceneManagement.Frame CreateCamera(Scene scene)
+        private void CreateCamera()
         {
-                        
-            var zn = 0.05f;
-            var zf = 1000f;           
-            var fov = Numerics.ToRadians(60);          
+            var scene = Engine.Scene;             
+            
+            //Compute the render target aspect ratio                                      
             float aspect = (float)Engine.Graphics.BackBuffer.Width / (float)Engine.Graphics.BackBuffer.Height;
 
+            //Create a First-Person camera controller. The controller will responds to user inputs and move the camera
             var controller = new FpController()
             {
                 MoveScale = 10.0f,
                 RotationScale = 0.5f,
                 BreakingTime = 0.2f,
+
+                //The callback that is called during a frame update ,if it returns true the camera respond to the user input
                 UpdateCallback = c => Engine.Mouse.IsButtonPresed(Igneel.Input.MouseButton.Middle) ||
                                       (Engine.Mouse.IsButtonPresed(Igneel.Input.MouseButton.Left) &&
-                                       Engine.KeyBoard.IsKeyPressed(Keys.Lalt))
+                                       Engine.KeyBoard.IsKeyPressed(Keys.Lalt)),
+
+                //Create the camera and the camera node
+                Node = scene.Create("cameraNode", Camera.FromOrientation("camera", zn: 0.05f, zf: 1000f).SetPerspective(Numerics.ToRadians(60), aspect),
+                            localPosition: new Vector3(0, 200, -30),
+                            localRotation: new Euler(0, Numerics.ToRadians(60), 0).ToMatrix())
             };
-
-            var camera = scene.Create("cameraNode",
-                Camera.FromOrientation("camera", zn: zn, zf: zf).SetPerspective(fov, aspect),
-                localPosition: new Vector3(0, 200, -30), 
-                localRotation: new Euler(0, Numerics.ToRadians(60), 0).ToMatrix());
-
-            camera.CommitChanges();
-
-            controller.Node = camera;
-       
-            scene.Dynamics.Add(new Dynamic(x => controller.Update(x)));
-            
-            return camera;
+                           
+            scene.Dynamics.Add(new Dynamic(x => controller.Update(x)));          
         }
 
-        private void CreateLight(Scene scene)
+        private void CreateLight()
         {
+            //Create a light ,the light containg properties like colors and specular powers
             var light = new Light("WhiteLight")
             {
                 Diffuse = new Color3(1,1,1),
@@ -148,32 +108,74 @@ namespace HeightFieldSample
                 Enable=true
             };
 
+            //Assign the light to a FrameLight wich acts like and adapter for the scene node 
+            //so it will set light spatial properties like direccion and position when the scene node change its pose.
             var lightFrame = new FrameLight(light);
-           var node =  scene.Create("LightNode", lightFrame,
-                new Vector3(0, 50, 0), new Euler(0, 60, 0));
 
-            node.CommitChanges();
-          
-            //scene.Lights.Add(light);
+            Engine.Scene.Create("LightNode", lightFrame, new Vector3(0, 50, 0), new Euler(0, 60, 0));                              
 
         }
 
         private void CreateTerrain()
         {
-            Texture2D heigMap = Engine.Graphics.CreateTexture2DFromFile("terrain.png");
+            //Load the height map
+            Texture2D heigthMap = Engine.Graphics.CreateTexture2DFromFile("terrain.png");
 
-            HeightField heigthField = new HeightField(heigMap, 8, 8);
+            //Create the HeightField using the heigth map ,divide the HeightField into and 8x8 grid of sections 
+            //this will improve culling
+            HeightField heigthField = new HeightField(heigthMap, 8, 8);
 
-            heigthField.Materials[0].DiffuseMaps = new Texture2D[]
-            {
-                Engine.Graphics.CreateTexture2DFromFile("grass.jpg")
-            };
+            heigthField.Materials[0].Diffuse =Color3.FromArgb(System.Drawing.Color.DarkGreen.ToArgb());
 
+            //Uncomment this to texture the terrain
+            //heigthField.Materials[0].DiffuseMaps = new Texture2D[]
+            //{
+            //    Engine.Graphics.CreateTexture2DFromFile("grass.jpg")
+            //};
+
+            //smoot the height field using a 5x5 gaussian kernel with 4 pass
             heigthField.Smoot(5, 4);
 
+            //Create the HeightField node translat it to the center of the scene, then scaling it to 1000 units in X and Z
             Engine.Scene.Create("HeightFieldNode", heigthField,
                 Igneel.Matrix.Translate(-0.5f, 0, -0.5f) *
                 Igneel.Matrix.Scale(1000, 100, 1000));
         }
+
+
+        void Presenter_Rendering()
+        {
+            if (fps == -1)
+            {
+                fps = 0;
+                baseTime = Engine.Time.Time;
+            }
+            else
+            {
+                float time = Engine.Time.Time;
+                if ((time - baseTime) > 1.0f)
+                {
+                    Dispatcher.Invoke(delegate ()
+                    {
+                        FPS.Text = fps.ToString();
+                    });
+
+                    fps = 0;
+                    baseTime = time;
+                }
+                fps++;
+            }
+
+        }
+
+        protected override void OnClosing(System.ComponentModel.CancelEventArgs e)
+        {
+            Engine.Presenter.Rendering -= Presenter_Rendering;
+
+            Engine.StopGameLoop();
+
+            base.OnClosing(e);
+        }
+
     }
 }

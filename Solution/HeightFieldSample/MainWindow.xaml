@@ -6,7 +6,10 @@
         xmlns:local="clr-namespace:HeightFieldSample"
         mc:Ignorable="d"
         xmlns:c="clr-namespace:Igneel.Windows.Wpf;assembly=Igneel.Windows.Wpf"
-        Title="MainWindow" Height="350" Width="525">
+        Title="MainWindow" Height="350" Width="525"
+        WindowState="Maximized"
+        Loaded="MainWindow_Loaded" >
+    
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*" />
