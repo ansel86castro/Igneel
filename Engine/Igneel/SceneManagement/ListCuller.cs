@@ -45,11 +45,13 @@ namespace Igneel.SceneManagement
             _items.Clear();
         }
 
-        public void GetVisibleObjects(Camera camera, ICollection<T> collection)
+        public void GetVisibleObjects(Camera camera, ICollection<T> collection, ICullTester<T> frustumTester = null)
         {
             foreach (var item in _items)
             {
-                if (camera.TestFrustum(item.BoundingSphere)!= FrustumTest.Outside)
+                if (frustumTester != null && frustumTester.Contains(camera, item.BoundingSphere))
+                    collection.Add(item);
+                else if (camera.TestFrustum(item.BoundingSphere) != FrustumTest.Outside)
                     collection.Add(item);
             }
         }

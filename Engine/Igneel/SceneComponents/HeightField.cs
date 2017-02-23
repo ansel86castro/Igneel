@@ -10,6 +10,8 @@ namespace Igneel.SceneComponents
   
     public class HeightField : GraphicObject<HeightField>
     {
+        unsafe delegate float ReadPixelFunc(byte*pter, int x, int y, int pitch);
+
         GraphicBuffer _vbPosUv;
         GraphicBuffer _ibStrips;       
         VertexDescriptor _vd = VertexDescriptor.GetDescriptor<HeightFieldVertex>();
@@ -25,36 +27,77 @@ namespace Igneel.SceneComponents
         /// </summary>
         QuadTree<HeightFieldSection> _quadTree;
         List<HeightFieldSection> _visibleSections;
-        Matrix _transform;
-        private Texture2D _heightMap;
+        Matrix _transform;        
         float[] _heights;
+        int width;
+        int height;
 
-        public HeightField(Texture2D heightMap, int nbSectionsX, int nbSectionsY)           
+        public HeightField(Texture2D heightMap, int nbSectionsX = 1, int nbSectionsY = 1)           
         {
-            this._heightMap = heightMap;
-            AABB extends = new AABB(new Vector3(0, 0, 0), new Vector3(1, 1, 1));       
-            var sd = heightMap.Description;
+            ReadHeightsFromTexture(heightMap);
 
-            int xVerts = sd.Width / nbSectionsX; // horizontal number of vertices 
-            int yVerts = sd.Height / nbSectionsY; // vertical number of vertices
+            Init(nbSectionsX, nbSectionsY);         
+        }   
+
+        public HeightField(float[,]heightMap, int nbSectionsX, int nbSectionsY)
+        {
+            width = heightMap.GetLength(0);
+            height = heightMap.GetLength(1);
+            _heights = new float[width * height];
+
+
+            for (int j = 0; j < height; j++)
+            {
+                for (int i = 0; i < width; i++)
+                {
+                    int p0 = i * width + j;
+                    int p1 = i * width + j + 1;
+                    int p2 = (i + 1) * width + j;
+                    int p3 = (i + 1) * width + j + 1;
+
+                    _heights[p0] = heightMap[i, j];
+                    _heights[p1] = heightMap[i, j + 1]; 
+                    _heights[p2] = heightMap[i + 1, j]; 
+                    _heights[p3] = heightMap[i + 1, j + 1];
+                }
+            }
+
+            Init(nbSectionsX, nbSectionsY);
+        }
+
+        public HeightField(float[] heightMap, int width, int nbSectionsX, int nbSectionsY)
+        {
+            _heights = heightMap;
+            this.width = width;
+            this.height = heightMap.Length / width;
+
+            Init(nbSectionsX, nbSectionsY);
+        }
+
+
+        private void Init(int nbSectionsX, int nbSectionsY)
+        {
+            AABB extends = new AABB(new Vector3(0, 0, 0), new Vector3(1, 1, 1));           
+
+            int xVerts = width / nbSectionsX; // horizontal number of vertices 
+            int yVerts = height / nbSectionsY; // vertical number of vertices
             ushort stride = (ushort)xVerts; // number of vertices in one row
 
-           _ibStrips = _CreateTriangleStrips(xVerts, yVerts, stride);
-           _visibleSections = new List<HeightFieldSection>(nbSectionsX * nbSectionsY);
+            _ibStrips = _CreateTriangleStrips(xVerts, yVerts, stride);
+            _visibleSections = new List<HeightFieldSection>(nbSectionsX * nbSectionsY);
 
             _quadTree = new QuadTree<HeightFieldSection>(new RectangleF(extends.Minimum.X, extends.Maximum.Z,
                                                                        extends.Maximum.X - extends.Minimum.X,
                                                                        extends.Maximum.Z - extends.Minimum.Z),
                                                         (int)Math.Log(nbSectionsX * nbSectionsY, 4) - 1);
 
+            CreateGeometry(nbSectionsX, nbSectionsY);
 
-            _CreateGeometry(heightMap, nbSectionsX, nbSectionsY);
+            _sectionVertexCount = xVerts * yVerts;
 
-           _sectionVertexCount = xVerts  * yVerts;
-          
-           _materials = new LayeredMaterial[] { new LayeredMaterial() { Name = "Dafault" } };
-            
-           //BoundingSphere = _quadTree.BoundSphere;            
+            _materials = new LayeredMaterial[] { new LayeredMaterial() { Name = "Dafault" } };
+
+            //BoundingSphere = _quadTree.BoundSphere;            
         }
 
         public int SectionVertexCount
@@ -81,9 +124,7 @@ namespace Igneel.SceneComponents
             set { _materials = value; }
         }
 
-        public List<HeightFieldSection> VisibleSections { get { return _visibleSections; } }
-
-        public Texture2D HeightMap { get { return _heightMap; } }
+        public List<HeightFieldSection> VisibleSections { get { return _visibleSections; } }     
 
         public override void OnSceneAttach(Scene scene)
         {
@@ -93,15 +134,24 @@ namespace Igneel.SceneComponents
 
         public void UpdateVisibleSections(Camera camera)
         {
-            //var points = camera.ViewFrustum.Corners;
-            //for (int i = 0; i < points.Length; i++)
-            //{
-            //    _tester.Points[i] = Vector3.Transform(points[i], _transform);
-            //}
+            var points = camera.ViewFrustum.Corners;
+            for (int i = 0; i < points.Length; i++)
+            {
+                _tester.Points[i] = Vector3.Transform(points[i], _transform);
+            }
 
-            //Frustum.CreatePlanes(_tester.LocalFrustum, _tester.Points);
+            Frustum.CreatePlanes(_tester.LocalFrustum, _tester.Points);
 
-            //_quadTree.GetVisibleObjects(camera, _visibleSections);
+            _visibleSections.Clear();
+            foreach (var item in Sections)
+            {
+                if (_tester.IsInsideFrustum(item, camera))
+                {
+                    _visibleSections.Add(item);
+                }
+            }
+
+            //_quadTree.GetVisibleObjects(camera, _visibleSections, _tester);
         }
 
         public override int  SubmitGraphics(Scene scene, Frame node , ICollection<GraphicSubmit> collection)
@@ -122,8 +172,7 @@ namespace Igneel.SceneComponents
         }       
 
         public void Smoot(int kernelSize, int times = 1, float stdDev = 3)
-        {
-            var sd = _heightMap.Description;
+        {            
             var kernel = GetGaussianKernel2D(kernelSize, stdDev);
 
             float[] output = new float[_heights.Length];
@@ -138,12 +187,12 @@ namespace Igneel.SceneComponents
                     output = temp;
                 }
 
-                Convolve2D(src, new Size(sd.Width, sd.Height), kernel, new Size(kernelSize, kernelSize),
+                Convolve2D(src, new Size(width, height), kernel, new Size(kernelSize, kernelSize),
                 new Vector2(kernelSize / 2, kernelSize / 2), output);
             }
 
 
-            var normals = ComputeNormals(output, sd.Width, sd.Height);
+            var normals = ComputeNormals(output, width, height);
 
             _UpdateSectionData(output, normals);
         }
@@ -213,40 +262,51 @@ namespace Igneel.SceneComponents
             return ib;
         }
 
-        private unsafe void _CreateGeometry(Texture2D heightMap, int nbSectionsX, int nbSectionsY)
+
+        private unsafe void ReadHeightsFromTexture(Texture2D heightMap)
         {
-          
             var sd = heightMap.Description;
-            float dz = 1.0f / (float)sd.Height;
-            float dx = 1.0f / (float)sd.Width;
-           
-            var width = sd.Width;
-            var height = sd.Height;
+            width = sd.Width;
+            height = sd.Height;
 
-            var positions = stackalloc Vector3[4];
-            var normals = new Vector3[width * height];
-            var blendCoords = new Vector2[width * height];
-            _heights = new float[width * height]; ;
 
-            int stride = 0;
+            ReadPixelFunc readPixel;
+
             switch (sd.Format)
-            {                
+            {
                 case Format.B8G8R8X8_UNORM:
                 case Format.B8G8R8A8_UNORM:
-                case Format.R8G8B8A8_UNORM: stride = 4; break;
-                case Format.R16G16B16A16_UNORM: stride = 8; break;
-                case Format.R16G16B16A16_FLOAT: stride = 8; break;
-                case Format.R32G32B32A32_TYPELESS: stride = 16; break;
-                case Format.A8_UNORM: stride = 1; break;                
+                case Format.R8G8B8A8_UNORM:
+                    readPixel = delegate(byte* pter, int i, int j, int rowPitch) { return pter[i * rowPitch + j * 4] / 255.0f; };
+                    break;
+                case Format.R16G16B16A16_UNORM:
+                    readPixel = delegate (byte* pter, int i, int j, int rowPitch) { return pter[i * rowPitch + j * 8] / 255.0f; };
+                    break;
+                case Format.R16G16B16A16_FLOAT:
+                    readPixel = delegate (byte* pter, int i, int j, int rowPitch) { return *(short*)&pter[i * rowPitch + j * 8]; };
+                    break;
+                case Format.R32G32B32A32_FLOAT:
+                    readPixel = delegate (byte* pter, int i, int j, int rowPitch) { return *(float*)&pter[i * rowPitch + j * 16]; };
+                    break;
+                case Format.A8_UNORM:
+                    readPixel = delegate (byte* pter, int i, int j, int rowPitch) { return pter[i * rowPitch + j] / 255.0f; };
+                    break;
+                case Format.R16_FLOAT:
+                    readPixel = delegate (byte* pter, int i, int j, int rowPitch) { return *(short*)&pter[i * rowPitch + j * 2]; };
+                    break;
+                case Format.R32_FLOAT:
+                    readPixel = delegate (byte* pter, int i, int j, int rowPitch) { return *(float*)&pter[i * rowPitch + j * 2]; };
+                    break;
+                default:
+                    throw new InvalidOperationException("Invalid Texture Format");
             }
-            if (stride == 0)
-                throw new InvalidOperationException("Invalid Texture Format");
+        
+
+            _heights = new float[width * height];                    
 
             var dataRec = heightMap.Map(0, MapType.Read);
             byte* pixels = (byte*)dataRec.DataPointer;
-            var pitch = dataRec.RowPitch;
-
-            #region  create shared tables
+            var pitch = dataRec.RowPitch;                   
 
             for (int i = 0; i < height - 1; i++)
             {
@@ -258,20 +318,46 @@ namespace Igneel.SceneComponents
                     int p2 = (i + 1) * width + j;
                     int p3 = (i + 1) * width + j + 1;
 
-                    _heights[p0] =  (float)pixels[i * pitch + j * stride] / 255.0f;
+                    _heights[p0] = readPixel(pixels, i, j, pitch); //(float)pixels[i * pitch + j * stride] / 255.0f;                 
+                    _heights[p1] = readPixel(pixels, i, j + 1, pitch); // (float)pixels[i * pitch + (j + 1) * stride] / 255.0f;                    
+                    _heights[p2] = readPixel(pixels, i + 1, j, pitch); // (float)pixels[(i + 1) * pitch + j * stride] / 255.0f;                
+                    _heights[p3] = readPixel(pixels, i + 1, j + 1, pitch); //(float)pixels[(i + 1) * pitch + (j + 1) * stride] / 255.0f;                   
+                }
+            }
+
+            heightMap.UnMap(0);
+        }
+
+        private unsafe void CreateGeometry(int nbSectionsX, int nbSectionsY)
+        {                     
+            float dz = 1.0f / (float)height;
+            float dx = 1.0f / (float)width;
+                   
+            var positions = stackalloc Vector3[4];
+            var normals = new Vector3[width * height];
+            var blendCoords = new Vector2[width * height];        
+          
+            #region  create shared tables
+
+            for (int i = 0; i < height - 1; i++)
+            {
+                for (int j = 0; j < width - 1; j++)
+                {
+                    //Quad Corners
+                    int p0 = i * width + j;
+                    int p1 = i * width + j + 1;
+                    int p2 = (i + 1) * width + j;
+                    int p3 = (i + 1) * width + j + 1;
+                 
                     blendCoords[p0] = new Vector2((float)j / (float)(width - 1), (float)i / (float)(height - 1));
                     positions[0] = new Vector3(j * dx, _heights[p0], i * dz);
-
-                    _heights[p1] = (float)pixels[i * pitch + (j + 1) * stride] / 255.0f;
+                  
                     blendCoords[p1] = new Vector2((float)(j + 1) / (float)(width - 1), (float)i / (float)(height - 1));
                     positions[1] = new Vector3((j + 1) * dx, _heights[p1], i * dz);
-
-                    _heights[p2] = (float)pixels[(i + 1) * pitch + j * stride] / 255.0f;
+                
                     blendCoords[p2] = new Vector2((float)j / (float)(width - 1), (float)(i + 1) / (float)(height - 1));
                     positions[2] = new Vector3(j * dx, _heights[p2], (i + 1) * dz);
-
-
-                    _heights[p3] = (float)pixels[(i + 1) * pitch + (j + 1) * stride] / 255.0f;
+                  
                     blendCoords[p3] = new Vector2((float)(j + 1) / (float)(width - 1), (float)(i + 1) / (float)(height - 1));
                     positions[3] = new Vector3((j + 1) * dx, _heights[p3], (i + 1) * dz);
 
@@ -286,12 +372,11 @@ namespace Igneel.SceneComponents
                     normals[p2] += normal2;
                     normals[p3] += avgNormal;
                 }
-            }
-
-            heightMap.UnMap(0);            
+            }           
 
             for (int i = 0; i < normals.Length; i++)
                 normals[i].Normalize();
+
             #endregion
 
             #region create sections
@@ -300,7 +385,7 @@ namespace Igneel.SceneComponents
             int yVertPerSections = height / nbSectionsY;
             _sections = new HeightFieldSection[nbSectionsX, nbSectionsY];
 
-             stride = 24;
+            var stride = 24;
             int dataSize = xVertPerSections * yVertPerSections * stride;
             byte[] vbData = new byte[dataSize];
 
@@ -353,10 +438,7 @@ namespace Igneel.SceneComponents
                         #endregion
 
                         _sections[j, i] = section;
-                        _quadTree.Add(section);
-
-                        //TODO remove this when enabling culling
-                        _visibleSections.Add(section);
+                        _quadTree.Add(section);                   
                        
                     }
                 }
@@ -401,10 +483,7 @@ namespace Igneel.SceneComponents
         {
             this._heights = heights;
             var nbSectionsX = _sections.GetLength(0);
-            var nbSectionsY = _sections.GetLength(1);
-            var sd = _heightMap.Description;
-            var width = sd.Width;
-            var height = sd.Height;
+            var nbSectionsY = _sections.GetLength(1);           
             int xVertPerSections = width / nbSectionsX;
             int yVertPerSections = height / nbSectionsY;
             var stride = 24;

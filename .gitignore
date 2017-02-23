@@ -270,3 +270,5 @@ paket-files/
 *.suo
 
 /Solution/.vs
+Solution/Solution.sdf
+Solution/.vs/Solution/v14/.suo

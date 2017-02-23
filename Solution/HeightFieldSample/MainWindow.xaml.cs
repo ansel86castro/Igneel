@@ -90,8 +90,8 @@ namespace HeightFieldSample
 
                 //Create the camera and the camera node
                 Node = scene.Create("cameraNode", Camera.FromOrientation("camera", zn: 0.05f, zf: 1000f).SetPerspective(Numerics.ToRadians(60), aspect),
-                            localPosition: new Vector3(0, 200, -30),
-                            localRotation: new Euler(0, Numerics.ToRadians(60), 0).ToMatrix())
+                            localPosition: new Vector3(0, 200, -500),
+                            localRotation: new Euler(0, Numerics.ToRadians(30), 0).ToMatrix())
             };
                            
             scene.Dynamics.Add(new Dynamic(x => controller.Update(x)));          
@@ -118,20 +118,20 @@ namespace HeightFieldSample
 
         private void CreateTerrain()
         {
-            //Load the height map
-            Texture2D heigthMap = Engine.Graphics.CreateTexture2DFromFile("terrain.png");
+            //Load the height map            
+            Texture2D heigthMap = Engine.Graphics.CreateTexture2DFromFile("terrain.png");            
 
             //Create the HeightField using the heigth map ,divide the HeightField into and 8x8 grid of sections 
             //this will improve culling
-            HeightField heigthField = new HeightField(heigthMap, 8, 8);
+            HeightField heigthField = new HeightField(heigthMap,32,32);
 
             heigthField.Materials[0].Diffuse =Color3.FromArgb(System.Drawing.Color.DarkGreen.ToArgb());
 
             //Uncomment this to texture the terrain
-            //heigthField.Materials[0].DiffuseMaps = new Texture2D[]
-            //{
-            //    Engine.Graphics.CreateTexture2DFromFile("grass.jpg")
-            //};
+            heigthField.Materials[0].DiffuseMaps = new Texture2D[]
+            {
+                Engine.Graphics.CreateTexture2DFromFile("grass.jpg")
+            };
 
             //smoot the height field using a 5x5 gaussian kernel with 4 pass
             heigthField.Smoot(5, 4);

@@ -18,7 +18,7 @@ namespace Igneel.SceneManagement
 
         void Clear();
 
-        void GetVisibleObjects(Camera camera, ICollection<T> collection);
+        void GetVisibleObjects(Camera camera, ICollection<T> collection, ICullTester<T> frustumTester = null);
     }
 
 }

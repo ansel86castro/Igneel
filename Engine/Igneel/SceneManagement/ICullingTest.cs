@@ -73,4 +73,13 @@ namespace Igneel.SceneManagement
             return camera.ViewFrustum.TestFrustum(sphere);// camera.GetCullTest(sphere.Center, sphere.Radius);
         }
     }
+
+    public static class CullTesterUtils
+    {
+        public static bool Contains<T>(this ICullTester<T> tester, Camera camera, Sphere sphere)
+        {
+            var cont =  tester.GetCullState(camera, sphere);
+            return cont == FrustumTest.Inside || cont == FrustumTest.Partial;
+        }
+    }
 }

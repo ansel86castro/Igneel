@@ -141,13 +141,13 @@ namespace Igneel.SceneManagement
             return _root.Remove(item);
         }
 
-        public void GetVisibleObjects(Camera camera, ICollection<T> collection)
+        public void GetVisibleObjects(Camera camera, ICollection<T> collection, ICullTester<T> frustumTester = null)
         {
             if (_root == null)
                 return;
 
             _items.Clear();
-            _root.CullItems(camera, _items);
+            _root.CullItems(camera, _items, frustumTester);
          
             foreach (var item in _items)
             {
@@ -162,7 +162,7 @@ namespace Igneel.SceneManagement
             if (_root == null)
                 return _items;
 
-            _root.CullItems(camera, _items);
+            _root.CullItems(camera, _items, null);
             return _items;
         }
 
@@ -243,17 +243,19 @@ namespace Igneel.SceneManagement
                 }
             }
 
-            public void CullItems(Camera camera, HashSet<T> collection)
+            public void CullItems(Camera camera, HashSet<T> collection, ICullTester<T> frustumTester)
             {
                 if (_nbElements == 0)
                     return;
 
-                var check = camera.TestFrustum(_boundSphere);
+                var check = frustumTester != null ? 
+                    frustumTester.GetCullState(camera, _boundSphere) : 
+                    camera.TestFrustum(_boundSphere);
 
                 switch (check)
                 {
                     case FrustumTest.Inside:
-                        GetItems(camera, collection, false);
+                        GetItems(camera, collection, false, frustumTester);
                         break;
                     case FrustumTest.Partial:
                         if (_items != null)
@@ -268,20 +270,20 @@ namespace Igneel.SceneManagement
                         }
 
                         if (_northWest != null && _northWest._nbElements > 0)
-                            _northWest.CullItems(camera, collection);
+                            _northWest.CullItems(camera, collection, frustumTester);
                         if (_northEast != null && _northEast._nbElements > 0)
-                            _northEast.CullItems(camera, collection);
+                            _northEast.CullItems(camera, collection, frustumTester);
                         if (_southWest != null && _southWest._nbElements > 0)
-                            _southWest.CullItems(camera, collection);
+                            _southWest.CullItems(camera, collection, frustumTester);
                         if (_southEast != null && _southEast._nbElements > 0)
-                            _southEast.CullItems(camera, collection);
+                            _southEast.CullItems(camera, collection, frustumTester);
 
                         break;
                 }
 
             }
 
-            private void GetItems(Camera camera, HashSet<T> collection, bool partial)
+            private void GetItems(Camera camera, HashSet<T> collection, bool partial, ICullTester<T> frustumTester)
             {
                 if (_nbElements == 0)
                     return;
@@ -292,20 +294,20 @@ namespace Igneel.SceneManagement
                     {
                         if (!collection.Contains(item))
                         {
-                            if (!partial || camera.Contains(item.BoundingSphere))
+                            if (!partial || ((frustumTester != null && frustumTester.Contains(camera, item.BoundingSphere)) || (frustumTester == null && camera.Contains(item.BoundingSphere))))
                                 collection.Add(item);
                         }
                     }
                 }
 
                 if (_northWest != null )
-                    _northWest.GetItems(camera, collection, partial);
+                    _northWest.GetItems(camera, collection, partial, frustumTester);
                 if (_northEast != null )
-                    _northEast.GetItems(camera, collection, partial);
+                    _northEast.GetItems(camera, collection, partial, frustumTester);
                 if (_southWest != null )
-                    _southWest.GetItems(camera, collection, partial);
+                    _southWest.GetItems(camera, collection, partial, frustumTester);
                 if (_southEast != null )
-                    _southEast.GetItems(camera, collection, partial);
+                    _southEast.GetItems(camera, collection, partial, frustumTester);
             }
 
             public void GetItems(HashSet<T> collection)
