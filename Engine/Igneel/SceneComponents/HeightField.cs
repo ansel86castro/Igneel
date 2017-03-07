@@ -142,14 +142,14 @@ namespace Igneel.SceneComponents
 
             Frustum.CreatePlanes(_tester.LocalFrustum, _tester.Points);
 
-            _visibleSections.Clear();
-            foreach (var item in Sections)
-            {
-                if (_tester.IsInsideFrustum(item, camera))
-                {
-                    _visibleSections.Add(item);
-                }
-            }
+            //_visibleSections.Clear();
+            //foreach (var item in Sections)
+            //{
+            //    if (_tester.IsInsideFrustum(item, camera))
+            //    {
+            //        _visibleSections.Add(item);
+            //    }
+            //}
 
             //_quadTree.GetVisibleObjects(camera, _visibleSections, _tester);
         }
@@ -438,7 +438,9 @@ namespace Igneel.SceneComponents
                         #endregion
 
                         _sections[j, i] = section;
-                        _quadTree.Add(section);                   
+                        _quadTree.Add(section);
+
+                        _visibleSections.Add(section);              
                        
                     }
                 }
