@@ -22,10 +22,10 @@ namespace ForgeEditor
         static readonly string[] _shaderRepositoryDir =
         {
             //IGNEEL CORE SHADERS
-            "../../../../Shaders/Shaders.D3D10/Binaries/",
+            "../../../../../Shaders/Shaders.D3D10/Binaries/",
 
             //APPLICATION SHADERS
-            "../../../ForgeShaders/Binaries/",
+            "../../../../ForgeShaders/Binaries/",
         };
 
         public static void Init(MainWindow window, Canvas3D mainCanvas)

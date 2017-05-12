@@ -63,6 +63,7 @@ namespace Igneel.Importers.Collada
         //Dictionary<string, ICurveOutput> _channelsTargesLookup;
         //ColladaExecutionContext _executionContext;        
         Scene _scene;
+        private bool _preserveOrder;
 
         public IProgressReport Report { get { return _report; } set { _report = value; } }
 
@@ -97,6 +98,9 @@ namespace Igneel.Importers.Collada
                 var xunit = asset.GetElementByTag("unit");
                 if (xunit != null)
                     _unit = float.Parse(xunit.GetAttribute("meter"));
+                _preserveOrder = asset.GetElementByTag("contributor")?
+                                   .GetElementByTag("authoring_tool")?
+                                   .Value?.StartsWith("CINEMA4D") ?? false;              
             }
             _unit *= _scene.UnitOfDistance.Meters;
 
@@ -176,9 +180,9 @@ namespace Igneel.Importers.Collada
             return true;
         }
 
-        private string GetName(string value)
+        private string GetName(XElement node)
         {
-            string name = value;            
+            string name = node.GetName()??node.GetId();            
             int index = name.IndexOf("__");
             int lastIndex = name.LastIndexOf("__");
             if (index > 0)
@@ -380,7 +384,7 @@ namespace Igneel.Importers.Collada
             var typeAttr = element.GetAttribute("type");                                       
 
             string id = element.GetId();
-            string name = element.GetName();
+            string name = element.GetName()??id;
             string tag = null;
             int index = name.IndexOf("__");
             int lastIndex = name.LastIndexOf("__");
@@ -725,9 +729,11 @@ namespace Igneel.Importers.Collada
                         var vcount = itag == 2 ? polygonos.GetElementByTag("vcount") : null;                        
 
                         foreach (var p in polygonos.GetElementsByTag("p"))
-                        {                            
+                        {                           
                             var polyIndices = ParseIntArray(p.Value);
-                            int polyVerticesCount = polyIndices.Length / vertexAttrStride;                            
+                            int polyVerticesCount = polyIndices.Length / vertexAttrStride;
+
+                            tesselateList.Clear();
 
                             for (int tVertex = 0; tVertex < polyVerticesCount; tVertex++)
                             {
@@ -931,7 +937,7 @@ namespace Igneel.Importers.Collada
             if (mesh.VertexCount > ushort.MaxValue)
             {
                 int[] indicesData = new int[indicesList.Count];              
-                if (GraphicDeviceFactory.Device.Rasterizer!=null && !GraphicDeviceFactory.Device.Rasterizer.State.FrontCounterClockwise)
+                if (!GraphicDeviceFactory.Device.Rasterizer?.State.FrontCounterClockwise??true && !_preserveOrder)
                 {
                     for (int i = 0; i < indicesData.Length - 2; i += 3)
                     {
@@ -951,7 +957,7 @@ namespace Igneel.Importers.Collada
             else
             {
                 ushort[] indicesData = new ushort[indicesList.Count];
-                if (GraphicDeviceFactory.Device.Rasterizer != null && !GraphicDeviceFactory.Device.Rasterizer.State.FrontCounterClockwise)
+                if (GraphicDeviceFactory.Device.Rasterizer != null && !GraphicDeviceFactory.Device.Rasterizer.State.FrontCounterClockwise && !_preserveOrder)
                 {
                     for (int i = 0; i < indicesData.Length - 2; i += 3)
                     {
@@ -1402,7 +1408,7 @@ namespace Igneel.Importers.Collada
         private ElementRef Parse_Camera(XElement element, object @param)
         {
             var colladaNode = (XElement)param;
-            var camera = Camera.FromOrientation(GetName(colladaNode.GetName()));
+            var camera = Camera.FromOrientation(GetName(colladaNode));
             element.FindDescendantByTag("technique_common", tech =>
             {
                 tech.FindElementByTag("perspective", e =>
