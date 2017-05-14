@@ -19,6 +19,7 @@ using ForgeEditor.Components;
 using System.Drawing;
 using ForgeEditor.ViewModel;
 using Igneel.Techniques;
+using Igneel.States;
 
 namespace ForgeEditor
 {
@@ -215,13 +216,30 @@ namespace ForgeEditor
                 //windows.ShowProgressDialog();
                 Engine.Invoke(delegate
                 {
-                    Igneel.Importers.ContentImporter.Import(Engine.Scene, dialog.FileName);                  
+                    Igneel.Importers.ContentImporter.Import(Engine.Scene, dialog.FileName);
+
+                    foreach (var lightInstance in Engine.Scene.FrameLights)
+                    {
+                        var sm = lightInstance.CreateShadowMap();
+                        if (sm != null)
+                        {
+                            var frustum = new ShadowMapGlyp(Engine.Scene, sm);
+                            Engine.Scene.Decals.Add(frustum);
+                        }
+                    }
+
+                    if (!EngineState.Shadow.ShadowMapping.Enable)
+                    {
+                        EngineState.Shadow.ShadowMapping.Enable = true;
+                        EngineState.Shadow.Enable = true;
+                    }
+
                     windows.Dispatcher.Invoke(delegate 
                     {
                         if (ContentLoaded != null)
                         {
                             ContentLoaded(this, Engine.Scene);
-                        }
+                        }                  
 
                         progressDialog.Close(); 
                     });

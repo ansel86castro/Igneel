@@ -100,7 +100,7 @@ namespace Igneel.Techniques
 
         [Category("ShadowMap")]
        
-        public Texture DepthTexture
+        public Texture2D DepthTexture
         {
             get { return ShadowMap.Texture; }
         }

@@ -176,6 +176,7 @@ namespace Igneel.SceneComponents
             var viewMat = Matrix.LookAt(_globalPosition, _globalPosition + _globalDirection, Vector3.UnitY);            
             var camera = new Camera();            
             camera.View = viewMat;
+
             if (_light.Type == LightType.Directional)
             {
                 var centerWorld = 0.5f * (maxWorld + minWorld);
@@ -230,6 +231,56 @@ namespace Igneel.SceneComponents
 
             sm.OnSceneAttach(scene);
 
+            return sm;
+        }
+
+        public ShadowMapTechnique CreateShadowMap(int size = 1024, bool dynamic =true)
+        {
+            if (Node.Technique != null && !(Node.Technique is ShadowMapTechnique))
+            {
+                return null;
+            }
+
+            var scene = Scene;
+            var camera = new Camera(this.Name+"_shadowMap", 1, 1000);
+            var initialPos = Vector3.Zero;
+            var view = Matrix.LookAt(initialPos, initialPos + _globalDirection, Vector3.UnitY);
+            camera.View = view;
+
+            
+            var sm =Node.Technique as ShadowMapTechnique ?? new ShadowMapTechnique(size) { IsDynamic = dynamic };
+
+            if (Light.Type == LightType.Directional)
+            {
+                //Get bounding box in camera space
+                scene.GetBoundingBox(out Vector3 viewMin, out Vector3 viewMax, camera.View);
+
+                //1 compute initial shadow map camera position
+                initialPos = new Vector3((viewMin.X + viewMax.X) * 0.5f, (viewMin.Y + viewMax.Y) * 0.5f, viewMin.Z - 0.1f);
+                var invView = Matrix.Invert(view);
+                initialPos = Vector3.TransformCoordinates(initialPos, invView);
+
+                view = Matrix.LookAt(initialPos, initialPos + _globalDirection, Vector3.UnitY);
+                camera.View = view;
+
+                camera.ZNear = 0.1f;
+                camera.ZFar = Math.Abs(viewMax.Z - viewMin.Z);
+                camera.OrthoWidth = Math.Abs(viewMax.X - viewMin.X);
+                camera.OrthoHeight = Math.Abs(viewMax.Y - viewMin.Y);
+                camera.FieldOfView = Numerics.PIover2;
+
+                camera.Type = ProjectionType.Orthographic;
+                camera.CommitChanges();
+            }           
+
+            sm.Camera = camera;    
+            
+            if (Node.Technique == null)
+            {
+                sm.Affector = Node;
+                Node.Technique = sm;
+                sm.OnSceneAttach(scene);
+            }
             return sm;
         }
 

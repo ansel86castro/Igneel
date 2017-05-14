@@ -96,7 +96,7 @@ namespace ForgeEditor.Components.CoordinateSystems
             RenderTexture(Engine.Graphics, renderTarget.Texture, decal.X, decal.Y, decal.Width, decal.Height);
         }
 
-        private void RenderTexture(GraphicDevice device, Texture2D texture, int x = 0, int y = 0, int width = 256, int height = 256)
+        public  void RenderTexture(GraphicDevice device, Texture2D texture, int x = 0, int y = 0, int width = 256, int height = 256)
         {
             if (untranformed == null)
             {

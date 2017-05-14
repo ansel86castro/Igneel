@@ -60,7 +60,7 @@ namespace ForgeEditor
 
         void viewModel_HitTestPerformed(object sender, Igneel.Techniques.HitTestResult e)
         {
-            SceneTreeView.SelectedItem = e.Frame;
+            SceneTreeView.SelectedItem = e.Frame;            
         }
 
         void viewModel_ContentLoaded(object sender, Igneel.SceneManagement.Scene e)

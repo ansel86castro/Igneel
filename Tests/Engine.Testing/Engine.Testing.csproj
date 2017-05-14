@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -9,8 +9,9 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Igneel.Testing</RootNamespace>
     <AssemblyName>Igneel.Testing</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>x86</PlatformTarget>
@@ -23,7 +24,7 @@
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <UseVSHostingProcess>true</UseVSHostingProcess>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -35,16 +36,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="antlr.runtime">
-      <HintPath>..\Igneel\bin\Debug\antlr.runtime.dll</HintPath>
-    </Reference>
-    <Reference Include="Antlr3.Runtime, Version=0.3.0.37313, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Igneel\bin\Debug\Antlr3.Runtime.dll</HintPath>
-    </Reference>
-    <Reference Include="Antlr3.Utility">
-      <HintPath>..\Igneel\bin\Debug\Antlr3.Utility.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -155,10 +146,6 @@
     <ProjectReference Include="..\..\Engine\Igneel.Physics\Igneel.Physics.csproj">
       <Project>{7d76eb73-4742-45c7-84a6-f50b9961d874}</Project>
       <Name>Igneel.Physics</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Engine\Igneel.PhysX\Igneel.PhysX.vcxproj">
-      <Project>{e5bba35a-934c-4eee-9661-1856d75bd17e}</Project>
-      <Name>Igneel.PhysX</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Engine\Igneel.Rendering\Igneel.Rendering.csproj">
       <Project>{185f3662-2f7f-4945-9156-9aab127281ab}</Project>

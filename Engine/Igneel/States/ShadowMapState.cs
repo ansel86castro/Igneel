@@ -10,7 +10,7 @@ namespace Igneel.States
         public ShadowMapState()
         {
             Size = 1024;
-            Bias = 0.6e-3f;
+            Bias = 0.5e-3f;
             PcfBlurSize = 3;
             GaussianDeviation = (float)Math.Sqrt(3);
         }

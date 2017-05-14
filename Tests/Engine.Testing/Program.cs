@@ -23,7 +23,7 @@ namespace D3D9Testing
             Application.SetCompatibleTextRenderingDefault(false);
 
             Service.Set<GraphicDeviceFactory>(new IgneelD3D10.GraphicManager10());
-            Service.Set<PhysicManager>(new Igneel.PhysX.PXPhysicManager());
+            //Service.Set<PhysicManager>(new Igneel.PhysX.PXPhysicManager());
             Service.Set<InputManager>(new IgneelDirectInput.DInputManager());
 
             Application.Run(new Form1(new IgneelFormsApp()));

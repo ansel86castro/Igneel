@@ -477,5 +477,96 @@ namespace Igneel.Components
                 _boneRoot = null;
             }
         }
+
+        public void GetBoundingBox(out Vector3 min, out Vector3 max, Matrix view)
+        {
+            min = new Vector3(float.MaxValue, float.MaxValue, float.MaxValue);
+            max = new Vector3(float.MinValue, float.MinValue, float.MinValue);
+
+            var mesh = Mesh;
+            var positions = mesh.GetVertexBufferView<Vector3>(IASemantic.Position);
+            var boneIndices = mesh.GetVertexBufferView<Vector4>(IASemantic.BlendIndices);
+            var boneWeights = mesh.GetVertexBufferView<Vector4>(IASemantic.BlendWeight);
+            var bones = Bones;
+            var boneOffets = BoneBindingMatrices;
+
+            if (HasBonesPerLayer)
+            {
+                foreach (var part in mesh.Layers)
+                {
+                    var partBones = GetBones(part);
+                    for (int i = 0; i < part.VertexCount; i++)
+                    {
+                        var pos = Vector3.TransformCoordinates(positions[part.StartVertex + i], BindShapePose);
+                        var blendIndices = boneIndices[part.StartVertex + i];
+                        var blendWeights = boneWeights[part.StartVertex + i];
+                        Vector3 posWorld = new Vector3();
+                        float lastWeight = 0;
+                        unsafe
+                        {
+                            float* pIndices = (float*)&blendIndices;
+                            float* pWeights = (float*)&blendWeights;
+                            int ibone = 0;
+
+                            for (int k = 0; k < 3; k++)
+                            {
+                                lastWeight += pWeights[k];
+                                ibone = partBones[(int)pIndices[k]];
+
+                                posWorld += Vector3.TransformCoordinates(pos,
+                                    boneOffets[ibone] * bones[ibone].GlobalPose) * pWeights[k];
+                            }
+
+                            lastWeight = 1.0f - lastWeight;
+                            ibone = partBones[(int)pIndices[3]];
+                            posWorld += Vector3.TransformCoordinates(pos,
+                                    boneOffets[ibone] * bones[ibone].GlobalPose) * pWeights[3];
+                        }
+
+                        posWorld = Vector3.TransformCoordinates(posWorld, view);
+                        min = Vector3.Min(min, posWorld);
+                        max = Vector3.Max(max, posWorld);
+                    }
+                }
+            }
+            else
+            {
+                for (int i = 0; i < positions.Count; i++)
+                {
+                    var pos = Vector3.TransformCoordinates(positions[i], BindShapePose);
+                    var blendIndices = boneIndices[i];
+                    var blendWeights = boneWeights[i];
+                    Vector3 posWorld = new Vector3();
+                    float lastWeight = 0;
+                    unsafe
+                    {
+                        float* pIndices = (float*)&blendIndices;
+                        float* pWeights = (float*)&blendWeights;
+                        int ibone = 0;
+
+                        for (int k = 0; k < 3; k++)
+                        {
+                            lastWeight += pWeights[k];
+                            ibone = (int)pIndices[k];
+
+                            posWorld += Vector3.TransformCoordinates(pos,
+                                boneOffets[ibone] * bones[ibone].GlobalPose) * pWeights[k];
+                        }
+
+                        lastWeight = 1.0f - lastWeight;
+                        ibone = (int)pIndices[3];
+                        posWorld += Vector3.TransformCoordinates(pos,
+                                boneOffets[ibone] * bones[ibone].GlobalPose) * pWeights[3];
+                    }
+
+                    posWorld = Vector3.TransformCoordinates(posWorld, view);
+
+                    min = Vector3.Min(min, posWorld);
+                    max = Vector3.Max(max, posWorld);
+                }
+            }
+
+            mesh.ReleaseViews();
+        }
     }
 }

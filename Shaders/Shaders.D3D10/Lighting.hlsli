@@ -104,11 +104,11 @@ void ComputeLighting()
 	 [branch]
 	 if(Light.Type == DIRECTIONAL)
 		DirectionalLight();	 					
-	 else [branch] if(Light.Type == SPOT)
+	 else if(Light.Type == SPOT)
 		SpotLight();
-	 else [branch] if(Light.Type == POINT)
-		PointLight();	 
-		
+	 else if(Light.Type == POINT)
+		PointLight();	 	
+
 	/*[branch]
 	if(USE_ENVIROMENT_MAP)
 	{
@@ -125,5 +125,4 @@ void ComputeLighting()
 			gColor.rgb += gDiffuse * t6.Sample(s6, gScreenCoord.xy / gScreenCoord.w).rgb * (1 - gAlpha);
 	}	*/
 }
-
 

@@ -146,7 +146,9 @@ namespace ForgeEditor.Views
 
             Igneel.SceneManagement.Frame frame = item.Tag as Igneel.SceneManagement.Frame;
             if (frame != null)
+            {
                 mainViewModel.TransformationController.ShowTransformGlyp(frame);
+            }
             else
             {
                 mainViewModel.TransformationController.SelectedFrame = null;

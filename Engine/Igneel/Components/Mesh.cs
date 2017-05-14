@@ -129,6 +129,7 @@ namespace Igneel.Components
 
             _vb = GraphicDeviceFactory.Device.CreateVertexBuffer<T>(_vd.Size, usage, cpuAccess, data: vertexes);
         }
+
         public void CreateVertexBuffer(Array vertexes, int vertexCount, ResourceUsage usage = ResourceUsage.Default, CpuAccessFlags cpuAccess = CpuAccessFlags.ReadWrite)        
         {
             if (_vb != null)
@@ -962,6 +963,22 @@ namespace Igneel.Components
 
             dimensions = 0.5f * (max - min);
             center *= 1.0f / (float)_vertexCount;
+        }
+
+        public void GetBoundingBox(out Vector3 min, out Vector3 max,  Matrix globalPose)
+        {
+            min = new Vector3(float.MaxValue, float.MaxValue, float.MaxValue);
+            max = new Vector3(float.MinValue, float.MinValue, float.MinValue);
+
+            var positionView = GetVertexBufferView<Vector3>(IASemantic.Position);
+            for (int i = 0; i < positionView.Count; i++)
+            {
+                var posWorld = Vector3.TransformCoordinates(positionView[i], globalPose);
+                max = Vector3.Max(posWorld, max);
+                min = Vector3.Min(posWorld, min);
+            }
+
+            ReleaseViews();
         }
 
         private unsafe void ComputeXZRadius(IntPtr vbStream, out Vector3 centerXz ,out float radius ,out Vector3 center, out int nbZeroDistance)

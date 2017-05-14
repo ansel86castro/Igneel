@@ -11,9 +11,10 @@ namespace Igneel.Rendering.Bindings
 
         public interface ISmMap
         {
-            Matrix LightVp { get; set; }
-            float ShadowEpsilon { get; set; }         
+            Matrix LightVP { get; set; }
+            float SHADOW_EPSILON { get; set; }         
             float SmSize { get; set; }
+            Sampler<Texture2D> ShadowMap { get; set; }
         }
         
         protected int Register = 7;
@@ -48,12 +49,14 @@ namespace Igneel.Rendering.Bindings
         {
             if (EngineState.Shadow.Enable)
             {
-                _mapping.LightVp = value.camera.ViewProj;
-                _mapping.ShadowEpsilon = value.bias;
+                _mapping.LightVP = value.camera.ViewProj;
+                _mapping.SHADOW_EPSILON = value.bias;
                 _mapping.SmSize = value.size;
 
-                GraphicDeviceFactory.Device.PS.SetResource(Register, value.DepthTexture);
-                GraphicDeviceFactory.Device.PS.SetSampler(Register, _pointSampler);
+                _mapping.ShadowMap = value.DepthTexture.ToSampler(_pointSampler);
+
+                //GraphicDeviceFactory.Device.PS.SetResource(Register, value.DepthTexture);
+                //GraphicDeviceFactory.Device.PS.SetSampler(Register, _pointSampler);
             }
         }
 

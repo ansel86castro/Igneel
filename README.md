@@ -3,6 +3,9 @@ Game engine for .NET
 
 In order to compile the code you must download and install the DirectXSDK at https://www.microsoft.com/en-us/download/details.aspx?id=6812
 
+Demostration:
+https://youtu.be/3mU4TyAGuDU
+
 Additional SDKs
 Nvidia PhysX runtime: http://www.nvidia.com/object/physx-9.16.0318-driver.html
 

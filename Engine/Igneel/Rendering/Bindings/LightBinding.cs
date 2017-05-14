@@ -39,6 +39,9 @@ namespace Igneel.Rendering.Bindings
 
         private void Bind(GlobalLigth value, bool addSceneAmbient)
         {
+            if (Mapping == null)
+                return;
+
             var effect = Effect;
             float ambientIntensity = 0;
             Color3 skyColor = new Color3();

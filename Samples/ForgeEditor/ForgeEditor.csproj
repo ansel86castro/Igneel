@@ -43,6 +43,7 @@
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <Prefer32Bit>true</Prefer32Bit>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
     <OutputPath>bin\x86\Release\</OutputPath>
@@ -104,6 +105,7 @@
     </ApplicationDefinition>
     <Compile Include="ActionCommand.cs" />
     <Compile Include="Bootstraper.cs" />
+    <Compile Include="Components\FrustumGlyp.cs" />
     <Compile Include="Components\MaterialHitTester.cs" />
     <Compile Include="Components\NotifyPropertyChanged.cs" />
     <Compile Include="Components\CoordinateSystems\AxisComponent.cs" />
@@ -115,6 +117,8 @@
     <Compile Include="Components\SceneEnvironmentRender.cs" />
     <Compile Include="Components\CoordinateSystems\CoordinateGlyp.cs" />
     <Compile Include="Components\CoordinateSystems\DecalGlypHitTest.cs" />
+    <Compile Include="Components\ShadowMapGlyp.cs" />
+    <Compile Include="Components\TextureRender.cs" />
     <Compile Include="Components\Transforms\ITranformGlyp.cs" />
     <Compile Include="Components\Transforms\RotationGlyp.cs" />
     <Compile Include="Components\Transforms\TranslationGlyp.cs" />

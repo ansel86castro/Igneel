@@ -9,6 +9,7 @@ using Igneel.Rendering;
 using Igneel.SceneComponents;
 using Igneel.States;
 using Igneel.Techniques;
+using Igneel.Graphics;
 
 namespace Igneel.SceneManagement
 {
@@ -256,6 +257,30 @@ namespace Igneel.SceneManagement
                     return node;
             }
             return null;
+        }
+
+        public void GetBoundingBox(out Vector3 min, out Vector3 max, Matrix trasform)
+        {
+            Vector3 maxWorld = new Vector3(float.MinValue, float.MinValue, float.MinValue);
+            Vector3 minWorld = new Vector3(float.MaxValue, float.MaxValue, float.MaxValue);
+            foreach (var n in Geometries)
+            {
+                if(n.Component is FrameSkin skin)                
+                {
+                    skin.Skin.GetBoundingBox(out Vector3 skinMinWorld, out Vector3 skinMaxWorld, trasform);
+                    minWorld = Vector3.Min(skinMinWorld, minWorld);
+                    maxWorld = Vector3.Max(skinMaxWorld, maxWorld);
+                }
+                else if(n.Component is FrameMesh meshContainer)
+                {
+                    meshContainer.Mesh.GetBoundingBox(out Vector3 meshMinWorld, out Vector3 meshMaxWorl, n.GlobalPose * trasform);
+                    minWorld = Vector3.Min(meshMinWorld, minWorld);
+                    maxWorld = Vector3.Max(meshMaxWorl, maxWorld);
+                }
+            }
+
+            min = minWorld;
+            max = maxWorld;
         }
 
         public Frame FindNode(int id)
