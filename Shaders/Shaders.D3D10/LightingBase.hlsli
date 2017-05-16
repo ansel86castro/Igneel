@@ -146,7 +146,7 @@ void DirectionalLight()
     float3 lightDir = -Light.Dir;
 
 	float3 h = normalize(lightDir + toEye);
-	float4 l = lit(saturate(dot(gNormalW, lightDir)), saturate(dot(gNormalW, h)), 1);
+	float4 l = lit(dot(gNormalW, lightDir), dot(gNormalW, h), 1);
 	l.z = pow(l.z, gSpecularPower);	
 	
 	//add diffuse contribution

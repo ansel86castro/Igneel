@@ -110,8 +110,8 @@ namespace ForgeEditor
         {
             var scene = new Scene("Defaul");
 
-            scene.AmbientLight.SkyColor = new Vector3(0.8f);
-            scene.AmbientLight.GroundColor = new Vector3(0.2f);
+            scene.AmbientLight.SkyColor = new Vector3(0.5f);
+            scene.AmbientLight.GroundColor = new Vector3(0.1f);
 
             Engine.BackColor = new Color4(Color.LightBlue.ToArgb());
             return scene;
@@ -218,17 +218,20 @@ namespace ForgeEditor
                 {
                     Igneel.Importers.ContentImporter.Import(Engine.Scene, dialog.FileName);
 
+                    var smCount = 0;
                     foreach (var lightInstance in Engine.Scene.FrameLights)
                     {
                         var sm = lightInstance.CreateShadowMap();
-                        if (sm != null)
-                        {
-                            var frustum = new ShadowMapGlyp(Engine.Scene, sm);
-                            Engine.Scene.Decals.Add(frustum);
-                        }
+                        if (sm != null) smCount++;
+                    //    if (sm != null)
+                    //    {
+                    //        var frustum = new ShadowMapGlyp(Engine.Scene, sm);
+                    //        Engine.Scene.Decals.Add(frustum);
+                    //    }
+
                     }
 
-                    if (!EngineState.Shadow.ShadowMapping.Enable)
+                    if (smCount > 0 && !EngineState.Shadow.ShadowMapping.Enable)
                     {
                         EngineState.Shadow.ShadowMapping.Enable = true;
                         EngineState.Shadow.Enable = true;

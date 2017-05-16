@@ -18,7 +18,7 @@ float4 main(SMVSOutput input) : SV_TARGET0
 	gPositionL	 = input.PositionL;
 	gScreenCoord = input.ScreenCoord;
 	
-	ComputeShadowTexCoord();
+	ComputeShadowTexCoord(-Light.Dir);
 
 	float edge = EdgeTexture.Sample(sEdgeTexture, gScreenCoord.xy / gScreenCoord.w).r;
 

@@ -103,19 +103,7 @@
     <FxCompile Include="Mesh_ShadowBump3KPS.hlsl">
       <Filter>System\Mesh</Filter>
     </FxCompile>
-    <FxCompile Include="Mesh_ShadowBump5KPS.hlsl">
-      <Filter>System\Mesh</Filter>
-    </FxCompile>
-    <FxCompile Include="Mesh_ShadowBump7KPS.hlsl">
-      <Filter>System\Mesh</Filter>
-    </FxCompile>
     <FxCompile Include="Mesh_ShadowPhong3KPS.hlsl">
-      <Filter>System\Mesh</Filter>
-    </FxCompile>
-    <FxCompile Include="Mesh_ShadowPhong5KPS.hlsl">
-      <Filter>System\Mesh</Filter>
-    </FxCompile>
-    <FxCompile Include="Mesh_ShadowPhong7KPS.hlsl">
       <Filter>System\Mesh</Filter>
     </FxCompile>
     <FxCompile Include="SampleLumIterativePS.hlsl">

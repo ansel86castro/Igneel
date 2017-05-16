@@ -6,6 +6,10 @@ struct VSOut
 	float4 PositionL :TEXCOORD0;
 };
 
+cbuffer cLigth {
+	float3 lightDir;
+};
+
 Texture2D ShadowMap;
 SamplerState sShadowMap;
 
@@ -13,7 +17,7 @@ float4 main(VSOut input) :SV_TARGET
 {
 	//clip(dot(float4(input.PositionW, 1), ClipPlane));	
 	gPositionL	 = input.PositionL;			
-	ComputeShadowTexCoord();
+	ComputeShadowTexCoord(-lightDir);
 	
 	float inShadow = (float)(ShadowMap.SampleLevel(sShadowMap, gShadowTexCoord.xy, 0). r > gShadowTexCoord.z);	
 	

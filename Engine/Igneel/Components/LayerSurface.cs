@@ -11,11 +11,11 @@ namespace Igneel.Components
     [StructLayout(LayoutKind.Sequential)]
     public struct LayerSurface
     {
-        public Color4 Color;
+        public Color4 Diffuse;
 
-        public float SpecularIntensity;
+        public float Specular;
 
-        public float EmisiveIntensity;
+        public float Emisive;
 
         public float Reflectivity;
 
@@ -29,9 +29,9 @@ namespace Igneel.Components
             {
                 return new LayerSurface()
                 {
-                    Color = new Color4(1, 1, 1, 1),
-                    SpecularIntensity = 1,
-                    EmisiveIntensity = 0,
+                    Diffuse = new Color4(1, 1, 1, 1),
+                    Specular = 1,
+                    Emisive = 0,
                     Reflectivity = 0,
                     Refractitity = 0,
                     SpecularPower = 4,

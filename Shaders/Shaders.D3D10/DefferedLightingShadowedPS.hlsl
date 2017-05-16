@@ -59,7 +59,7 @@ PSOut main(PSIn input)
 
 	gPositionL = mul(float4(gPositionW,1) , LightVP);
 
-	ComputeShadowTexCoord();
+	ComputeShadowTexCoord(-Light.Dir);
 	ComputeShadowFactor();	
 
 	[branch]

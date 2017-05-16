@@ -38,11 +38,11 @@ namespace Igneel.Components
         {
             get
             {
-                return (Color3)_surface.Color;
+                return (Color3)_surface.Diffuse;
             }
             set
             {
-                _surface.Color = new Color4(value, _surface.Color.A);
+                _surface.Diffuse = new Color4(value, _surface.Diffuse.A);
             }
         }
 
@@ -50,20 +50,20 @@ namespace Igneel.Components
         {
             get
             {
-                return _surface.SpecularIntensity;
+                return _surface.Specular;
             }
             set
             {
-                _surface.SpecularIntensity = value;
+                _surface.Specular = value;
             }
         }
 
         public float Alpha
         {
-            get { return _surface.Color.A; }
+            get { return _surface.Diffuse.A; }
             set
             {
-                _surface.Color.A = value;
+                _surface.Diffuse.A = value;
                 if (value != 1)
                     _containsAlpha = true;
             }
@@ -75,7 +75,7 @@ namespace Igneel.Components
 
         public float SpecularPower { get { return _surface.SpecularPower; } set { _surface.SpecularPower = value; } }
 
-        public float EmisiveIntensity { get { return _surface.EmisiveIntensity; } set { _surface.EmisiveIntensity = value; } }
+        public float EmisiveIntensity { get { return _surface.Emisive; } set { _surface.Emisive = value; } }
 
         public bool ContainsTrasparency { get { return _containsAlpha; } protected set { _containsAlpha = value; } }
 

@@ -17,7 +17,7 @@ float4 main(SMBumpVSOutput input) : SV_TARGET
 	gTangentW =  input.TangentW;
 	gBinormalW = input.BinormalW;
 	
-	ComputeShadowTexCoord();
+	ComputeShadowTexCoord(-Light.Dir);
 	ComputeShadowFactor();	
 	ComputeNormal();
 	ComputeLighting();

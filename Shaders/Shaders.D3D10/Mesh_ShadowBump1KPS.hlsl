@@ -15,7 +15,7 @@ float4 main(SMBumpVSOutput input) : SV_TARGET
 	gTangentW =  input.TangentW;
 	gBinormalW = input.BinormalW;
 	
-	ComputeShadowTexCoord();
+	ComputeShadowTexCoord(-Light.Dir);
 
 	gShadowFactor = ShadowMap.SampleCmpLevelZero(sShadowMap, gShadowTexCoord.xy , gShadowTexCoord.z);
 

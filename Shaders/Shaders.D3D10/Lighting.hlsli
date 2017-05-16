@@ -12,11 +12,12 @@ Texture2D    ReflectionMap;
 Texture2D    RefractionMap;
 
 SamplerState sDiffuseMap; // Linear Sampler
-
+SamplerState sSpecularMap;
+SamplerState sNormalMap;
 
 void ComputeNormal()
 {		
-	float3 normal = NormalMap.Sample(sDiffuseMap, gTexCoord).rgb;
+	float3 normal = NormalMap.Sample(sNormalMap, gTexCoord).rgb;
 	normal = (normal * 2) - 1;	
 	// Move the normal from tangent space to world space
 	float3x3 tangentMatrix = {gTangentW, gBinormalW, gNormalW};	
@@ -81,7 +82,7 @@ void InitLighting()
 	[branch]
 	if(USE_SPECULAR_MAP)
 	{
-		c = SpecularMap.Sample(sDiffuseMap ,gTexCoord);
+		c = SpecularMap.Sample(sSpecularMap,gTexCoord);
 		gSpecular *= c.rgb;
 
 		gGlossFactor *= c.a;

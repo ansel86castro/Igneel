@@ -20,7 +20,7 @@ namespace Igneel.Graphics
         public Sampler(T texture)
         {
             this.Texture = texture;
-            this.State = SamplerState.Linear;
+            this.State = texture!=null ? SamplerState.Linear: null;
         }
         
     }
