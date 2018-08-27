@@ -1,0 +1,45 @@
+﻿<UserControl x:Class="MNISTDigitRecognizer.LearningCurveGraph"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:MNISTDigitRecognizer"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+    <Grid>
+
+        <TextBlock Text="10" VerticalAlignment="Top" HorizontalAlignment="Left" Name="YMaxValue" />
+
+        <TextBlock Text="Target Function Error" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="15 50 0 0" Name="">
+            <TextBlock.RenderTransform>
+                <TransformGroup>
+                    <RotateTransform Angle="90"/>
+                    
+                </TransformGroup>
+            </TextBlock.RenderTransform>
+        </TextBlock>
+
+        <Canvas Background="White" Margin="15">
+            <Line X1="0" X2="0" 
+                  Y1="0" Y2="{Binding ActualWidth ,RelativeSource={RelativeSource AncestorType=Canvas}}" 
+                  StrokeThickness="2"
+                  Stroke="Black"
+                 />
+
+            <Line X1="0"                 
+                  X2="{Binding ActualWidth ,RelativeSource={RelativeSource AncestorType=Canvas}}"  
+                  Y1="{Binding ActualHeight ,RelativeSource={RelativeSource AncestorType=Canvas}}" 
+                  Y2="{Binding ActualHeight ,RelativeSource={RelativeSource AncestorType=Canvas}}"                   
+                  Stroke="Black"
+                  StrokeThickness="2"/>
+
+            <Polyline
+                Name="polyline"               
+                Stroke="Black"
+                StrokeThickness="1" />  
+        </Canvas>
+
+        <TextBlock Text="Exmples" VerticalAlignment="Bottom" HorizontalAlignment="Center" />
+        <TextBlock Text="60K" VerticalAlignment="Bottom" HorizontalAlignment="Right" />
+    </Grid>
+</UserControl>

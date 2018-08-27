@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26403.3
+VisualStudioVersion = 15.0.26730.10
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Wrappers", "Wrappers", "{4F12D023-AE34-4C7B-8D1A-01E25B750C75}"
 EndProject
@@ -64,6 +64,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BasicColorTraingle", "..\Samples\ColorTraingle\BasicColorTraingle.csproj", "{7F97EB58-793F-401A-B7CD-651438BBD177}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HeightFieldSample", "HeightFieldSample\HeightFieldSample.csproj", "{628983CD-BFD4-4F4F-9E87-768D3ABB6CB9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MNISTDigitRecognizer", "MNISTDigitRecognizer\MNISTDigitRecognizer.csproj", "{E30D10B7-9C48-48E3-B70E-21259576FF88}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -437,6 +439,22 @@ Global
 		{628983CD-BFD4-4F4F-9E87-768D3ABB6CB9}.Release|Win32.Build.0 = Release|Any CPU
 		{628983CD-BFD4-4F4F-9E87-768D3ABB6CB9}.Release|x86.ActiveCfg = Release|x86
 		{628983CD-BFD4-4F4F-9E87-768D3ABB6CB9}.Release|x86.Build.0 = Release|x86
+		{E30D10B7-9C48-48E3-B70E-21259576FF88}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E30D10B7-9C48-48E3-B70E-21259576FF88}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E30D10B7-9C48-48E3-B70E-21259576FF88}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{E30D10B7-9C48-48E3-B70E-21259576FF88}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{E30D10B7-9C48-48E3-B70E-21259576FF88}.Debug|Win32.ActiveCfg = Debug|Any CPU
+		{E30D10B7-9C48-48E3-B70E-21259576FF88}.Debug|Win32.Build.0 = Debug|Any CPU
+		{E30D10B7-9C48-48E3-B70E-21259576FF88}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{E30D10B7-9C48-48E3-B70E-21259576FF88}.Debug|x86.Build.0 = Debug|Any CPU
+		{E30D10B7-9C48-48E3-B70E-21259576FF88}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E30D10B7-9C48-48E3-B70E-21259576FF88}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E30D10B7-9C48-48E3-B70E-21259576FF88}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{E30D10B7-9C48-48E3-B70E-21259576FF88}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{E30D10B7-9C48-48E3-B70E-21259576FF88}.Release|Win32.ActiveCfg = Release|Any CPU
+		{E30D10B7-9C48-48E3-B70E-21259576FF88}.Release|Win32.Build.0 = Release|Any CPU
+		{E30D10B7-9C48-48E3-B70E-21259576FF88}.Release|x86.ActiveCfg = Release|Any CPU
+		{E30D10B7-9C48-48E3-B70E-21259576FF88}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -468,5 +486,9 @@ Global
 		{C55B842F-C146-4EB1-B859-E715A70B0FC2} = {00120518-A24D-4CEB-855A-459409D07769}
 		{7F97EB58-793F-401A-B7CD-651438BBD177} = {00120518-A24D-4CEB-855A-459409D07769}
 		{628983CD-BFD4-4F4F-9E87-768D3ABB6CB9} = {00120518-A24D-4CEB-855A-459409D07769}
+		{E30D10B7-9C48-48E3-B70E-21259576FF88} = {00120518-A24D-4CEB-855A-459409D07769}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {C78A9AB2-ED7A-42C5-BEB1-0A4066AF516B}
 	EndGlobalSection
 EndGlobal
