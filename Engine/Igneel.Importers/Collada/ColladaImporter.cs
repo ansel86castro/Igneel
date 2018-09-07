@@ -648,7 +648,7 @@ namespace Igneel.Importers.Collada
             int texOffset = vd.OffsetOf(IASemantic.TextureCoordinate, 0);
             int vertexAttrStride = 0;
 
-            string[] tags = new string[] { "polygons", "triangles", "polylist", "trifans", "tristrips" };
+            string[] tags = { "polygons", "triangles", "polylist", "trifans", "tristrips" };
 
             fixed (byte* pVertexData = vertexData)
             {
@@ -718,7 +718,7 @@ namespace Igneel.Importers.Collada
 
                             inputList.Sort((x, y) => x.Offset.CompareTo(y.Offset));
                             inputs = inputList.ToArray();
-                            vertexAttrStride = inputs.Length;
+                            vertexAttrStride = inputList.GroupBy(x => x.Offset).Count();
                         }
 
                         #endregion
@@ -726,12 +726,16 @@ namespace Igneel.Importers.Collada
                         #region Create Layers 
                         List<int> tesselateList = new List<int>();
 
-                        var vcount = itag == 2 ? polygonos.GetElementByTag("vcount") : null;                        
+                        var vcount = itag == 2 ? polygonos.GetElementByTag("vcount") : null;
+                        int[] vcountList = vcount != null ? ParseIntArray(vcount.Value) : null;                       
 
                         foreach (var p in polygonos.GetElementsByTag("p"))
-                        {                           
+                        {
+                            int vcountIndex = 0;
+                            int vcountTaken = 0;
+
                             var polyIndices = ParseIntArray(p.Value);
-                            int polyVerticesCount = polyIndices.Length / vertexAttrStride;
+                            int polyVerticesCount = polyIndices.Length / vertexAttrStride;                         
 
                             tesselateList.Clear();
 
@@ -762,38 +766,27 @@ namespace Igneel.Importers.Collada
 
                                 startVertex = Math.Min(startVertex, index);
 
-                                if (itag == 1)
+                                tesselateList.Add(index);
+
+                                vcountTaken++;
+                                if (vcountList != null)
                                 {
-                                    indicesList.Add(index);
-                                }
-                                else
-                                {
-                                    tesselateList.Add(index);
+                                    if (vcountList[vcountIndex] == vcountTaken)
+                                    {                                                                                
+                                        Tesselate(itag, indicesList, tesselateList);
+
+                                        vcountTaken = 0;
+                                        vcountIndex++;
+                                        tesselateList.Clear();
+                                    }
+
                                 }
 
                             }
 
-                            //tesselate primitives
-                            switch (itag)
-                            {
-                                case 0:
-                                    //polygons   
-                                    indicesList.AddRange(TesselatePolygons(tesselateList));
-                                    break;
-                                case 2:
-                                    //polylist
-                                    indicesList.AddRange(TesselatePolylist(tesselateList, ParseIntArray(vcount.Value)));
-                                    break;
-                                case 3:
-                                    //trifans
-                                    break;
-                                case 4:
-                                    //tristrips
-                                    break;
-                            }
-                         
+                            if(tesselateList.Count > 0)
+                                Tesselate(itag, indicesList, tesselateList);
 
-                          
                             //int polygon = 0;
                             //int lastVertexIndex = 0;
                             //int index;
@@ -1012,9 +1005,42 @@ namespace Igneel.Importers.Collada
             };
         }
 
-        private List<int> TesselatePolygons(List<int> tesselateList)
+        private void Tesselate(int itag, List<int> indicesList, List<int> tesselateList)
         {
-            List<int> triangles = new List<int>();
+            //tesselate primitives
+            switch (itag)
+            {
+                case 0:
+                case 2:
+                    //polygons   
+                    TesselatePolygons(indicesList, tesselateList);
+                    break;
+                case 1:
+                    //triangles
+                    indicesList.AddRange(tesselateList);
+                    break;                
+                case 3:
+                    //trifans
+                    break;
+                case 4:
+                    //tristrips
+                    TesselateTriangleStrip(indicesList, tesselateList);
+                    break;
+            }
+        }
+
+        private void TesselatePolygons(List<int> triangles, List<int> tesselateList)
+        {
+            //if (tesselateList.Count % 2 == 0)
+            //{
+            //    for (int i = 0; i < tesselateList.Count / 2; i++)
+            //    {
+            //        triangles.Add(tesselateList[2 * i]);
+            //        triangles.Add(tesselateList[2 * i + 1]);
+            //        triangles.Add(tesselateList[2 * i + 2]);
+            //    }
+
+            //}
 
             triangles.Add(tesselateList[0]);
             triangles.Add(tesselateList[1]);
@@ -1025,9 +1051,7 @@ namespace Igneel.Importers.Collada
                 triangles.Add(tesselateList[0]);
                 triangles.Add(tesselateList[i-1]);
                 triangles.Add(tesselateList[i]);
-            }            
-            
-            return triangles;
+            }          
         }
 
         private List<int> TesselatePolylist(List<int> tesselateList, int[]vcounts)
@@ -1055,6 +1079,29 @@ namespace Igneel.Importers.Collada
             }           
 
             return triangles;
+        }
+
+        private void TesselateTriangleStrip(List<int> triangles, List<int> tesselateList)
+        {
+            triangles.Add(tesselateList[0]);
+            triangles.Add(tesselateList[1]);
+            triangles.Add(tesselateList[2]);
+
+            for (int i = 3; i < tesselateList.Count - 1; i++)
+            {
+                if (i % 2 == 0)
+                {
+                    triangles.Add(tesselateList[i - 2]);
+                    triangles.Add(tesselateList[i]);
+                    triangles.Add(tesselateList[i + 1]);
+                }
+                else
+                {
+                    triangles.Add(tesselateList[i - 1]);
+                    triangles.Add(tesselateList[i]);
+                    triangles.Add(tesselateList[i + 1]);
+                }
+            }
         }
 
         [ParserOf("source")]

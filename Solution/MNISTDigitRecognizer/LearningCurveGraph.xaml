@@ -10,7 +10,7 @@
 
         <TextBlock Text="10" VerticalAlignment="Top" HorizontalAlignment="Left" Name="YMaxValue" />
 
-        <TextBlock Text="Target Function Error" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="15 50 0 0" Name="">
+        <TextBlock Text="Target Function Error" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="15 50 0 0" Name="ERr">
             <TextBlock.RenderTransform>
                 <TransformGroup>
                     <RotateTransform Angle="90"/>

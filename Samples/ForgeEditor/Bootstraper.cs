@@ -22,10 +22,10 @@ namespace ForgeEditor
         static readonly string[] _shaderRepositoryDir =
         {
             //IGNEEL CORE SHADERS
-            "../../../../../Shaders/Shaders.D3D10/Debug/Binaries/",
+            "../../../../Shaders/Shaders.D3D10/Binaries/",
 
             //APPLICATION SHADERS
-            "../../../../ForgeShaders/Binaries/",
+            "../../../ForgeShaders/Binaries/",
         };
 
         public static void Init(MainWindow window, Canvas3D mainCanvas)
@@ -42,6 +42,8 @@ namespace ForgeEditor
 
             var interopHelper = new WindowInteropHelper(window);
             var size = mainCanvas.RenderSize;
+
+            EngineState.Shadow.ShadowMapping.Size = 3;
 
             mainCanvas.Init();
 
@@ -66,6 +68,7 @@ namespace ForgeEditor
             EngineState.Lighting.Reflection.Enable = true;
             EngineState.Lighting.TransparencyEnable = true;
             EngineState.Shading.BumpMappingEnable = true;
+            
  
 
             InitializeRendering();

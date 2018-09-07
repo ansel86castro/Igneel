@@ -102,12 +102,12 @@ namespace Igneel.Effects
         {
             return new TechniqueDesc[]{
                 Tech().Pass<SkinnedVertex>("Skin_ShadowPhongVS", "Mesh_ShadowPhong3KPS"),
-                Tech().Pass<SkinnedVertex>("Skin_ShadowPhongVS", "Mesh_ShadowPhong5KPS"),
-                Tech().Pass<SkinnedVertex>("Skin_ShadowPhongVS", "Mesh_ShadowPhong7KPS"),
+                //Tech().Pass<SkinnedVertex>("Skin_ShadowPhongVS", "Mesh_ShadowPhong5KPS"),
+                //Tech().Pass<SkinnedVertex>("Skin_ShadowPhongVS", "Mesh_ShadowPhong7KPS"),
 
                 Tech().Pass<SkinnedVertex>("Skin_ShadowBumpVS", "Mesh_ShadowBump3KPS"),
-                Tech().Pass<SkinnedVertex>("Skin_ShadowBumpVS", "Mesh_ShadowBump5KPS"),
-                Tech().Pass<SkinnedVertex>("Skin_ShadowBumpVS", "Mesh_ShadowBump7KPS")
+                //Tech().Pass<SkinnedVertex>("Skin_ShadowBumpVS", "Mesh_ShadowBump5KPS"),
+                //Tech().Pass<SkinnedVertex>("Skin_ShadowBumpVS", "Mesh_ShadowBump7KPS")
             };
         }
 
@@ -118,26 +118,12 @@ namespace Igneel.Effects
             ShadowMapTechnique tech;
             if ((tech = sm.BindedValue) != null)
             {
-                switch (tech.KernelSize)
-                {
-                    case 3:
-                        Technique = 0;
-                        break;
-                    case 5:
-                        Technique = 1;
-                        break;
-                    case 7:
-                        Technique = 2;
-                        break;
-                    default:
-                        Technique = 0;
-                        break;
-                }
+                Technique = 0;
             }
             var binding = render.GetBinding<BasicMaterial>();
             if (binding.BindedValue != null && binding.BindedValue.NormalMap != null)
             {
-                Technique = +3;
+                Technique = +1;
             }
         }
 

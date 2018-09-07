@@ -1,4 +1,5 @@
-﻿using System.Text.RegularExpressions;
+﻿using System;
+using System.Text.RegularExpressions;
 using Igneel.SceneComponents;
 using Igneel.SceneManagement;
 using Igneel.States;
@@ -22,7 +23,7 @@ namespace Igneel.Utilities
             
              ShadowMapTechnique sm;
              if (match.Groups["S"].Success)             
-                 sm = new ShadowMapTechnique(int.Parse(match.Groups["S"].Value)) { IsDynamic = match.Groups["D"].Success };             
+                 sm = new ShadowMapTechnique(int.Parse(match.Groups["S"].Value)) { IsDynamic = match.Groups["D"].Success };  
              else
                  sm = new ShadowMapTechnique() { IsDynamic = match.Groups["D"].Success };
 

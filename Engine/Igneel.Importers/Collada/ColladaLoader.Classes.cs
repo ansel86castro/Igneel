@@ -171,10 +171,11 @@ namespace Igneel.Importers.Collada
 
         public int WriteVertex(byte[] vertexData, int posIdx, int normalIdx, int texCoordIdx)
         {
+            _taken[posIdx] = true;
+
             if (_vertices[posIdx] == null)
             {
-                _vertices[posIdx] = new List<VertexCache>();
-                _taken[posIdx] = true;
+                _vertices[posIdx] = new List<VertexCache>();                
             }
 
             VertexCache vc = new VertexCache

@@ -25,10 +25,10 @@ namespace HeightFieldSample
         static readonly string[] _shaderRepositoryDir =
         {
             //IGNEEL CORE SHADERS
-            "../../../../Shaders/Shaders.D3D10/Binaries/",
+            "../../../../../Shaders/Shaders.D3D10/Debug/Binaries/",
 
             //APPLICATION SHADERS
-            "../../../ForgeShaders/Binaries/",
+            "../../../../ForgeShaders/Binaries/",
         };
 
         public static void Init(Window window, Canvas3D mainCanvas)
@@ -50,6 +50,7 @@ namespace HeightFieldSample
 
             //The canvas size
             var size = mainCanvas.RenderSize;
+            EngineState.Shading.FillMode = FillMode.Wireframe;
 
             //Initialize the Canvas. The Canvas3D is used to render to the screen in a WPF context
             //this is achived by creating a GraphicPresenter
@@ -80,7 +81,7 @@ namespace HeightFieldSample
             EngineState.Lighting.HemisphericalAmbient = true;
             EngineState.Lighting.Reflection.Enable = true;
             EngineState.Lighting.TransparencyEnable = true;
-            EngineState.Shading.BumpMappingEnable = true;
+            EngineState.Shading.BumpMappingEnable = true;         
  
             //Initialize the Hight Level rendering System
             //This will register the renders fo each components for each supported shading techniques

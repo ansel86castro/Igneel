@@ -106,14 +106,14 @@ namespace Igneel.Effects
         {
             return new TechniqueDesc[]{
                 Tech().Pass<MeshVertex>("Mesh_ShadowPhongVS", "Mesh_ShadowPhong3KPS"),
-                Tech().Pass<MeshVertex>("Mesh_ShadowPhongVS", "Mesh_ShadowPhong5KPS"),
-                Tech().Pass<MeshVertex>("Mesh_ShadowPhongVS", "Mesh_ShadowPhong7KPS"),
+                //Tech().Pass<MeshVertex>("Mesh_ShadowPhongVS", "Mesh_ShadowPhong5KPS"),
+                //Tech().Pass<MeshVertex>("Mesh_ShadowPhongVS", "Mesh_ShadowPhong7KPS"),
                 Tech().Pass<MeshVertex>("Mesh_ShadowPhongVS", "Mesh_ShadowPhong1KPS"),
 
 
                 Tech().Pass<MeshVertex>("Mesh_ShadowBumpVS", "Mesh_ShadowBump3KPS"),
-                Tech().Pass<MeshVertex>("Mesh_ShadowBumpVS", "Mesh_ShadowBump5KPS"),
-                Tech().Pass<MeshVertex>("Mesh_ShadowBumpVS", "Mesh_ShadowBump7KPS"),
+                //Tech().Pass<MeshVertex>("Mesh_ShadowBumpVS", "Mesh_ShadowBump5KPS"),
+                //Tech().Pass<MeshVertex>("Mesh_ShadowBumpVS", "Mesh_ShadowBump7KPS"),
                 Tech().Pass<MeshVertex>("Mesh_ShadowBumpVS", "Mesh_ShadowBump1KPS")
            };  
         }

@@ -61,7 +61,7 @@
       <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <FxCompile>
-      <ObjectFileOutput>$(Configuration)\Binaries\%(Filename).cso</ObjectFileOutput>
+      <ObjectFileOutput>Binaries\%(Filename).cso</ObjectFileOutput>
       <DisableOptimizations>false</DisableOptimizations>
       <EnableDebuggingInformation>false</EnableDebuggingInformation>
       <TreatWarningAsError>true</TreatWarningAsError>
